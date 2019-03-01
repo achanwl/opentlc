@@ -1,0 +1,7 @@
+- import_playbook: /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml
+
+- import_playbook: /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml
+
+- import_playbook: postinstall.yml
+
+- import_playbook: /usr/share/ansible/openshift-ansible/playbooks/openshift-management/add_container_provider.yml

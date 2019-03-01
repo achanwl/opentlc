@@ -1,0 +1,25 @@
+- name: OCP HA Lab - Post-installation Setup
+  hosts: masters[0]
+  vars_files:
+    - vars/vault_ldap_binddn.yml
+
+  tasks:
+    - name: Create groupsync.yaml
+      template:
+        src: groupsync.j2
+        dest: /etc/origin/master/groupsync.yaml
+        backup: yes
+
+    - name: Create whitelist.yaml
+      copy:
+        src: files/whitelist.yaml
+        dest: /etc/origin/master/whitelist.yaml
+
+    - name: Synchronize groups
+      command: oc adm groups sync --sync-config=/etc/origin/master/groupsync.yaml --whitelist=/etc/origin/master/whitelist.yaml --confirm
+
+    - name: Verify groups
+      command: oc get groups
+
+    - name: Add cluster role to andrew
+      command: oc adm policy add-cluster-role-to-user cluster-admin andrew

@@ -1,0 +1,38 @@
+- name: Setup NFS volumes
+  block:
+    - name: Create partition
+      parted:
+        device: /dev/xvdc
+        number: 1
+        flags: lvm
+        state: present
+        part_end: 100%
+    - name: Extend volume group
+      lvg:
+        vg: nfsvg
+        pvs: /dev/xvdb,/dev/xvdc1
+    - name: Extend logical volume
+      lvol:
+        vg: nfsvg
+        lv: nfsmount
+        size: 100g
+        resizefs: yes
+    - name: Create logical volume
+      lvol:
+        vg: nfsvg
+        lv: cf
+        size: 100g
+    - name: Create filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/nfsvg/cf
+        opts: -L cf
+    - name: Mount exports
+      mount:
+        path: /srv/cf
+        src: /dev/nfsvg/cf
+        fstype: xfs
+        state: mounted
+  tags:
+    - nfs_cf
+

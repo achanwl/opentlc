@@ -1,0 +1,18 @@
+- name: OCP HA Lab - Pre-installation Setup
+  hosts: localhost,all
+  order: inventory
+
+  roles:
+    - role: set-guid
+    - role: set-env
+      when: inventory_hostname == 'localhost'
+    - role: get-ipa-ca
+      when: inventory_hostname == 'localhost'
+    - role: create-inventory
+      when: inventory_hostname == 'localhost'
+    - role: setup-nfs
+      when: inventory_hostname in groups['nfs']
+#   - role: set-manage_cgroup
+#     when: inventory_hostname in groups['nodes']
+    - role: updatereboot
+      when: inventory_hostname != 'localhost'

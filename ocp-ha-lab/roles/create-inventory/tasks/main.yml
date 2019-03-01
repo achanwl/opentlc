@@ -1,0 +1,5 @@
+- name: Create inventory file
+  template:
+    src: hosts.j2
+    dest: /etc/ansible/hosts
+    backup: yes

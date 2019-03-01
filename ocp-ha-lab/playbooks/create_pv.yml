@@ -1,0 +1,25 @@
+- name: OCP HA Lab - Create PVs
+  hosts: nfs
+
+  tasks:
+    - name: Create user-vols dirs
+      file:
+        path: /srv/nfs/user-vols/pv{{ item }}
+        state: directory
+        mode: 0777
+        owner: nfsnobody
+        group: nfsnobody
+      with_sequence: start=1 end=200
+
+    - name: Create user-vols exports
+      lineinfile:
+        path: /etc/exports.d/openshift-user-vols.exports
+        create: yes
+        line: '/srv/nfs/user-vols/pv{{ item }} *(rw,root_squash)'
+      with_sequence: start=1 end=50
+
+    - name: Restart nfs-server
+      service:
+        name: nfs-server
+        state: restarted
+

@@ -1,0 +1,2 @@
+- name: CFME manage_cgroup fix
+  command: setsebool -P container_manage_cgroup on

@@ -1,0 +1,10 @@
+- name: OCP HA Lab - Post-installation Setup
+  hosts: localhost,masters[0]
+  order: inventory
+
+  roles:
+    - role: get-kubecfg
+      when: inventory_hostname == groups['masters'][0]
+    - role: pause
+    - role: groupsync
+      when: inventory_hostname == groups['masters'][0]

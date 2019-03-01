@@ -1,0 +1,9 @@
+- name: Get GUID
+  shell: hostname | cut -d"." -f2
+  register: guid
+
+- name: Create GUID env variable in bashrc
+  lineinfile:
+    path: /root/.bashrc
+    state: present
+    line: 'export GUID={{ guid.stdout }}'

@@ -1,0 +1,4 @@
+- name: Get IPA CA cert
+  get_url:
+    url: http://ipa.shared.example.opentlc.com/ipa/config/ca.crt
+    dest: /root/ipa-ca.crt
