@@ -5,8 +5,8 @@
 #
 # Needs to be separated cuz it creates inventory file
 #
-ansible-playbook -f 10 --ask-vault-pass playbooks/preinstall.yml
+ansible-playbook -f 20 --ask-vault-pass playbooks/preinstall.yml
 
 # Build
 #
-ansible-playbook -f 10 --ask-vault-pass playbooks/build.yml
+ansible-playbook -f 20 --ask-vault-pass playbooks/build.yml
