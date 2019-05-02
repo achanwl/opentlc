@@ -180,7 +180,7 @@ openshift_prometheus_alertbuffer_cpu_limit=200m
 
 openshift_logging_install_logging=true
 openshift_logging_install_eventrouter=true
-openshift_logging_eventrouter_replicas=2
+openshift_logging_eventrouter_replicas=3
 
 openshift_logging_storage_kind=nfs
 openshift_logging_storage_access_modes=['ReadWriteOnce']
@@ -208,11 +208,11 @@ openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra": "tr
 # openshift_router_selector='node-role.kubernetes.io/infra=true'
 # openshift_registry_selector='node-role.kubernetes.io/infra=true'
 
-#openshift_hosted_router_replicas=2
+openshift_hosted_router_replicas=3
 
 # openshift_hosted_router_certificate={"certfile": "/path/to/router.crt", "keyfile": "/path/to/router.key", "cafile": "/path/to/router-ca.crt"}
 
-#openshift_hosted_registry_replicas=1
+openshift_hosted_registry_replicas=3
 openshift_hosted_registry_pullthrough=true
 openshift_hosted_registry_acceptschema2=true
 openshift_hosted_registry_enforcequota=true
