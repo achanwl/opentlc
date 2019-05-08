@@ -131,7 +131,6 @@ openshift_master_ldap_ca_file=/root/ipa-ca.crt
 
 openshift_cluster_monitoring_operator_install=true
 
-
 ########################
 # Cluster Metrics
 ########################
@@ -155,20 +154,22 @@ openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra": "true"
 openshift_metrics_duration=3
 
 # Suggested Quotas and limits for Prometheus components:
-openshift_prometheus_memory_requests=2Gi
-openshift_prometheus_cpu_requests=750m
-openshift_prometheus_memory_limit=2Gi
-openshift_prometheus_cpu_limit=750m
-openshift_prometheus_alertmanager_memory_requests=300Mi
-openshift_prometheus_alertmanager_cpu_requests=200m
-openshift_prometheus_alertmanager_memory_limit=300Mi
-openshift_prometheus_alertmanager_cpu_limit=200m
-openshift_prometheus_alertbuffer_memory_requests=300Mi
-openshift_prometheus_alertbuffer_cpu_requests=200m
-openshift_prometheus_alertbuffer_memory_limit=300Mi
-openshift_prometheus_alertbuffer_cpu_limit=200m
+# Deprecated because of prometheus operator
+#openshift_prometheus_memory_requests=2Gi
+#openshift_prometheus_cpu_requests=750m
+#openshift_prometheus_memory_limit=2Gi
+#openshift_prometheus_cpu_limit=750m
+#openshift_prometheus_alertmanager_memory_requests=300Mi
+#openshift_prometheus_alertmanager_cpu_requests=200m
+#openshift_prometheus_alertmanager_memory_limit=300Mi
+#openshift_prometheus_alertmanager_cpu_limit=200m
+#openshift_prometheus_alertbuffer_memory_requests=300Mi
+#openshift_prometheus_alertbuffer_cpu_requests=200m
+#openshift_prometheus_alertbuffer_memory_limit=300Mi
+#openshift_prometheus_alertbuffer_cpu_limit=200m
 
 # Grafana
+# Deprecated because of prometheus operator
 #openshift_grafana_node_selector={"node-role.kubernetes.io/infra":"true"}
 #openshift_grafana_storage_type=pvc
 #openshift_grafana_pvc_size=2Gi
@@ -180,7 +181,8 @@ openshift_prometheus_alertbuffer_cpu_limit=200m
 
 openshift_logging_install_logging=true
 openshift_logging_install_eventrouter=true
-openshift_logging_eventrouter_replicas=3
+openshift_logging_eventrouter_replicas=2
+openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra":"true"}
 
 openshift_logging_storage_kind=nfs
 openshift_logging_storage_access_modes=['ReadWriteOnce']
@@ -208,11 +210,11 @@ openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra": "tr
 # openshift_router_selector='node-role.kubernetes.io/infra=true'
 # openshift_registry_selector='node-role.kubernetes.io/infra=true'
 
-openshift_hosted_router_replicas=3
+openshift_hosted_router_replicas=2
 
 # openshift_hosted_router_certificate={"certfile": "/path/to/router.crt", "keyfile": "/path/to/router.key", "cafile": "/path/to/router-ca.crt"}
 
-openshift_hosted_registry_replicas=3
+openshift_hosted_registry_replicas=1
 openshift_hosted_registry_pullthrough=true
 openshift_hosted_registry_acceptschema2=true
 openshift_hosted_registry_enforcequota=true
@@ -258,13 +260,15 @@ openshift_hosted_etcd_storage_labels={'storage': 'etcd-oab'}
 openshift_management_install_management=true
 openshift_management_storage_class=nfs
 openshift_management_storage_nfs_base_dir=/srv/cf
+openshift_management_nodeselector='node-role.kubernetes.io/compute=true'
 #openshift_management_template_parameters={'APPLICATION_MEM_REQ': '2Gi', 'POSTGRESQL_MEM_REQ': '3Gi'}
 
 ###########################################################################
 ### OpenShift Hosts
 ###########################################################################
 # openshift_node_labels DEPRECATED
-# openshift_node_problem_detector_install
+
+openshift_node_problem_detector_install=true
 
 [OSEv3:children]
 lb
@@ -288,18 +292,18 @@ master3.{{ guid.stdout }}.internal
 
 [nodes]
 ## These are the masters
-master1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
-master2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
-master3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
+master1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
+master2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
+master3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
 
 ## These are infranodes
-infranode1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra' openshift_node_problem_detector_install=true
-infranode2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra' openshift_node_problem_detector_install=true
+infranode1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra'
+infranode2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra'
 
 ## These are regular nodes
-node1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_node_problem_detector_install=true
-node2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_node_problem_detector_install=true
-node3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_node_problem_detector_install=true
+node1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
+node2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
+node3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
 
 [nfs]
 support1.{{ guid.stdout }}.internal
