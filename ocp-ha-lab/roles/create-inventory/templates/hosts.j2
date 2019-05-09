@@ -289,18 +289,18 @@ master3.{{ guid.stdout }}.internal
 
 [nodes]
 ## These are the masters
-master1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
-master2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
-master3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master'
+master1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_kubelet_name_override=master1
+master2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_kubelet_name_override=master2
+master3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-master' openshift_kubelet_name_override=master3
 
 ## These are infranodes
-infranode1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra'
-infranode2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra'
+infranode1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra' openshift_kubelet_name_override=infranode1
+infranode2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-infra' openshift_kubelet_name_override=infranode2
 
 ## These are regular nodes
-node1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
-node2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
-node3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute'
+node1.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_kubelet_name_override=node1
+node2.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_kubelet_name_override=node2
+node3.{{ guid.stdout }}.internal openshift_node_group_name='node-config-compute' openshift_kubelet_name_override=node3
 
 [nfs]
 support1.{{ guid.stdout }}.internal
