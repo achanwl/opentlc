@@ -45,7 +45,7 @@ logrotate_scripts=[{"name": "syslog", "path": "/var/log/cron\n/var/log/maillog\n
 openshift_enable_olm=true
 
 # Default infra selector
-openshift_hosted_infra_selector={"node-role.kubernetes.io/infra":"true"}
+openshift_hosted_infra_selector="node-role.kubernetes.io/infra=true"
 
 ###########################################################################
 ### OpenShift Registries Locations
