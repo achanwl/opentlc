@@ -11,12 +11,12 @@
       lvg:
         vg: nfsvg
         pvs: /dev/xvdc1,/dev/xvdd
-    #- name: Extend logical volume
-    #  lvol:
-    #    vg: nfsvg
-    #    lv: nfsmount
-    #    size: 100g
-    #    resizefs: yes
+    - name: Extend logical volume
+      lvol:
+        vg: nfsvg
+        lv: nfsmount
+        size: 300g
+        resizefs: yes
     - name: Create logical volume
       lvol:
         vg: nfsvg
