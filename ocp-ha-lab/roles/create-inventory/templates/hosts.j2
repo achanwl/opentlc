@@ -142,7 +142,7 @@ openshift_metrics_storage_access_modes=['ReadWriteOnce']
 openshift_metrics_storage_nfs_directory=/srv/nfs
 openshift_metrics_storage_nfs_options='*(rw,async,root_squash)'
 openshift_metrics_storage_volume_name=metrics
-openshift_metrics_storage_volume_size=10Gi
+openshift_metrics_storage_volume_size=50Gi
 openshift_metrics_storage_labels={'storage': 'metrics'}
 #openshift_metrics_cassandra_pvc_storage_class_name=''
 
@@ -172,7 +172,7 @@ openshift_metrics_duration=3
 # Deprecated because of prometheus operator
 #openshift_grafana_node_selector={"node-role.kubernetes.io/infra":"true"}
 #openshift_grafana_storage_type=pvc
-#openshift_grafana_pvc_size=2Gi
+#openshift_grafana_pvc_size=50Gi
 #openshift_grafana_node_exporter=true
 
 ########################
@@ -188,12 +188,12 @@ openshift_logging_storage_access_modes=['ReadWriteOnce']
 openshift_logging_storage_nfs_directory=/srv/nfs
 openshift_logging_storage_nfs_options='*(rw,async,root_squash)'
 openshift_logging_storage_volume_name=logging
-openshift_logging_storage_volume_size=10Gi
+openshift_logging_storage_volume_size=100Gi
 openshift_logging_storage_labels={'storage': 'logging'}
 openshift_logging_es_pvc_storage_class_name=''
 openshift_logging_es_memory_limit=8Gi
 openshift_logging_es_cluster_size=1
-openshift_logging_curator_default_days=3
+openshift_logging_curator_default_days=7
 openshift_logging_use_ops=false
 
 openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra": "true"}
@@ -223,7 +223,7 @@ openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
 openshift_hosted_registry_storage_nfs_directory=/srv/nfs
 openshift_hosted_registry_storage_nfs_options='*(rw,async,root_squash)'
 openshift_hosted_registry_storage_volume_name=registry
-openshift_hosted_registry_storage_volume_size=20Gi
+openshift_hosted_registry_storage_volume_size=50Gi
 
 ###########################################################################
 ### OpenShift Service Catalog Vars
@@ -252,7 +252,7 @@ openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
 openshift_hosted_etcd_storage_nfs_directory=/srv/nfs
 openshift_hosted_etcd_storage_nfs_options='*(rw,root_squash,sync,no_wdelay)'
 openshift_hosted_etcd_storage_volume_name=etcd-oab
-openshift_hosted_etcd_storage_volume_size=10Gi
+openshift_hosted_etcd_storage_volume_size=50Gi
 openshift_hosted_etcd_storage_labels={'storage': 'etcd-oab'}
 
 # CloudForms
