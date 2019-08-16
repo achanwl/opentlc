@@ -1,0 +1,41 @@
+- name: OCP HA Lab - Create nfs pv dirs
+  hosts: localhost
+
+  tasks:
+    - name: Create RWO pv
+      k8s:
+        state: present
+        definition:
+					apiVersion: v1
+					kind: PersistentVolume
+					metadata:
+						name: pv{{ item }}
+					spec:
+						capacity:
+							storage: 5Gi
+						accessModes:
+						- ReadWriteOnce
+						nfs:
+							path: /srv/nfs/user-vols/pv{{ item }}
+							server: support1.9b91.internal
+						persistentVolumeReclaimPolicy: Recycle
+			with_sequence: start=1 end=5
+
+    - name: Create RWX pv
+      k8s:
+        state: present
+        definition:
+					apiVersion: v1
+					kind: PersistentVolume
+					metadata:
+						name: pv{{ item }}
+					spec:
+						capacity:
+							storage: 10Gi
+						accessModes:
+						- ReadWriteMany
+						nfs:
+							path: /srv/nfs/user-vols/pv{{ item }}
+							server: support1.9b91.internal
+						persistentVolumeReclaimPolicy: Recycle
+			with_sequence: start=6 end=10
