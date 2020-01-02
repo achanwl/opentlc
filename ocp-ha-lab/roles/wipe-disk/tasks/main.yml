@@ -1,2 +1,0 @@
-- name: Wipe disk xvdb
-  command: /usr/sbin/wipefs -f -a /dev/xvdb
