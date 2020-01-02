@@ -32,8 +32,28 @@
   command: /sbin/atomic-openshift-excluder exclude
   when: inventory_hostname in groups['nodes']
 
+- name: docker-storage-setup DEVS
+  lineinfile:
+    path: /etc/sysconfig/docker-storage-setup
+    regexp: '^DEVS'
+    state: absent
+  when: inventory_hostname_short == 'node1' or inventory_hostname_short == 'node2' or inventory_hostname_short == 'node3'
+
+- name: docker-storage-setup VG
+  lineinfile:
+    path: /etc/sysconfig/docker-storage-setup
+    regexp: '^VG'
+    state: absent
+  when: inventory_hostname_short == 'node1' or inventory_hostname_short == 'node2' or inventory_hostname_short == 'node3'
+
 - name: wipe xvdb
   command: /usr/sbin/wipefs -f -a /dev/xvdb
+  when: inventory_hostname_short == 'node1' or inventory_hostname_short == 'node2' or inventory_hostname_short == 'node3'
+
+- name: parted
+  parted:
+    device: /dev/xvdb
+    label: gpt
   when: inventory_hostname_short == 'node1' or inventory_hostname_short == 'node2' or inventory_hostname_short == 'node3'
 
 - name: Reboot
