@@ -1,0 +1,18 @@
+- name: Unzip awscli-bundle
+  unarchive:
+    src: https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
+    dest: ~
+    remote_src: yes
+
+- name: Install AWS CLI
+  command: ~/awscli-bundle/install -i /usr/local/aws -b /bin/aws
+
+- name: Clean up files
+  file:
+    path: "~/{{ item }}"
+    state: absent
+  with_items:
+    - awscli-bundle
+    - awscli-bundle.zip
+
+
