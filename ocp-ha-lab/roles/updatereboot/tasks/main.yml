@@ -6,9 +6,11 @@
 
 - name: docker unexclude
   command: /sbin/atomic-openshift-docker-excluder unexclude
+  when: inventory_hostname != 'localhost'
 
 - name: openshift unexclude
   command: /sbin/atomic-openshift-excluder unexclude
+  when: inventory_hostname != 'localhost'
 
 - name: yum update all
   yum:
@@ -17,9 +19,11 @@
 
 - name: docker exclude
   command: /sbin/atomic-openshift-docker-excluder exclude
+  when: inventory_hostname != 'localhost'
 
 - name: openshift exclude
   command: /sbin/atomic-openshift-excluder exclude
+  when: inventory_hostname != 'localhost'
 
 - name: Reboot
   shell: sleep 3 && /sbin/shutdown -r now
