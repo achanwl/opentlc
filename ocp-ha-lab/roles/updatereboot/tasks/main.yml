@@ -8,6 +8,9 @@
   command: yum versionlock clear
   when: inventory_hostname in groups['nodes']
 
+- name: yum clean all
+  command: yum clean all
+
 - name: docker unexclude
   command: /sbin/atomic-openshift-docker-excluder unexclude
   when: inventory_hostname in groups['nodes']
