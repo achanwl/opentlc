@@ -32,6 +32,10 @@
   command: /sbin/atomic-openshift-excluder exclude
   when: inventory_hostname in groups['nodes']
 
+- name: wipe xvdb
+  command: /usr/sbin/wipefs -f -a /dev/xvdb
+  when: inventory_hostname_short == 'node1' or inventory_hostname_short == 'node2' or inventory_hostname_short == 'node3'
+
 - name: Reboot
   shell: sleep 3 && /sbin/shutdown -r now
   async: 60
