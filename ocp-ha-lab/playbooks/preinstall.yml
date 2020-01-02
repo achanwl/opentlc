@@ -14,5 +14,7 @@
       when: inventory_hostname in groups['nfs']
 #   - role: set-manage_cgroup
 #     when: inventory_hostname in groups['nodes']
+    - role: wipe-disk
+      when: inventory_hostname in groups['computes']
     - role: updatereboot
       when: inventory_hostname != 'localhost'
