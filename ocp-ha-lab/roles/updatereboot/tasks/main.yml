@@ -1,3 +1,9 @@
+- name: Update repo to newer dir
+  replace:
+    path: /etc/yum.repos.d/open_ocp-ha-lab.repo
+    regexp: '3\.11\.59'
+    replace: '3.11.154'
+
 - name: yum update all
   yum:
     name: '*'
