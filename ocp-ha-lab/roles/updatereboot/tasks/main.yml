@@ -6,11 +6,11 @@
 
 - name: docker unexclude
   command: /sbin/atomic-openshift-docker-excluder unexclude
-  when: inventory_hostname != 'localhost'
+  when: inventory_hostname in groups['nodes']
 
 - name: openshift unexclude
   command: /sbin/atomic-openshift-excluder unexclude
-  when: inventory_hostname != 'localhost'
+  when: inventory_hostname in groups['nodes']
 
 - name: yum update all
   yum:
@@ -19,11 +19,11 @@
 
 - name: docker exclude
   command: /sbin/atomic-openshift-docker-excluder exclude
-  when: inventory_hostname != 'localhost'
+  when: inventory_hostname in groups['nodes']
 
 - name: openshift exclude
   command: /sbin/atomic-openshift-excluder exclude
-  when: inventory_hostname != 'localhost'
+  when: inventory_hostname in groups['nodes']
 
 - name: Reboot
   shell: sleep 3 && /sbin/shutdown -r now
