@@ -4,10 +4,22 @@
     regexp: '3\.11\.59'
     replace: '3.11.154'
 
+- name: docker unexclude
+  command: /sbin/atomic-openshift-docker-excluder unexclude
+
+- name: openshift unexclude
+  command: /sbin/atomic-openshift-excluder unexclude
+
 - name: yum update all
   yum:
     name: '*'
     state: latest
+
+- name: docker exclude
+  command: /sbin/atomic-openshift-docker-excluder exclude
+
+- name: openshift exclude
+  command: /sbin/atomic-openshift-excluder exclude
 
 - name: Reboot
   shell: sleep 3 && /sbin/shutdown -r now
