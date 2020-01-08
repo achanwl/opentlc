@@ -22,10 +22,10 @@ openshift_disable_check="disk_availability,memory_availability,docker_image_avai
 # If openshift_image_tag is set, its value is used for all hosts in system container environments, even those that have another version installed. If
 # Use this variable to specify a container image tag to install or configure.
 #openshift_pkg_version is set, its value is used for all hosts in RPM-based environments, even those that have another version installed.
-openshift_image_tag=v3.11.154
+openshift_image_tag=v3.11.104
 # Use this variable to specify an RPM version to install or configure.
-openshift_pkg_version=-3.11.154
-openshift_release=3.11.154
+openshift_pkg_version=-3.11.104
+openshift_release=3.11.104
 
 # Node Groups
 openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}]}]
@@ -135,7 +135,7 @@ openshift_cluster_monitoring_operator_install=true
 
 openshift_metrics_install_metrics=true
 openshift_metrics_cassandra_replicas=1
-openshift_metrics_hawkular_replicas=2
+openshift_metrics_hawkular_replicas=1
 
 openshift_metrics_storage_kind=nfs
 openshift_metrics_storage_access_modes=['ReadWriteOnce']
@@ -181,7 +181,7 @@ openshift_metrics_duration=3
 
 openshift_logging_install_logging=true
 openshift_logging_install_eventrouter=true
-openshift_logging_eventrouter_replicas=2
+openshift_logging_eventrouter_replicas=1
 
 openshift_logging_storage_kind=nfs
 openshift_logging_storage_access_modes=['ReadWriteOnce']
