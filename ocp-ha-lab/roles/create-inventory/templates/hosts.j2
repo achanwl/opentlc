@@ -22,10 +22,10 @@ openshift_disable_check="disk_availability,memory_availability,docker_image_avai
 # If openshift_image_tag is set, its value is used for all hosts in system container environments, even those that have another version installed. If
 # Use this variable to specify a container image tag to install or configure.
 #openshift_pkg_version is set, its value is used for all hosts in RPM-based environments, even those that have another version installed.
-openshift_image_tag=v3.11.98
+openshift_image_tag=v3.11.154
 # Use this variable to specify an RPM version to install or configure.
-openshift_pkg_version=-3.11.98
-openshift_release=3.11.98
+openshift_pkg_version=-3.11.154
+openshift_release=3.11.154
 
 # Node Groups
 openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}]}]
@@ -190,7 +190,10 @@ openshift_logging_storage_nfs_options='*(rw,async,root_squash)'
 openshift_logging_storage_volume_name=logging
 openshift_logging_storage_volume_size=100Gi
 openshift_logging_storage_labels={'storage': 'logging'}
+openshift_logging_elasticsearch_storage_type=pvc
+openshift_logging_es_pvc_size=100Gi
 openshift_logging_es_pvc_storage_class_name=''
+openshift_logging_es_pvc_dynamic=true
 openshift_logging_es_memory_limit=8Gi
 openshift_logging_es_cluster_size=1
 openshift_logging_curator_default_days=7
@@ -263,8 +266,7 @@ openshift_management_nodeselector="node-role.kubernetes.io/compute=true"
 #openshift_management_template_parameters={'APPLICATION_MEM_REQ': '2Gi', 'POSTGRESQL_MEM_REQ': '3Gi'}
 
 ###########################################################################
-### OpenShift Hosts
-###########################################################################
+
 # openshift_node_labels DEPRECATED
 
 openshift_node_problem_detector_install=true
