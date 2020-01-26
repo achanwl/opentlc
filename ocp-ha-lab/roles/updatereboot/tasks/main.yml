@@ -11,26 +11,26 @@
 - name: yum clean all
   command: yum clean all
 
-- name: docker unexclude
-  command: /sbin/atomic-openshift-docker-excluder unexclude
-  when: inventory_hostname in groups['nodes']
+#- name: docker unexclude
+#  command: /sbin/atomic-openshift-docker-excluder unexclude
+#  when: inventory_hostname in groups['nodes']
 
-- name: openshift unexclude
-  command: /sbin/atomic-openshift-excluder unexclude
-  when: inventory_hostname in groups['nodes']
+#- name: openshift unexclude
+#  command: /sbin/atomic-openshift-excluder unexclude
+#  when: inventory_hostname in groups['nodes']
 
 - name: yum update all
   yum:
     name: '*'
     state: latest
 
-- name: docker exclude
-  command: /sbin/atomic-openshift-docker-excluder exclude
-  when: inventory_hostname in groups['nodes']
+#- name: docker exclude
+#  command: /sbin/atomic-openshift-docker-excluder exclude
+#  when: inventory_hostname in groups['nodes']
 
-- name: openshift exclude
-  command: /sbin/atomic-openshift-excluder exclude
-  when: inventory_hostname in groups['nodes']
+#- name: openshift exclude
+#  command: /sbin/atomic-openshift-excluder exclude
+#  when: inventory_hostname in groups['nodes']
 
 - name: docker-storage-setup DEVS
   lineinfile:
