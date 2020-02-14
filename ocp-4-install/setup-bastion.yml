@@ -3,7 +3,7 @@
   order: inventory
   vars_prompt:
     - name: ocpver
-      prompt: "OCP 4 Version"
+      prompt: "OCP 4 Version x.y.z"
       private: no
     - name: awsaccesskey
       prompt: "aws_access_key_id"
@@ -13,7 +13,10 @@
       private: no
 
   tasks:
-    - name: Setup
+    - name: Get GUID
+      shell: hostname | cut -d"." -f2
+      register: guid
+    - name: Setup aws and ocp tools
       block:
         - name: Unzip awscli-bundle
           unarchive:
@@ -44,6 +47,10 @@
         - name: Set bash completion
           shell: /usr/bin/oc completion bash > /etc/bash_completion.d/openshift
       become: true
+    - name: Setup ssh keypair
+      openssh_keypair:
+        path: ~/.ssh/cluster-{{ guid.stdout }}-key
+        force: yes
 
   roles:
     - role: aws-creds
