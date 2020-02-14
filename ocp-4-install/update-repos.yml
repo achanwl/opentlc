@@ -15,5 +15,11 @@
             path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
             regexp: 'ansible\-2\.7'
             replace: 'ansible-2.9'
+        - name: yum clean all
+          command: yum clean all
+        - name: yum update ansible
+          yum:
+            name: ansible
+            state: latest
       become: true
 
