@@ -1,0 +1,16 @@
+- name: Update Repos
+  hosts: localhost
+  order: inventory
+
+  tasks:
+    - name: Update repos to 4.3
+      replace:
+        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        regexp: '4\.1\.0'
+        replace: '4.3.0'
+    - name: Update ansible to 2.9
+      replace:
+        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        regexp: 'ansible\-2\.7'
+        replace: 'ansible-2.9'
+
