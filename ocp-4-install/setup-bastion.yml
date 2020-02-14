@@ -5,6 +5,12 @@
     - name: ocpver
       prompt: "OCP 4 Version"
       private: no
+    - name: awsaccesskey
+      prompt: "aws_access_key_id"
+      private: no
+    - name: awssecretaccesskey
+      prompt: "aws_secret_access_key"
+      private: no
 
   tasks:
     - name: Setup
@@ -39,3 +45,5 @@
           shell: /usr/bin/oc completion bash > /etc/bash_completion.d/openshift
       become: true
 
+  roles:
+    - role: aws-creds

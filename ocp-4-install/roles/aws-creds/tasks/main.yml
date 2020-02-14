@@ -1,0 +1,5 @@
+- name: Create aws credentials
+  template:
+    src: credentials.j2
+    dest: ~/.aws/credentials
+    backup: yes
