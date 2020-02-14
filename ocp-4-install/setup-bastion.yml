@@ -50,6 +50,11 @@
     - name: Setup ssh keypair
       openssh_keypair:
         path: ~/.ssh/cluster-{{ guid.stdout }}-key
+    - name: Set kubeconfig
+      lineinfile:
+        path: ~/.bash_profile
+        line: 'export KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
+        insertafter: EOF
 
   roles:
     - role: aws-creds
