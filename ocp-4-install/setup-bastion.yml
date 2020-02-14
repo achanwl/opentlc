@@ -50,7 +50,6 @@
     - name: Setup ssh keypair
       openssh_keypair:
         path: ~/.ssh/cluster-{{ guid.stdout }}-key
-        force: yes
 
   roles:
     - role: aws-creds
