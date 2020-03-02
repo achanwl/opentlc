@@ -58,3 +58,4 @@
 
   roles:
     - role: aws-creds
+    - role: set-env

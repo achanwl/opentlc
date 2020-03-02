@@ -1,0 +1,112 @@
+" Setup vim-plug
+"
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Initialize plugins
+"
+call plug#begin('~/.vim/bundle')
+
+" plaenight
+"
+Plug 'drewtempelmeyer/palenight.vim'
+
+" fugitive
+"   - needed for showing branch on airline
+"
+Plug 'tpope/vim-fugitive'
+
+" airline
+"
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" ansible-vim
+"
+Plug 'pearofducks/ansible-vim'
+
+" vim-puppet
+"
+Plug 'rodjek/vim-puppet'
+
+" End initialization
+"
+call plug#end()
+
+" turn off auto adding comments on next line
+" so you can cut and paste reliably
+" http://vimdoc.sourceforge.net/htmldoc/change.html#fo-table
+" set fo=tcq
+set nocompatible
+set modeline
+set bg=dark
+colorscheme palenight
+
+syntax on
+set hlsearch
+set number
+
+" set default comment color to cyan instead of darkblue
+" which is not very legible on a black background
+" highlight comment ctermfg=cyan
+
+set tabstop=2
+set expandtab
+set softtabstop=2
+set shiftwidth=2
+
+highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
+match LiteralTabs /\s\  /
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$/
+
+" Show me a ruler
+set ruler
+
+" Set up puppet manifest and spec options
+au BufRead,BufNewFile *.pp
+  \ set filetype=puppet
+au BufRead,BufNewFile *_spec.rb
+  \ nmap <F8> :!rspec --color %<CR>
+
+" Enable Ansible files
+au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
+
+" Enable indentation matching for =>'s
+filetype plugin indent on
+
+" airline settings
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+"let g:airline_theme='dark'
+
+" netrw settings
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 3
+let g:netrw_winsize = 25
+"let g:netrw_altv = 1
+
+" Toggle Vexplore with Ctrl-E
+" Modified to use non-split explorer than open with tabs
+function! ToggleVExplorer()
+  if exists("t:expl_buf_num")
+      let expl_win_num = bufwinnr(t:expl_buf_num)
+      if expl_win_num != -1
+          let cur_win_nr = winnr()
+          exec expl_win_num . 'wincmd w'
+          close
+          exec cur_win_nr . 'wincmd w'
+          unlet t:expl_buf_num
+      else
+          unlet t:expl_buf_num
+      endif
+  else
+      exec '1wincmd w'
+      Vexplore
+      let t:expl_buf_num = bufnr("%")
+  endif
+endfunction
+map <silent> <C-E> :call ToggleVExplorer()<CR>
