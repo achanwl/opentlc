@@ -75,7 +75,8 @@ openshift_master_cluster_hostname=loadbalancer.{{ guid.stdout }}.internal
 openshift_master_cluster_public_hostname=loadbalancer.{{ guid.stdout }}.example.opentlc.com
 openshift_master_default_subdomain=apps.{{ guid.stdout }}.example.opentlc.com
 #openshift_master_ca_certificate={'certfile': '/root/intermediate_ca.crt', 'keyfile': '/root/intermediate_ca.key'}
-openshift_master_overwrite_named_certificates=True
+openshift_master_overwrite_named_certificates=true
+openshift_master_bootstrap_auto_approve=true
 
 # Audit log
 # openshift_master_audit_config={"enabled": true, "auditFilePath": "/var/log/openpaas-oscp-audit/openpaas-oscp-audit.log", "maximumFileRetentionDays": 14, "maximumFileSizeMegabytes": 500, "maximumRetainedFiles": 5}
