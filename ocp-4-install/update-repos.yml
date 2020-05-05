@@ -5,7 +5,7 @@
   tasks:
     - name: Update repos block
       block:
-        - name: Update repos to 4.3
+        - name: Update repos to 4.4
           replace:
             path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
             regexp: '4\.1\.0'
