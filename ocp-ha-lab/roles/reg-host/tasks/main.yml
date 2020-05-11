@@ -10,8 +10,6 @@
       file:
         path: /etc/yum.repos.d/open_ocp-ha-lab.repo
         state: absent
-    - name: yum clean all
-      command: yum clean all
     - name: sub-mgr register
       redhat_subscription:
         state: present
