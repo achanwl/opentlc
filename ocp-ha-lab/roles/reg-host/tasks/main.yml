@@ -28,6 +28,7 @@
           - rhel-7-server-ose-3.11-rpms
           - rhel-7-server-ansible-2.6-rpms
           - rh-gluster-3-client-for-rhel-7-server-rpms
+        state: enabled
     - name: yum clean all
       command: yum clean all
     - name: yum update ansible
