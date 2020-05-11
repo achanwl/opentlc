@@ -19,5 +19,6 @@
 #   - role: set-manage_cgroup
 #     when: inventory_hostname in groups['nodes']
     - role: reg-host
+      when: inventory_hostname != 'localhost'
     - role: updatereboot
 #     when: inventory_hostname != 'localhost'
