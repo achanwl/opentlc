@@ -16,7 +16,7 @@
       redhat_subscription:
         state: present
         username: rhn-support-alchan
-        password: {{ rhnpasswd }}
+        password: "{{ rhnpasswd }}"
         pool_ids: 8a85f99c6c8b9588016c8be0f38a0ee9
     - name: Disable all repos
       rhsm_repository:
