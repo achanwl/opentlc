@@ -1,6 +1,10 @@
 - name: OCP HA Lab - Pre-installation Setup
   hosts: localhost,all
   order: inventory
+  vars_prompt:
+    - name: rhnpasswd
+      prompt: "RHN Password"
+      private: no
 
   roles:
     - role: set-guid

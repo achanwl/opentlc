@@ -1,8 +1,4 @@
 - name: Register system and enable required repos
-  vars_prompt:
-    - name: rhnpasswd
-      prompt: "RHN Password"
-      private: no
 
   block:
     - name: Copy open_ocp-ha-lab.repo
