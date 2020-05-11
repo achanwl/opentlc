@@ -1,6 +1,10 @@
 - name: Register system and enable required repos
 
   block:
+    - name: yum update subscription-manager first
+      yum:
+        name: subscription-manager
+        state: latest
     - name: Copy open_ocp-ha-lab.repo
       copy:
         src: /etc/yum.repos.d/open_ocp-ha-lab.repo
