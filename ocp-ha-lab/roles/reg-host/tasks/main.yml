@@ -1,0 +1,39 @@
+- name: Register system and enable required repos
+  vars_prompt:
+    - name: rhnpasswd
+      prompt: "RHN Password"
+      private: no
+
+  block:
+    - name: Copy open_ocp-ha-lab.repo
+      copy:
+        src: /etc/yum.repos.d/open_ocp-ha-lab.repo
+        dest: /etc/yum.repos.d/open_ocp-ha-lab.repo.old
+        remote_src: yes
+    - name: Remove open_ocp-ha-lab.repo
+      file:
+        path: /etc/yum.repos.d/open_ocp-ha-lab.repo
+        state: absent
+    - name: yum clean all
+      command: yum clean all
+    - name: sub-mgr register
+      redhat_subscription:
+        state: present
+        username: rhn-support-alchan
+        password: {{ rhnpasswd }}
+        pool_ids: 8a85f99c6c8b9588016c8be0f38a0ee9
+    - name: Disable all repos
+      rhsm_repository:
+        name: '*'
+        state: disabled
+    - name: Enable needed repos
+      rhsm_repository:
+        name:
+          - rhel-7-server-rpms
+          - rhel-7-server-extras-rpms
+          - rhel-7-server-ose-3.11-rpms
+          - rhel-7-server-ansible-2.9-rpms
+          - rh-gluster-3-client-for-rhel-7-server-rpms
+
+  tags:
+    - reg-host
