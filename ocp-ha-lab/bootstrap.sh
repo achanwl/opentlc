@@ -5,6 +5,10 @@
 #
 ansible-playbook playbooks/update-bastion.yml
 
+# Get into the dir
+#
+cd /usr/share/ansible/openshift-ansible
+
 # Pre-install
 #
 # Needs to be separated cuz it creates inventory file
