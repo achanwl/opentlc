@@ -21,4 +21,4 @@
     - role: reg-host
       when: inventory_hostname != 'localhost'
     - role: updatereboot
-#     when: inventory_hostname != 'localhost'
+      when: inventory_hostname != 'localhost'
