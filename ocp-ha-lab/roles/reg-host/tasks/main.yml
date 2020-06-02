@@ -40,6 +40,12 @@
       yum:
         name: ansible
         state: latest
+    - name: yum install packages
+      yum:
+        name:
+          - python2-openshift
+          - PyYAML
+        state: present
 
   tags:
     - reg-host

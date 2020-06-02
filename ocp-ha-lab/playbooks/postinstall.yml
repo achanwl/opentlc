@@ -8,3 +8,5 @@
     - role: pause
     - role: groupsync
       when: inventory_hostname == groups['masters'][0]
+    - role: config-metrics
+      when: inventory_hostname == groups['masters'][0]

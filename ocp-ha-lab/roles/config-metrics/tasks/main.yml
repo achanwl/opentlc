@@ -1,0 +1,94 @@
+- name: Annotate heketi-storage service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: heketi-storage
+        namespace: glusterfs
+      annotations:
+        prometheus.io/scheme=http
+        prometheus.io/scrape=true
+
+- name: Create hekieti servicemonitor
+  k8s:
+    state: present
+    definition:
+      apiVersion: monitoring.coreos.com/v1
+      kind: ServiceMonitor
+      metadata:
+        name: heketi
+        namespace: openshift-monitoring
+        labels:
+          k8s-app: heketi
+      spec:
+        endpoints:
+        - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+          interval: 30s
+          port: heketi
+          scheme: http
+          targetPort: 0
+        namespaceSelector:
+          matchNames:
+          - glusterfs
+        selector:
+          matchLabels:
+            heketi: storage-service
+
+- name: Add cluster-reader right
+  command: oc -n openshift-monitoring adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:openshift-monitoring:prometheus-k8s
+
+- name: Get STATS_USERNAME
+  command: oc -n default get dc/router -o jsonpath='{..env[?(@.name=="STATS_USERNAME")].value}'
+  register: stats_username.stdout
+
+- name: Get STATS_PASSWORD
+  command: oc -n default get dc/router -o jsonpath='{..env[?(@.name=="STATS_PASSWORD")].value}'
+  register: stats_password.stdout
+
+- name: Create router stats secret
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: router-stats-auth
+        namespace: openshift-monitoring
+      type: Opaque
+      data:
+        username: "{{ stats_username.stdout | b64encode }}"
+        password: "{{ stats_password.stdout | b64encode }}"
+
+- name: Create router servicemonitor
+  k8s:
+    state: present
+    definition:
+      apiVersion: monitoring.coreos.com/v1
+      kind: ServiceMonitor
+      metadata:
+        name: router-metrics
+        namespace: openshift-monitoring
+        labels:
+          k8s-app: haproxy-router
+      spec:
+        endpoints:
+        - basicAuth:
+            username:
+              name: router-stats-auth
+              key: username
+            password:
+              name: router-stats-auth
+              key: password
+          interval: 10s
+          path: /metrics
+          port: 1936-tcp
+          scheme: http
+        jobLabel: k8s-app
+        namespaceSelector:
+          matchNames:
+          - default
+        selector:
+          matchLabels:
+            router: router
