@@ -5,11 +5,16 @@
       yum:
         name: subscription-manager
         state: latest
+    - name: Check for open_ocp-ha-lab.repo
+      stat:
+        path: /etc/yum.repos.d/open_ocp-ha-lab.repo
+      register: repo_file
     - name: Copy open_ocp-ha-lab.repo
       copy:
         src: /etc/yum.repos.d/open_ocp-ha-lab.repo
         dest: /etc/yum.repos.d/open_ocp-ha-lab.repo.old
         remote_src: yes
+      when: repo_file.stat.exists
     - name: Remove open_ocp-ha-lab.repo
       file:
         path: /etc/yum.repos.d/open_ocp-ha-lab.repo
@@ -36,16 +41,16 @@
         state: enabled
     - name: yum clean all
       command: yum clean all
-    - name: yum update ansible
-      yum:
-        name: ansible
-        state: latest
     - name: yum install packages
       yum:
         name:
           - python2-openshift
           - PyYAML
-        state: present
+        state: latest
+    - name: yum update ansible
+      yum:
+        name: ansible
+        state: latest
 
   tags:
     - reg-host
