@@ -223,12 +223,15 @@ openshift_hosted_registry_pullthrough=true
 openshift_hosted_registry_acceptschema2=true
 openshift_hosted_registry_enforcequota=true
 
-openshift_hosted_registry_storage_kind=nfs
-openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
-openshift_hosted_registry_storage_nfs_directory=/srv/nfs
-openshift_hosted_registry_storage_nfs_options='*(rw,async,root_squash)'
-openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_kind=glusterfs
 openshift_hosted_registry_storage_volume_size=50Gi
+
+#openshift_hosted_registry_storage_kind=nfs
+#openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+#openshift_hosted_registry_storage_nfs_directory=/srv/nfs
+#openshift_hosted_registry_storage_nfs_options='*(rw,async,root_squash)'
+#openshift_hosted_registry_storage_volume_name=registry
+#openshift_hosted_registry_storage_volume_size=50Gi
 
 ###########################################################################
 ### OpenShift Service Catalog Vars
@@ -240,7 +243,7 @@ openshift_enable_service_catalog=true
 #openshift_service_catalog_remove=false
 
 # default=true
-#openshift_install_examples=true
+openshift_install_examples=true
 
 # default=true
 template_service_broker_install=true
@@ -268,7 +271,10 @@ openshift_management_nodeselector="node-role.kubernetes.io/compute=true"
 #openshift_management_template_parameters={'APPLICATION_MEM_REQ': '2Gi', 'POSTGRESQL_MEM_REQ': '3Gi'}
 
 # Gluster
-openshift_storage_glusterfs_storageclass_default=true
+openshift_storage_glusterfs_storageclass=true
+openshift_storage_glusterfs_storageclass_default=false
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_block_storageclass_default=false
 openshift_storage_glusterfs_image=registry.redhat.io/rhgs3/rhgs-server-rhel7:v3.11
 openshift_storage_glusterfs_block_image=registry.redhat.io/rhgs3/rhgs-gluster-block-prov-rhel7:v3.11
 openshift_storage_glusterfs_s3_image=registry.redhat.io/rhgs3/rhgs-s3-server-rhel7:v3.11
@@ -291,7 +297,7 @@ etcd
 nodes
 computes
 nfs
-#glusterfs
+glusterfs
 
 [lb]
 loadbalancer.{{ guid.stdout }}.internal
@@ -329,8 +335,8 @@ node3.{{ guid.stdout }}.internal
 [nfs]
 support1.{{ guid.stdout }}.internal
 
-#[glusterfs]
-#node1.{{ guid.stdout }}.internal glusterfs_zone=1 glusterfs_devices='["/dev/xvdb"]'
-#node2.{{ guid.stdout }}.internal glusterfs_zone=2 glusterfs_devices='["/dev/xvdb"]'
-#node3.{{ guid.stdout }}.internal glusterfs_zone=3 glusterfs_devices='["/dev/xvdb"]'
+[glusterfs]
+node1.{{ guid.stdout }}.internal glusterfs_zone=1 glusterfs_devices='["/dev/xvdb"]'
+node2.{{ guid.stdout }}.internal glusterfs_zone=2 glusterfs_devices='["/dev/xvdb"]'
+node3.{{ guid.stdout }}.internal glusterfs_zone=3 glusterfs_devices='["/dev/xvdb"]'
 

@@ -41,11 +41,11 @@
 
 - name: Get STATS_USERNAME
   command: oc -n default get dc/router -o jsonpath='{..env[?(@.name=="STATS_USERNAME")].value}'
-  register: stats_username.stdout
+  register: stats_username
 
 - name: Get STATS_PASSWORD
   command: oc -n default get dc/router -o jsonpath='{..env[?(@.name=="STATS_PASSWORD")].value}'
-  register: stats_password.stdout
+  register: stats_password
 
 - name: Create router stats secret
   k8s:
