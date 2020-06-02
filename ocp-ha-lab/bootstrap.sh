@@ -13,9 +13,9 @@ cd /usr/share/ansible/openshift-ansible
 #
 # Needs to be separated cuz it creates inventory file
 #
-ansible-playbook --ask-vault-pass playbooks/preinstall.yml
+ansible-playbook --ask-vault-pass ~/opentlc/ocp-ha-lab/playbooks/preinstall.yml
 
 # Build
 #
-ansible-playbook --ask-vault-pass playbooks/build.yml
+ansible-playbook --ask-vault-pass ~/opentlc/ocp-ha-lab/playbooks/build.yml
 
