@@ -1,15 +1,15 @@
 - name: Annotate heketi-storage service
   k8s:
-		state: present
-		namespace: glusterfs
-		api_version: v1
-		kind: Service
-		name: heketi-storage
-		definition:
-			metadata:
-				annotations:
-					prometheus.io/scheme: http
-					prometheus.io/scrape: "true"
+    state: present
+    namespace: glusterfs
+    api_version: v1
+    kind: Service
+    name: heketi-storage
+    definition:
+      metadata:
+        annotations:
+          prometheus.io/scheme: http
+          prometheus.io/scrape: "true"
 
 - name: Create hekieti servicemonitor
   k8s:
