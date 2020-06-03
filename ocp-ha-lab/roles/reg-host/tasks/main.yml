@@ -47,10 +47,6 @@
           - python2-openshift
           - PyYAML
         state: latest
-    - name: yum update ansible
-      yum:
-        name: ansible
-        state: latest
 
   tags:
     - reg-host
