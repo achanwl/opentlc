@@ -4,9 +4,9 @@
 #  regexp: '3\.11\.59'
 #  replace: '3.11.154'
 
-#- name: clear versionlock
-#  command: yum versionlock clear
-#  when: inventory_hostname in groups['nodes']
+- name: clear versionlock
+  command: yum versionlock clear
+  when: inventory_hostname in groups['nodes']
 
 - name: yum clean all
   command: yum clean all
