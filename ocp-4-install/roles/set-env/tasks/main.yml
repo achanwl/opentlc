@@ -17,4 +17,5 @@
     - ''
     - 'EDITOR=vim'
     - 'VISUAL=vim'
-    - 'export EDITOR VISUAL'
+    - 'SSH_KEY_PATH=~/.ssh/cluster-{{ guid.stdout }}-key'
+    - 'export EDITOR VISUAL SSH_KEY_PATH'
