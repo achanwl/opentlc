@@ -255,13 +255,13 @@ ansible_service_broker_install=true
 ansible_service_broker_local_registry_whitelist=['.*-apb$']
 
 # OAB Persistent Storage
-openshift_hosted_etcd_storage_kind=nfs
-openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
-openshift_hosted_etcd_storage_nfs_directory=/srv/nfs
-openshift_hosted_etcd_storage_nfs_options='*(rw,root_squash,sync,no_wdelay)'
-openshift_hosted_etcd_storage_volume_name=etcd-oab
-openshift_hosted_etcd_storage_volume_size=50Gi
-openshift_hosted_etcd_storage_labels={'storage': 'etcd-oab'}
+#openshift_hosted_etcd_storage_kind=nfs
+#openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
+#openshift_hosted_etcd_storage_nfs_directory=/srv/nfs
+#openshift_hosted_etcd_storage_nfs_options='*(rw,root_squash,sync,no_wdelay)'
+#openshift_hosted_etcd_storage_volume_name=etcd-oab
+#openshift_hosted_etcd_storage_volume_size=50Gi
+#openshift_hosted_etcd_storage_labels={'storage': 'etcd-oab'}
 
 # CloudForms
 openshift_management_install_management=true
