@@ -46,6 +46,9 @@
         name:
           - python2-openshift
           - PyYAML
+          - tree
+          - traceroute
+          - lsof
         state: latest
 
   tags:
