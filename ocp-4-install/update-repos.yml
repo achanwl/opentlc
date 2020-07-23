@@ -5,11 +5,11 @@
   tasks:
     - name: Update repos block
       block:
-        - name: Update repos to 4.4
+        - name: Update repos to 4.5
           replace:
             path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
             regexp: '4\.1\.0'
-            replace: '4.4.0'
+            replace: '4.5.0'
         - name: Update ansible to 2.9
           replace:
             path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
