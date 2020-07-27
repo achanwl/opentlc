@@ -15,7 +15,7 @@ ansible_become=yes
 ###########################################################################
 
 openshift_deployment_type=openshift-enterprise
-openshift_disable_check="disk_availability,memory_availability,docker_image_availability"
+openshift_disable_check=disk_availability,docker_image_availability,docker_storage,memory_availability
 
 # OpenShift Version:
 # If you modify the openshift_image_tag or the openshift_pkg_version variables after the cluster is set up, then an upgrade can be triggered, resulting in downtime.
