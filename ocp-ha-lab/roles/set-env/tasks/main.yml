@@ -18,3 +18,14 @@
     - 'EDITOR=vim'
     - 'VISUAL=vim'
     - 'export EDITOR VISUAL'
+
+- name: create ~/bin
+  file:
+    path: ~/bin
+    state: directory
+
+- name: get jq
+  get_url:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+    dest: ~/bin/jq
+    mode: '0755'
