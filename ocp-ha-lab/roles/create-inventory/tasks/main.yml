@@ -1,3 +1,12 @@
+- name: Get package facts
+  package_facts:
+    manager: auto
+
+- name: Get OCP Version
+  set_fact:
+    ocp_ver: "{{ ansible_facts.packages['openshift-ansible'] | json_query('[].version') }}"
+  when: "'openshift-ansible' in ansible_facts.packages"
+
 - name: Create inventory file
   template:
     src: hosts.j2
