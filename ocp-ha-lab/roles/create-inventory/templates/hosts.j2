@@ -269,7 +269,7 @@ openshift_management_install_management=true
 openshift_management_storage_class=nfs
 openshift_management_storage_nfs_base_dir=/srv/cf
 openshift_management_nodeselector="node-role.kubernetes.io/compute=true"
-#openshift_management_template_parameters={'APPLICATION_MEM_REQ': '2Gi', 'POSTGRESQL_MEM_REQ': '3Gi'}
+openshift_management_template_parameters={'APPLICATION_MEM_REQ': '2Gi', 'POSTGRESQL_MEM_REQ': '3Gi'}
 
 # Gluster
 openshift_storage_glusterfs_storageclass=true
