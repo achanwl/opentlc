@@ -163,11 +163,23 @@
           requests:
             storage: 1Gi
 
+- name: Create grafana is
+  k8s:
+    state: present
+    namespace: rmetrics
+    definition: "{{ lookup('file', 'grafana-is.yml') }}"
+
 - name: Create grafana dc
   k8s:
     state: present
     namespace: rmetrics
     definition: "{{ lookup('file', 'grafana-dc.yml') }}"
+
+- name: Create grafana svc
+  k8s:
+    state: present
+    namespace: rmetrics
+    definition: "{{ lookup('file', 'grafana-svc.yml') }}"
 
 - name: Create grafana route
   k8s:
