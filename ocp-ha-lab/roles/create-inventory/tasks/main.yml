@@ -4,7 +4,7 @@
 
 - name: Get OCP Version
   set_fact:
-    ocp_ver: "{{ ansible_facts.packages['openshift-ansible'] | json_query('[].version') }}"
+    ocp_ver: "{{ ansible_facts.packages['openshift-ansible'] | json_query('[].version') | first }}"
   when: "'openshift-ansible' in ansible_facts.packages"
 
 - name: Create inventory file
