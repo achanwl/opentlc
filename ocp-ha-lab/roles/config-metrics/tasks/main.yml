@@ -97,50 +97,50 @@
   k8s:
     state: present
     definition:
-			apiVersion: v1
-			kind: Namespace
-			metadata:
-				name: rmetrics
-				annotations:
-					openshift.io/node-selector: node-role.kubernetes.io/infra=true
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: rmetrics
+        annotations:
+          openshift.io/node-selector: node-role.kubernetes.io/infra=true
 
 - name: Create grafana datasource
-	shell: oc -n openshift-monitoring get secret grafana-datasources --export -o yaml | oc -n rmetrics create -f -
+  shell: oc -n openshift-monitoring get secret grafana-datasources --export -o yaml | oc -n rmetrics create -f -
 
 - name: Create grafana dashboard provider
-	k8s:
-		state: present
-		definition:
-			apiVersion: v1
-			kind: ConfigMap
-			metadata:
-				name: grafana-dashboards
-				namespace: rmetrics
-				labels:
-					app: grafana
-			data:
-				haproxy.yaml: |
-					apiVersion: 1
-					providers:
-					- name: 'HAProxy'
-						folder: ''
-						type: file
-						disableDeletion: true
-						editable: false
-						allowUiUpdates: true
-						options:
-							path: /var/lib/grafana/dashboards/haproxy
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: grafana-dashboards
+        namespace: rmetrics
+        labels:
+          app: grafana
+      data:
+        haproxy.yaml: |
+          apiVersion: 1
+          providers:
+          - name: 'HAProxy'
+            folder: ''
+            type: file
+            disableDeletion: true
+            editable: false
+            allowUiUpdates: true
+            options:
+              path: /var/lib/grafana/dashboards/haproxy
 
 - name: Get haproxy-full.json
   get_url:
-		url: https://raw.githubusercontent.com/rfrail3/grafana-dashboards/master/prometheus/haproxy-full.json
-		dest: ~/haproxy.json
+    url: https://raw.githubusercontent.com/rfrail3/grafana-dashboards/master/prometheus/haproxy-full.json
+    dest: ~/haproxy.json
 
 - name: Set the default prometheus source
-	replace:
-		path: ~/haproxy.json
-		regexp: '\$\{DS_LOCALHOST\}'
-		replace: 'prometheus'
+  replace:
+    path: ~/haproxy.json
+    regexp: '\$\{DS_LOCALHOST\}'
+    replace: 'prometheus'
 
 - name: Create grafana haporoxy dashboard
   command: oc -n rmetrics create cm grafana-dashboard-haproxy --from-file=$HOME/haproxy.json
@@ -149,19 +149,19 @@
   k8s:
     state: present
     definition:
-			apiVersion: v1
-			kind: PersistentVolumeClaim
-			metadata:
-				name: grafana-data
-				namespace: rmetrics
-				labels:
-					app: grafana
-			spec:
-				accessModes:
-					- ReadWriteOnce
-				resources:
-					requests:
-						storage: 1Gi
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: grafana-data
+        namespace: rmetrics
+        labels:
+          app: grafana
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
 
 - name: Create grafana dc
   k8s:
@@ -174,18 +174,18 @@
     state: present
     namespace: rmetrics
     definition:
-			apiVersion: v1
-			kind: Route
-			metadata:
-				name: grafana
-				labels:
-					app: grafana
-			spec:
-				to:
-					kind: Service
-					name: grafana
-				port:
-					targetPort: 3000-tcp
-				tls:
-					termination: edge
-					insecureEdgeTerminationPolicy: Redirect
+      apiVersion: v1
+      kind: Route
+      metadata:
+        name: grafana
+        labels:
+          app: grafana
+      spec:
+        to:
+          kind: Service
+          name: grafana
+        port:
+          targetPort: 3000-tcp
+        tls:
+          termination: edge
+          insecureEdgeTerminationPolicy: Redirect
