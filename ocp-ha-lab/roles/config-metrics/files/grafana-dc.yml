@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: grafana
+    deploymentconfig: grafana
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: grafana
+        deploymentconfig: grafana
+    spec:
+      containers:
+      - image: grafana/grafana:latest
+        imagePullPolicy: IfNotPresent
+        name: grafana
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/grafana/dashboards/haproxy
+          name: grafana-dashboard-haproxy-volume
+        - mountPath: /etc/grafana/provisioning/dashboards
+          name: grafana-dashboards-volume
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources-volume
+        - mountPath: /var/lib/grafana
+          name: grafana-volume
+      securityContext: {}
+      volumes:
+      - name: grafana-dashboard-haproxy-volume
+        configMap:
+          name: grafana-dashboard-haproxy
+          defaultMode: 420
+      - name: grafana-dashboards-volume
+        configMap:
+          name: grafana-dashboards
+          defaultMode: 420
+      - name: grafana-datasources-volume
+        secret:
+          secretName: grafana-datasources
+          defaultMode: 420
+      - name: grafana-volume
+        persistentVolumeClaim:
+          claimName: grafana-data
+  triggers:
+  - type: ConfigChange
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - grafana
+      from:
+        kind: ImageStreamTag
+        name: grafana:latest
