@@ -24,7 +24,7 @@
     - "\nEDITOR=vim"
     - 'VISUAL=vim'
     - 'SSH_KEY_PATH=~/.ssh/cluster-${GUID}-key'
-		- 'KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
+    - 'KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
     - 'export EDITOR VISUAL SSH_KEY_PATH KUBECONFIG'
 
 - name: create ~/bin
