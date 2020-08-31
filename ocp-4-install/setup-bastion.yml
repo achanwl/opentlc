@@ -18,20 +18,20 @@
       register: guid
     - name: Setup aws and ocp tools
       block:
-        - name: Unzip awscli-bundle
+        - name: Unzip awscli
           unarchive:
             src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
-            dest: "~/awscliv2.zip"
+            dest: "~"
             remote_src: yes
         - name: Install AWS CLI
-          command: ~/aws/install
+          command: ~/aws/install -u
         - name: Clean up files
           file:
             path: "~/{{ item }}"
             state: absent
           with_items:
             - aws
-            - awscliv2.zip
+            - awscli-exe-linux-x86_64.zip
         - name: Get OCP Installer
           unarchive:
             src: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{ ocpver }}/openshift-install-linux-{{ ocpver }}.tar.gz
@@ -50,11 +50,6 @@
     - name: Setup ssh keypair
       openssh_keypair:
         path: ~/.ssh/cluster-{{ guid.stdout }}-key
-    - name: Set kubeconfig
-      lineinfile:
-        path: ~/.bash_profile
-        line: 'export KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
-        insertafter: EOF
 
   roles:
     - role: aws-creds
