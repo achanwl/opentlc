@@ -14,14 +14,14 @@
     path: ~/.bashrc
     line: "{{ item }}"
   with_items:
-    - "\ncomplete -C '/usr/local/aws/bin/aws_completer' aws"
+    - "complete -C '/usr/local/aws/bin/aws_completer' aws"
 
 - name: set env vars
   lineinfile:
     path: ~/.bash_profile
     line: "{{ item }}"
   with_items:
-    - "\nEDITOR=vim"
+    - 'EDITOR=vim'
     - 'VISUAL=vim'
     - 'SSH_KEY_PATH=~/.ssh/cluster-${GUID}-key'
     - 'KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
