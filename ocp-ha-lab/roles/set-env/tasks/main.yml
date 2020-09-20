@@ -9,6 +9,12 @@
     line: 'alias vi=vim'
     insertafter: '^alias mv'
 
+- name: set rmf alias
+  lineinfile:
+    path: ~/.bashrc
+    line: 'alias rmf="yq d - metadata.managedFields"'
+    insertafter: '^alias vi'
+
 - name: set env vars
   lineinfile:
     path: ~/.bash_profile
