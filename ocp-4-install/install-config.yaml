@@ -1,0 +1,24 @@
+apiVersion: v1
+metadata:
+  name: cluster-88a9
+platform:
+  aws:
+    region: us-east-2
+baseDomain: sandbox134.opentlc.com
+publish: External
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: 3
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: 3
+networking:
+  networkType: OpenShiftSDN
+sshKey: 'x'
+pullSecret: 'x'
