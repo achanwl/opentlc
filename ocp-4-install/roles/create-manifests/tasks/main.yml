@@ -48,13 +48,13 @@
   blockinfile:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     insertbefore: '^      providerSpec:$'
-    block: |
-      taints:
-      - effect: NoSchedule
-        key: infra
-        value: reserved
-      - effect: NoExecute
-        key: infra
-        value: reserved
+    block: |6
+        taints:
+        - effect: NoSchedule
+          key: infra
+          value: reserved
+        - effect: NoExecute
+          key: infra
+          value: reserved
   with_sequence: start=0 end=2
 
