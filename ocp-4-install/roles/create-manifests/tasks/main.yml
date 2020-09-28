@@ -13,3 +13,10 @@
     dest: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     mode: 0640
   with_sequence: start=0 end=2
+
+- name: Update infra machinesets
+  replace:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    regexp: '-worker-us'
+    replace: '-infra-us'
+  with_sequence: start=0 end=2
