@@ -50,6 +50,9 @@
             exclude: README.md
         - name: Set bash completion
           shell: /usr/bin/oc completion bash > /etc/bash_completion.d/openshift
+        - name: Get yq
+          pip:
+            name: yq
       become: true
     - name: Setup ssh keypair
       openssh_keypair:

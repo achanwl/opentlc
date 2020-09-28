@@ -39,12 +39,8 @@
     state: directory
 
 - name: get yq
-  pip:
-    name: yq
-
-- name: get yq
   get_url:
     url: https://github.com/mikefarah/yq/releases/download/3.3.4/yq_linux_amd64
-    dest: ~/bin/yq.old
+    dest: ~/bin/yq
     mode: '0755'
 
