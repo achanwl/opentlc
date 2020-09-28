@@ -53,6 +53,7 @@
         - name: Get yq
           pip:
             name: yq
+            executable: pip3
       become: true
     - name: Setup ssh keypair
       openssh_keypair:
