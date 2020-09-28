@@ -25,20 +25,20 @@
   replace:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     regexp: 'worker$'
-    replace: 'infra$'
+    replace: 'infra'
   with_sequence: start=0 end=2
 
 - name: Insert infra node labels part1
   lineinfile:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
-    line: '^        labels:$'
+    line: '        labels:'
     insertbefore: '^      providerSpec:$'
   with_sequence: start=0 end=2
 
 - name: Insert infra node labels part2
   lineinfile:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
-    line: '^          node-role.kubernetes.io/infra: ""$'
+    line: '          node-role.kubernetes.io/infra: ""'
     insertbefore: '^      providerSpec:$'
   with_sequence: start=0 end=2
 
