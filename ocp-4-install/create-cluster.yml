@@ -13,3 +13,4 @@
 
   roles:
     - role: create-install-config
+    - role: create-manifests
