@@ -20,7 +20,7 @@
     path: ~/.bashrc
     line: "{{ item }}"
   with_items:
-    - "complete -C '/usr/local/aws/bin/aws_completer' aws"
+    - "complete -C '/usr/local/bin/aws_completer' aws"
 
 - name: set env vars
   lineinfile:
