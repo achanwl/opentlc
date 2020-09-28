@@ -16,8 +16,6 @@
       when: inventory_hostname == 'localhost'
     - role: setup-nfs
       when: inventory_hostname in groups['nfs']
-#   - role: set-manage_cgroup
-#     when: inventory_hostname in groups['nodes']
     - role: reg-host
       when: inventory_hostname != 'localhost'
     - role: updatereboot

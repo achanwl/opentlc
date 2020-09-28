@@ -17,8 +17,3 @@
         name: '*'
         state: latest
 
-    - name: Reboot
-      shell: sleep 3 && /sbin/shutdown -r now
-      async: 60
-      poll: 0
-
