@@ -1,9 +1,16 @@
 - name: Create manifests
   command: openshift-install create manifests --dir $HOME/cluster-${GUID}
 
-- name: Copy cluster-network-03-config
+- name: Create cluster-network-03-config
   copy:
     src: cluster-network-03-config.yml
     dest: ~/cluster-{{ guid.stdout }}/manifests
     mode: 0640
 
+- name: Create infra machinesets
+  copy:
+    src: ~/cluster-{{ guid.stdout }}/manifests/99_openshift-cluster-api_worker-machineset-{{ item }}.yaml
+    dest: ~/cluster-{{ guid.stdout }}/manifests/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    mode: 0640
+  with_sequence:
+    count: 3
