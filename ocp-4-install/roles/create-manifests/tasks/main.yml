@@ -45,11 +45,16 @@
     - ['        labels:', '          node-role.kubernetes.io/infra: ""']
 
 - name: Insert infra node taints
-  lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item[0] }}.yaml
-    line: "{{ item[1] }}"
+  blockinfile:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     insertbefore: '^      providerSpec:$'
-  with_nested:
-    - ['0', '1', '2']
-    - ['      taints:', '      - effect: NoSchedule', '        key: infra', '        value: reserved', '      - effect: NoExecute', '        key: infra', '        value: reserved']
+    block: |6
+			taints:
+			- effect: NoSchedule
+				key: infra
+				value: reserved
+			- effect: NoExecute
+				key: infra
+				value: reserved
+  with_sequence: start=0 end=2
 
