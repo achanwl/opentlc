@@ -1,25 +1,19 @@
 - name: Update Repos
   hosts: localhost
   order: inventory
+	become: yes
+  vars_prompt:
+    - name: rhnpasswd
+      prompt: "RHN Password"
+      private: yes
+
+  roles:
+    - role: reg-host
 
   tasks:
-    - name: Update repos block
-      block:
-        - name: Update repos to 4.5
-          replace:
-            path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
-            regexp: '4\.1\.0'
-            replace: '4.5.0'
-        - name: Update ansible to 2.9
-          replace:
-            path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
-            regexp: 'ansible\-2\.7'
-            replace: 'ansible-2.9'
-        - name: yum clean all
-          command: yum clean all
-        - name: yum update ansible
-          yum:
-            name: ansible
-            state: latest
-      become: true
-
+    - name: yum clean all
+      command: yum clean all
+    - name: yum update all
+      yum:
+        name: '*'
+        state: latest

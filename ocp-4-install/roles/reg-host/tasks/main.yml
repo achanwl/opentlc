@@ -1,0 +1,56 @@
+- name: Register system and enable required repos
+
+  block:
+    - name: yum update subscription-manager first
+      yum:
+        name: subscription-manager
+        state: latest
+    - name: Check for open_ocp4-ha-lab.repo
+      stat:
+        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+      register: repo_file
+    - name: Copy open_ocp4-ha-lab.repo
+      copy:
+        src: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        dest: /etc/yum.repos.d/open_ocp4-ha-lab.repo.old
+        remote_src: yes
+      when: repo_file.stat.exists
+    - name: Remove open_ocp4-ha-lab.repo
+      file:
+        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        state: absent
+    - name: sub-mgr register
+      redhat_subscription:
+        state: present
+        username: rhn-support-alchan
+        password: "{{ rhnpasswd }}"
+        force_register: yes
+        pool_ids: 8a85f99c6c8b9588016c8be0f38a0ee9
+    - name: Disable all repos
+      rhsm_repository:
+        name: '*'
+        state: disabled
+    - name: Enable needed repos
+      rhsm_repository:
+        name:
+          - rhel-7-server-rpms
+          - rhel-7-server-extras-rpms
+          - rhel-7-server-optional-rpms
+          - rhel-7-server-ansible-2.9-rpms
+          - rhel-7-server-ose-4.5-rpms
+        state: enabled
+    - name: yum clean all
+      command: yum clean all
+    - name: yum install packages
+      yum:
+        name:
+          - python2-openshift
+          - PyYAML
+          - tree
+          - traceroute
+          - lsof
+          - jq
+        state: latest
+
+  tags:
+    - reg-host
