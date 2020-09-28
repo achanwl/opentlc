@@ -1,7 +1,7 @@
 - name: Update Repos
   hosts: localhost
   order: inventory
-	become: yes
+  become: yes
   vars_prompt:
     - name: rhnpasswd
       prompt: "RHN Password"
