@@ -12,6 +12,10 @@
       prompt: "aws_secret_access_key"
       private: no
 
+  roles:
+    - role: aws-creds
+    - role: set-env
+
   tasks:
     - name: Get GUID
       shell: hostname | cut -d"." -f2
@@ -50,7 +54,3 @@
     - name: Setup ssh keypair
       openssh_keypair:
         path: ~/.ssh/cluster-{{ guid.stdout }}-key
-
-  roles:
-    - role: aws-creds
-    - role: set-env
