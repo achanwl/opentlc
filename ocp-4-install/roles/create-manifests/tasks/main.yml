@@ -1,0 +1,8 @@
+- name: Create manifests
+  command: openshift-install create manifests --dir $HOME/cluster-${GUID}
+
+- name: Copy cluster-network-03-config
+  copy:
+    src: cluster-network-03-config.yml
+    dest: ~/cluster-{{ guid.stdout }}
+

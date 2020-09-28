@@ -6,5 +6,10 @@
       prompt: "sandbox id"
       private: no
 
+  pre_tasks:
+    - name: Get GUID
+      shell: hostname | cut -d"." -f2
+      register: guid
+
   roles:
     - role: create-install-config
