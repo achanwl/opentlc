@@ -35,17 +35,12 @@
     replace: 'infra'
   with_sequence: start=0 end=2
 
-- name: Insert infra node labels part1
+- name: Insert infra node labels
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
-    line: '        labels:'
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item[0] }}.yaml
+    line: "{{ item[1] }}"
     insertbefore: '^      providerSpec:$'
-  with_sequence: start=0 end=2
-
-- name: Insert infra node labels part2
-  lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
-    line: '          node-role.kubernetes.io/infra: ""'
-    insertbefore: '^      providerSpec:$'
-  with_sequence: start=0 end=2
+  with_nested:
+    - ['0', '1', '2']
+    - ['        labels:', '          node-role.kubernetes.io/infra: ""']
 
