@@ -1,2 +1,2 @@
 sshkey: "{{ lookup('file', '~/.ssh/cluster-{{ guid.stdout }}-key.pub') }}"
-pullsecret: "xxx"
+pullsecret: "{{ lookup('file', 'pullsecret') }}"
