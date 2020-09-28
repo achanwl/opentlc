@@ -1,10 +1,10 @@
 apiVersion: v1
 metadata:
-  name: cluster-88a9
+  name: cluster-{{ guid }}
 platform:
   aws:
     region: us-east-2
-baseDomain: sandbox134.opentlc.com
+baseDomain: sandbox{{ sbid }}.opentlc.com
 publish: External
 controlPlane:
   architecture: amd64
@@ -20,5 +20,5 @@ compute:
   replicas: 3
 networking:
   networkType: OpenShiftSDN
-sshKey: 'x'
-pullSecret: 'x'
+sshKey: '{{ sshkey }}'
+pullSecret: '{{ pullsecret }}'

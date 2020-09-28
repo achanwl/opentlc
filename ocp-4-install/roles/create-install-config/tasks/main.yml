@@ -1,0 +1,13 @@
+- name: Get GUID
+  shell: hostname | cut -d"." -f2
+  register: guid
+
+- name: Create cluster-$GUID dir
+  file:
+    path: ~/cluster-{{ guid.stdout }}
+    state: directory
+
+- name: Create install-config.yaml
+  template:
+    src: install-config.j2
+    dest: ~/cluster-{{ guid.stdout }}/install-config.yaml

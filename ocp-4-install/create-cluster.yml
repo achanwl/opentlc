@@ -1,0 +1,10 @@
+- name: Create OCP4 Cluster
+  hosts: localhost
+  order: inventory
+  vars_prompt:
+    - name: sbid
+      prompt: "sandbox id"
+      private: no
+
+  roles:
+    - role: create-install-config
