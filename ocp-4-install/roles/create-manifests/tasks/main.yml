@@ -12,4 +12,4 @@
     src: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item }}.yaml
     dest: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     mode: 0640
-  with_sequence: end=2
+  with_sequence: start=0 end=2
