@@ -14,9 +14,31 @@
     mode: 0640
   with_sequence: start=0 end=2
 
-- name: Update infra machinesets
+- name: Update infra machinesets part1
   replace:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     regexp: '-worker-us'
     replace: '-infra-us'
   with_sequence: start=0 end=2
+
+- name: Update infra machinesets part2
+  replace:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    regexp: 'worker$'
+    replace: 'infra$'
+  with_sequence: start=0 end=2
+
+- name: Insert infra node labels part1
+  lineinfile:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    line: '^        labels:$'
+    insertbefore: '^      providerSpec:$'
+  with_sequence: start=0 end=2
+
+- name: Insert infra node labels part2
+  lineinfile:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    line: '^          node-role.kubernetes.io/infra: ""$'
+    insertbefore: '^      providerSpec:$'
+  with_sequence: start=0 end=2
+
