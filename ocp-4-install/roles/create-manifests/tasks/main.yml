@@ -14,6 +14,13 @@
     mode: 0640
   with_sequence: start=0 end=2
 
+- name: Switch to m4.xlarge
+  replace:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    regexp: 'm4\.large'
+    replace: 'm4.xlarge'
+  with_sequence: start=0 end=2
+
 - name: Update infra machinesets part1
   replace:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
