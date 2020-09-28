@@ -2,6 +2,11 @@
   shell: hostname | cut -d"." -f2
   register: guid
 
+- name: Remove cluster-$GUID dir
+  file:
+    path: ~/cluster-{{ guid.stdout }}
+    state: absent
+
 - name: Create cluster-$GUID dir
   file:
     path: ~/cluster-{{ guid.stdout }}
