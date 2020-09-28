@@ -11,8 +11,6 @@
     - role: reg-host
 
   tasks:
-    - name: yum clean all
-      command: yum clean all
     - name: yum update all
       yum:
         name: '*'
