@@ -49,11 +49,7 @@
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item.0 }}.yaml
     line: "{{ item.1 }}"
     state: absent
-  loop: "{{ range(0, 2, 1) | product({{ lines }}) | list }}"
-  vars:
-    lines:
-      - "# BEGIN ANSIBLE MANAGED BLOCK"
-      - "# END ANSIBLE MANAGED BLOCK"
+  loop: "{{ range(0, 2, 1) | product(['# BEGIN ANSIBLE MANAGED BLOCK', '# END ANSIBLE MANAGED BLOCK']) | list }}"
 
 - name: Insert infra node taints
   blockinfile:
