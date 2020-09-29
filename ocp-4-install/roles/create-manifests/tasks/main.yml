@@ -58,20 +58,20 @@
               value: reserved
   with_sequence: start=0 end=2
 
-#- name: Set nodeplacement for ingress
-#  blockinfile:
-#    path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
-#    insertbefore: '^status: {}$'
-#    block: |2
-#        nodePlacement:
-#          nodeSelector:
-#            matchLabels:
-#              node-role.kubernetes.io/infra: ""
-#          tolerations:
-#          - effect: NoSchedule
-#            key: infra
-#            value: reserved
-#          - effect: NoExecute
-#            key: infra
-#            value: reserved
+- name: Set nodeplacement for ingress
+  blockinfile:
+    path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
+    insertbefore: '^status: {}$'
+    block: |2
+        nodePlacement:
+          nodeSelector:
+            matchLabels:
+              node-role.kubernetes.io/infra: ""
+          tolerations:
+          - effect: NoSchedule
+            key: infra
+            value: reserved
+          - effect: NoExecute
+            key: infra
+            value: reserved
 
