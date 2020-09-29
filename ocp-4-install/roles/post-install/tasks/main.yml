@@ -1,7 +1,7 @@
 - name: Get a list of infra nodes
   k8s_info:
     kind: Node
-    label_selector:
+    label_selectors:
       - node-role.kubernetes.io/infra
   register: infranode_list
 
