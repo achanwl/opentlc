@@ -61,7 +61,7 @@
 - name: Set nodeplacement for ingress
   blockinfile:
     path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
-    insertbefore: '^status: {}$'
+    insertafter: '^spec:$'
     block: |2
         nodePlacement:
           nodeSelector:
@@ -74,4 +74,14 @@
           - effect: NoExecute
             key: infra
             value: reserved
+
+- name: Remove managed block lines
+  lineinfile:
+    path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
+    line: "{{ item }}"
+    state: absent
+  loop:
+    - "# BEGIN ANSIBLE MANAGED BLOCK"
+    - "# END ANSIBLE MANAGED BLOCK"
+
 
