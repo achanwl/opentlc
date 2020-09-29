@@ -1,0 +1,11 @@
+- name: Create OCP4 Cluster
+  hosts: localhost
+  order: inventory
+
+  pre_tasks:
+    - name: Get GUID
+      shell: hostname | cut -d"." -f2
+      register: guid
+
+  roles:
+    - role: post-install
