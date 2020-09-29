@@ -4,5 +4,6 @@ metadata:
   name: cluster
 spec:
   defaultNetwork:
+    type: OpenShiftSDN
     openshiftSDNConfig:
       mode: Multitenant
