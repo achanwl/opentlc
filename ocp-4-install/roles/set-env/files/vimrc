@@ -10,19 +10,14 @@ endif
 "
 call plug#begin('~/.vim/bundle')
 
-" plaenight
+" palenight theme
 "
 Plug 'drewtempelmeyer/palenight.vim'
 
-" fugitive
+" fugitive for git
 "   - needed for showing branch on airline
 "
 Plug 'tpope/vim-fugitive'
-
-" airline
-"
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 " ansible-vim
 "
@@ -31,6 +26,15 @@ Plug 'pearofducks/ansible-vim'
 " vim-puppet
 "
 Plug 'rodjek/vim-puppet'
+
+" syntastic
+"
+Plug 'vim-syntastic/syntastic'
+
+" airline statusline
+"
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " End initialization
 "
@@ -42,7 +46,7 @@ call plug#end()
 " set fo=tcq
 set nocompatible
 set modeline
-set bg=dark
+set background=dark
 colorscheme palenight
 
 syntax on
@@ -78,10 +82,16 @@ au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
 " Enable indentation matching for =>'s
 filetype plugin indent on
 
+" syntastic settings
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 " airline settings
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline_theme='dark'
+let g:airline_theme='dark'
 
 " netrw settings
 let g:netrw_liststyle = 3
