@@ -33,7 +33,7 @@
           matchLabels:
             node-role.kubernetes.io/infra: ""
 
-- name: Move routers to infra nodes
+- name: Move routers to infra nodes and scale up to 3
   k8s:
     api_version: operator.openshift.io/v1
     kind: IngressController
@@ -52,15 +52,7 @@
           - effect: NoExecute
             key: infra
             value: reserved
-
-- name: Scale up routers to 3
-  k8s_scale:
-    api_version: operator.openshift.io/v1
-    kind: IngressController
-    namespace: openshift-ingress-operator
-    name: default
-    replicas: 3
-    wait: no
+        replicas: 3
 
 - name: Move registry to infra nodes
   k8s:
