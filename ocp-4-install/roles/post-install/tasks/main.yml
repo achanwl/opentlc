@@ -1,5 +1,21 @@
-- name: Remove worker label from infranodes
-  command: oc label $(oc get nodes -l "node-role.kubernetes.io/infra" -o name) node-role.kubernetes.io/worker-
+- name: Get a list of infra nodes
+  k8s_info:
+    kind: Node
+    label_selectors:
+      - node-role.kubernetes.io/infra
+  register: infranode_list
+
+- name: Remove worker label from infra nodes
+  k8s:
+    state: present
+    merge_type: json
+    api_version: v1
+    kind: Node
+    name: "{{ item }}"
+    definition:
+      - op: remove
+        path: /metadata/labels/node-role.kubernetes.io\/worker
+  with_items: "{{ infranode_list | json_query('resources[].metadata.name') }}"
 
 - name: Create MachineConfigPool infra
   k8s:
@@ -17,7 +33,7 @@
           matchLabels:
             node-role.kubernetes.io/infra: ""
 
-- name: Move routers to infranodes and Scale up to 3
+- name: Move routers to infra nodes and Scale up to 3
   k8s:
     state: present
     api_version: operator.openshift.io/v1
@@ -38,7 +54,7 @@
             key: infra
             value: reserved
 
-- name: Move registry to infranodes
+- name: Move registry to infra nodes
   k8s:
     state: present
     api_version: imageregistry.operator.openshift.io/v1
