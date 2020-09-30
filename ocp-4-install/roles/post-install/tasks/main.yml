@@ -1,5 +1,5 @@
 - name: Get a list of infra nodes
-  k8s_facts:
+  k8s_info:
     kind: Node
     label_selectors:
       - node-role.kubernetes.io/infra
@@ -7,14 +7,13 @@
 
 - name: Remove worker label from infra nodes
   k8s:
-    state: present
-    merge_type: json
     api_version: v1
     kind: Node
     name: "{{ item }}"
     definition:
-      - op: remove
-        path: /metadata/labels/alan.test
+      metadata:
+        labels:
+          node-role.kubernetes.io/worker: null
   with_items: "{{ infranode_list | json_query('resources[].metadata.name') }}"
 
 - name: Create MachineConfigPool infra
