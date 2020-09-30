@@ -1,5 +1,5 @@
 - name: Remove worker label from infranodes
-  command: oc label $(oc get nodes -l node-role.kubernetes.io/infra -o name) node-role.kubernetes.io/worker-
+  command: oc label $(oc get nodes -l "node-role.kubernetes.io/infra" -o name) node-role.kubernetes.io/worker-
 
 - name: Create MachineConfigPool infra
   k8s:
