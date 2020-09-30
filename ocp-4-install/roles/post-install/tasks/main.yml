@@ -60,7 +60,7 @@
     name: cluster
     definition:
       spec:
-        replicas: 2
+        replicas: 3
         nodeSelector:
           node-role.kubernetes.io/infra: ""
         tolerations:
