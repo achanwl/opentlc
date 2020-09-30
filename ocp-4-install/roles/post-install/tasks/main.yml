@@ -13,7 +13,7 @@
     kind: Node
     name: "{{ item }}"
     definition:
-      - {"op":"remove", "path":"/metadata/labels/node-role.kubernetes.io\\/worker"}
+      - {"op":"remove", "path":"/metadata/labels/node-role.kubernetes.io/worker"}
 #     - op: remove
 #       path: /metadata/labels/node-role.kubernetes.io\/worker
   with_items: "{{ infranode_list | json_query('resources[].metadata.name') }}"
