@@ -1,3 +1,15 @@
+- name: Create debug project with tolerations for debug pods to handle infra node's taints
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: debug
+        annotations:
+          openshift.io/node-selector: ""
+          scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+
 - name: Get a list of infra nodes
   k8s_info:
     kind: Node
