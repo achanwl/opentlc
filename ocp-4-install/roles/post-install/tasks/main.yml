@@ -119,7 +119,7 @@
             scaleTargetRef:
               apiVersion: machine.openshift.io/v1beta1
               kind: MachineSet
-              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}"-infra-us-east-2{{ item }}
+              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}-infra-us-east-2{{ item }}"
       loop: ['a', 'b', 'c']
     - name: Create Worker MachineAutoscaler
       k8s:
@@ -136,6 +136,6 @@
             scaleTargetRef:
               apiVersion: machine.openshift.io/v1beta1
               kind: MachineSet
-              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}"-worker-us-east-2{{ item }}
+              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}-worker-us-east-2{{ item }}"
       loop: ['a', 'b', 'c']
 
