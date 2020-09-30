@@ -12,9 +12,9 @@
     api_version: v1
     kind: Node
     name: "{{ item }}"
-    definition: {"op":"remove", "path":"/metadata/labels/alan.test"}
-#     - op: remove
-#       path: /metadata/labels/node-role.kubernetes.io\/worker
+    definition:
+      - op: remove
+        path: /metadata/labels/alan.test
   with_items: "{{ infranode_list | json_query('resources[].metadata.name') }}"
 
 - name: Create MachineConfigPool infra
