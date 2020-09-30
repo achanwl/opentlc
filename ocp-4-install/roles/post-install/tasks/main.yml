@@ -76,3 +76,66 @@
     state: present
     definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
 
+- name:  Enable Autoscaler
+  block:
+    - name: Get Infrastructure Name
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: Infrastructure
+        name: cluster
+      register: infra_info
+    - name: Create ClusterAutoscaler
+      k8s:
+        state: present
+        definition:
+          apiVersion: autoscaling.openshift.io/v1
+          kind: ClusterAutoscaler
+          metadata:
+            name: default
+          spec:
+            podPriorityThreshold: -10
+            resourceLimits:
+              maxNodesTotal: 18
+              cores:
+                min: 2
+                max: 4
+              memory:
+                min: 8
+                max: 16
+            scaleDown:
+              enabled: true
+    - name: Create Infra MachineAutoscaler
+      k8s:
+        state: present
+        definition:
+          apiVersion: autoscaling.openshift.io/v1beta1
+          kind: MachineAutoscaler
+          metadata:
+            name: infra-us-east-2{{ item }}
+            namespace: openshift-machine-api
+          spec:
+            minReplicas: 1
+            maxReplicas: 3
+            scaleTargetRef:
+              apiVersion: machine.openshift.io/v1beta1
+              kind: MachineSet
+              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}"-infra-us-east-2{{ item }}
+      loop: ['a', 'b', 'c']
+    - name: Create Worker MachineAutoscaler
+      k8s:
+        state: present
+        definition:
+          apiVersion: autoscaling.openshift.io/v1beta1
+          kind: MachineAutoscaler
+          metadata:
+            name: worker-us-east-2{{ item }}
+            namespace: openshift-machine-api
+          spec:
+            minReplicas: 1
+            maxReplicas: 2
+            scaleTargetRef:
+              apiVersion: machine.openshift.io/v1beta1
+              kind: MachineSet
+              name: "{{ infra_info | json_query('resources[].status.infrastructureName') }}"-worker-us-east-2{{ item }}
+      loop: ['a', 'b', 'c']
+
