@@ -139,3 +139,40 @@
               name: "{{ infra_info.resources[0].status.infrastructureName }}-worker-us-east-2{{ item }}"
       loop: ['a', 'b', 'c']
 
+- name: Config allocated resources for nodes
+  block:
+    - name: Label MCPs
+      k8s:
+        api_version: machineconfiguration.openshift.io/v1
+        kind: MachineConfigPool
+        name: "{{ item }}"
+        definition:
+          metadata:
+            labels:
+              custom-kubelet: allocatable
+      loop:
+        - master
+        - infra
+        - worker
+    - name: Create KubeletConfig
+      k8s:
+        state: present
+        definition:
+          apiVersion: machineconfiguration.openshift.io/v1
+          kind: KubeletConfig
+          metadata:
+            name: allocatable
+          spec:
+            machineConfigPoolSelector:
+              matchLabels:
+                custom-kubelet: allocatable
+            kubeletConfig:
+              kubeReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
+              systemReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
+
