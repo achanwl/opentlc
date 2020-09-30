@@ -1,5 +1,5 @@
 - name: Get a list of infra nodes
-  k8s_info:
+  k8s_facts:
     kind: Node
     label_selectors:
       - node-role.kubernetes.io/infra
