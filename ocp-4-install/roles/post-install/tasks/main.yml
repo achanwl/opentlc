@@ -1,11 +1,58 @@
-- name: Get a list of infra nodes
-  k8s_info:
-    kind: Node
-    label_selectors:
-      - node-role.kubernetes.io/infra
-  register: infranode_list
+- name: Remove worker label from infranodes
+  command: oc label $(oc get nodes -l node-role.kubernetes.io/infra -o name) node-role.kubernetes.io/worker-
 
-- name: Print infranode list
-  debug:
-    msg: "{{ infranode_list | json_query('resources[].metadata.name') }}"
+- name: Create MachineConfigPool infra
+  k8s:
+    state: present
+    definition:
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: MachineConfigPool
+      metadata:
+        name: infra
+      spec:
+        machineConfigSelector:
+          matchExpressions:
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
+        nodeSelector:
+          matchLabels:
+            node-role.kubernetes.io/infra: ""
+
+- name: Move routers to infranodes and Scale up to 3
+  k8s:
+    state: present
+    api_version: operator.openshift.io/v1
+    kind: IngressController
+    namespace: openshift-ingress-operator
+    name: default
+    definition:
+      spec:
+        nodePlacement:
+          nodeSelector:
+            matchLabels:
+              node-role.kubernetes.io/infra: ""
+          tolerations:
+          - effect: NoSchedule
+            key: infra
+            value: reserved
+          - effect: NoExecute
+            key: infra
+            value: reserved
+
+- name: Move registry to infranodes
+  k8s:
+    state: present
+    api_version: imageregistry.operator.openshift.io/v1
+    kind: Config
+    name: cluster
+    definition:
+      spec:
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+        tolerations:
+        - effect: NoSchedule
+          key: infra
+          value: reserved
+        - effect: NoExecute
+          key: infra
+          value: reserved
 
