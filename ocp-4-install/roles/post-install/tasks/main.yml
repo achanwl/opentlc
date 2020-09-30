@@ -53,13 +53,14 @@
             value: reserved
         replicas: 3
 
-- name: Move registry to infra nodes
+- name: Move registry to infra nodes and scale up to 3
   k8s:
     api_version: imageregistry.operator.openshift.io/v1
     kind: Config
     name: cluster
     definition:
       spec:
+        replicas: 2
         nodeSelector:
           node-role.kubernetes.io/infra: ""
         tolerations:
