@@ -74,4 +74,5 @@
 - name: Move cluster-monitoring stack to infra nodes and add persistent storage
   k8s:
     state: present
-    src: cluster-monitoring-config.yml
+    definiton: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
+
