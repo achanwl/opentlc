@@ -1,4 +1,4 @@
-- name: Create OCP4 Cluster
+- name: Post-installation Configuration
   hosts: localhost
   order: inventory
 
