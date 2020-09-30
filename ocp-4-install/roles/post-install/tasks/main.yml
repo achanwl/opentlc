@@ -7,5 +7,5 @@
 
 - name: Print infranode list
   debug:
-    msg: "{{ infranode_list }}"
+    msg: "{{ infranode_list | json_query('[].metadata.name') }}"
 
