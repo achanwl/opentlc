@@ -1,4 +1,4 @@
-- name: Create debug project with tolerations for debug pods to handle infra node's taints
+- name: Create debug project with tolerations for infra node debug pods
   k8s:
     state: present
     definition:
