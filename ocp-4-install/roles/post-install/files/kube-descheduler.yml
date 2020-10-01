@@ -4,6 +4,7 @@ metadata:
   name: cluster
   namespace: openshift-kube-descheduler-operator
 spec:
+  image: registry.redhat.io/openshift4/ose-descheduler
   deschedulingIntervalSeconds: 900
   strategies:
     - name: "LowNodeUtilization"
