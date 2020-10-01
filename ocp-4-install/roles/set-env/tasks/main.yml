@@ -15,11 +15,15 @@
     regexp: '^alias ge'
     line: 'alias ge="oc get events --sort-by=.metadata.creationTimestamp"'
 
-- name: set rmf alias
+- name: set jq/yq/rmf alias
   lineinfile:
     path: ~/.bashrc
-    line: 'alias rmf="yq -Y 'del(.metadata.managedFields)'"'
+    line: "{{ item }}"
     insertafter: '^alias ge'
+  loop:
+    - 'alias jq="jq -C"'
+    - 'alias yq="yq -C"'
+    - 'alias rmf="yq d - metadata.managedFields"'
 
 - name: set aws completion
   lineinfile:
