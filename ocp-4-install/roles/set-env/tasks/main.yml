@@ -21,9 +21,9 @@
     line: "{{ item }}"
     insertafter: '^alias ge'
   loop:
-    - 'alias jq="jq -C"'
-    - 'alias yq="yq -C"'
     - 'alias rmf="yq d - metadata.managedFields"'
+    - 'alias yq="yq -C"'
+    - 'alias jq="jq -C"'
 
 - name: set aws completion
   lineinfile:
