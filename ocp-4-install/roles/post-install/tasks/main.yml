@@ -196,7 +196,7 @@
         wait_condition:
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
-          status: no
+          status: "False"
     - name: Create KubeDescheduler
       k8s:
         state: present
@@ -299,9 +299,9 @@
             sourceNamespace: openshift-marketplace
         wait: yes
         wait_condition:
-          reason: InstallSucceeded
-          type: Succeeded
-          status: True
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
     - name: Create openshift-logging OperatorGroup
       k8s:
         state: present
@@ -331,9 +331,9 @@
             sourceNamespace: openshift-marketplace
         wait: yes
         wait_condition:
-          reason: InstallSucceeded
-          type: Succeeded
-          status: True
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
     - name: Create Cluster Logging instance
       k8s:
         state: present
