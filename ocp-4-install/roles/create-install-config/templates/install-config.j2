@@ -16,7 +16,9 @@ compute:
 - architecture: amd64
   hyperthreading: Enabled
   name: worker
-  platform: {}
+  platform:
+    aws:
+      type: m4.xlarge
   replicas: 3
 networking:
   networkType: OpenShiftSDN
