@@ -13,3 +13,5 @@ destroy-cluster:
 
 post-install:
 	ansible-playbook post-install.yml
+	curl https://raw.githubusercontent.com/eparis/ssh-bastion/master/deploy/deploy.sh | bash
+
