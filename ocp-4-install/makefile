@@ -8,7 +8,6 @@ setup-bastion:
 	ansible-playbook setup-bastion.yml
 
 create-cluster:
-#	ansible-playbook --ask-vault-pass create-config.yml
 	ansible-playbook --ask-vault-pass create-config.yml && openshift-install create cluster --dir $$HOME/cluster-$${GUID} --log-level debug
 
 destroy-cluster:
