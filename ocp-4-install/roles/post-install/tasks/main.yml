@@ -44,49 +44,42 @@
           matchLabels:
             node-role.kubernetes.io/infra: ""
 
-- name: Move routers to infra nodes and scale up to 3
-  k8s:
-    api_version: operator.openshift.io/v1
-    kind: IngressController
-    namespace: openshift-ingress-operator
-    name: default
-    definition:
-      spec:
-        nodePlacement:
-          nodeSelector:
-            matchLabels:
-              node-role.kubernetes.io/infra: ""
-          tolerations:
-          - effect: NoSchedule
-            key: infra
-            value: reserved
-          - effect: NoExecute
-            key: infra
-            value: reserved
-        replicas: 3
-
-- name: Move registry to infra nodes and scale up to 3
-  k8s:
-    api_version: imageregistry.operator.openshift.io/v1
-    kind: Config
-    name: cluster
-    definition:
-      spec:
-        replicas: 3
-        nodeSelector:
-          node-role.kubernetes.io/infra: ""
-        tolerations:
-        - effect: NoSchedule
-          key: infra
-          value: reserved
-        - effect: NoExecute
-          key: infra
-          value: reserved
-
-- name: Move cluster-monitoring stack to infra nodes and add persistent storage
-  k8s:
-    state: present
-    definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
+- name: Config allocated resources for nodes
+  block:
+    - name: Label MCPs
+      k8s:
+        api_version: machineconfiguration.openshift.io/v1
+        kind: MachineConfigPool
+        name: "{{ item }}"
+        definition:
+          metadata:
+            labels:
+              custom-kubelet: allocatable
+      loop:
+        - master
+        - infra
+        - worker
+    - name: Create KubeletConfig
+      k8s:
+        state: present
+        definition:
+          apiVersion: machineconfiguration.openshift.io/v1
+          kind: KubeletConfig
+          metadata:
+            name: allocatable
+          spec:
+            machineConfigPoolSelector:
+              matchLabels:
+                custom-kubelet: allocatable
+            kubeletConfig:
+              kubeReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
+              systemReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
 
 - name: Enable Autoscaler
   block:
@@ -151,42 +144,49 @@
               name: "{{ infra_info.resources[0].status.infrastructureName }}-worker-us-east-2{{ item }}"
       loop: ['a', 'b', 'c']
 
-- name: Config allocated resources for nodes
-  block:
-    - name: Label MCPs
-      k8s:
-        api_version: machineconfiguration.openshift.io/v1
-        kind: MachineConfigPool
-        name: "{{ item }}"
-        definition:
-          metadata:
-            labels:
-              custom-kubelet: allocatable
-      loop:
-        - master
-        - infra
-        - worker
-    - name: Create KubeletConfig
-      k8s:
-        state: present
-        definition:
-          apiVersion: machineconfiguration.openshift.io/v1
-          kind: KubeletConfig
-          metadata:
-            name: allocatable
-          spec:
-            machineConfigPoolSelector:
-              matchLabels:
-                custom-kubelet: allocatable
-            kubeletConfig:
-              kubeReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
-              systemReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
+- name: Move routers to infra nodes and scale up to 3
+  k8s:
+    api_version: operator.openshift.io/v1
+    kind: IngressController
+    namespace: openshift-ingress-operator
+    name: default
+    definition:
+      spec:
+        nodePlacement:
+          nodeSelector:
+            matchLabels:
+              node-role.kubernetes.io/infra: ""
+          tolerations:
+          - effect: NoSchedule
+            key: infra
+            value: reserved
+          - effect: NoExecute
+            key: infra
+            value: reserved
+        replicas: 3
+
+- name: Move registry to infra nodes and scale up to 3
+  k8s:
+    api_version: imageregistry.operator.openshift.io/v1
+    kind: Config
+    name: cluster
+    definition:
+      spec:
+        replicas: 3
+        nodeSelector:
+          node-role.kubernetes.io/infra: ""
+        tolerations:
+        - effect: NoSchedule
+          key: infra
+          value: reserved
+        - effect: NoExecute
+          key: infra
+          value: reserved
+
+- name: Move cluster-monitoring stack to infra nodes and add persistent storage
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
 
 - name: Install Cluster Logging
   block:
