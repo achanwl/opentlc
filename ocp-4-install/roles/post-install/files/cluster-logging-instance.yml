@@ -28,7 +28,7 @@ spec:
           memory: 16Gi
       storage:
         storageClassName: gp2
-        size: 100G
+        size: 100Gi
     retentionPolicy:
       infra:
         maxAge: 7d
