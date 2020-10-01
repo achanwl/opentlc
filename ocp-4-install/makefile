@@ -5,7 +5,7 @@ update-repos:
 	sleep 10; sudo reboot
 
 setup-bastion:
-	ansible-playbook setup-bastion.yml
+	ansible-playbook setup-bastion.yml && exit
 
 create-cluster:
 	ansible-playbook --ask-vault-pass create-config.yml && openshift-install create cluster --dir $$HOME/cluster-$${GUID} --log-level debug
