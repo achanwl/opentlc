@@ -1,5 +1,3 @@
-# Update repos
-#
 update-repos:
 	ansible-playbook update-repos.yml
 	sleep 10; sudo reboot
