@@ -9,6 +9,12 @@
     line: 'alias vi=vim'
     insertafter: '^alias mv'
 
+- name: replace ge alias
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^alias ge'
+    line: 'alias ge="oc get events --sort-by=.metadata.creationTimestamp"'
+
 - name: set rmf alias
   lineinfile:
     path: ~/.bashrc
