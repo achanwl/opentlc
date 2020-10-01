@@ -151,7 +151,7 @@
     kind: ClusterVersion
     name: version
   register: clusterversion
-      
+
 - name: Install Descheduler
   block:
     - name: Create openshift-kube-descheduler-operator namespace
