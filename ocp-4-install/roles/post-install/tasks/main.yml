@@ -88,7 +88,7 @@
     state: present
     definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
 
-- name:  Enable Autoscaler
+- name: Enable Autoscaler
   block:
     - name: Get Infrastructure Name
       k8s_info:
@@ -187,4 +187,92 @@
                 cpu: 500m
                 memory: 1Gi
                 ephemeral-storage: 1Gi
+
+- name: Install Cluster Logging
+  block:
+    - name: Create openshift-operators-redhat namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-operators-redhat
+            annotations:
+              openshift.io/node-selector: ""
+            labels:
+              openshift.io/cluster-monitoring: "true"
+    - name: Create openshift-logging namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-logging
+            annotations:
+              openshift.io/node-selector: ""
+            labels:
+              openshift.io/cluster-monitoring: "true"
+    - name: Get ClusterVersion
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: ClusterVersion
+        name: version
+      register: clusterversion
+    - name: Create openshift-operators-redhat OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-operators-redhat
+            namespace: openshift-operators-redhat
+          spec: {}
+    - name: Create elasticsearch-operator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: elasticsearch-operator
+            namespace: openshift-operators-redhat
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            installPlanApproval: Automatic
+            name: elasticsearch-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+    - name: Create openshift-logging OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-logging
+            namespace: openshift-logging
+          spec:
+            targetNamespaces:
+              - openshift-logging
+    - name: Create cluster-logging Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: cluster-logging
+            namespace: openshift-logging
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            installPlanApproval: Automatic
+            name: cluster-logging
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+
+
+
 
