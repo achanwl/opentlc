@@ -2,7 +2,7 @@
 #
 update-repos:
 	ansible-playbook update-repos.yml
-	sleep 10; reboot
+	sleep 10; sudo reboot
 
 setup-bastion:
 	ansible-playbook setup-bastion.yml
