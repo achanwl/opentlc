@@ -272,4 +272,8 @@
             name: cluster-logging
             source: redhat-operators
             sourceNamespace: openshift-marketplace
+    - name: Create Cluster Logging instance
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'cluster-logging-instance.yml') }}"
 
