@@ -192,6 +192,11 @@
             name: cluster-kube-descheduler-operator
             source: redhat-operators
             sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: InstallSucceeded
+          type: Succeeded
+          status: True
     - name: Create KubeDescheduler
       k8s:
         state: present
@@ -292,6 +297,11 @@
             name: elasticsearch-operator
             source: redhat-operators
             sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: InstallSucceeded
+          type: Succeeded
+          status: True
     - name: Create openshift-logging OperatorGroup
       k8s:
         state: present
@@ -319,6 +329,11 @@
             name: cluster-logging
             source: redhat-operators
             sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: InstallSucceeded
+          type: Succeeded
+          status: True
     - name: Create Cluster Logging instance
       k8s:
         state: present
