@@ -194,9 +194,9 @@
             sourceNamespace: openshift-marketplace
         wait: yes
         wait_condition:
-          reason: InstallSucceeded
-          type: Succeeded
-          status: True
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: no
     - name: Create KubeDescheduler
       k8s:
         state: present
