@@ -28,6 +28,12 @@
   with_items:
     - "complete -C '/usr/local/bin/aws_completer' aws"
 
+- name: replace PATH
+  lineinfile:
+    path: ~/.bash_profile
+    regexp: '^export PATH'
+    line: 'export PATH=~/bin:$PATH'
+
 - name: set env vars
   lineinfile:
     path: ~/.bash_profile
