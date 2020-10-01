@@ -1,0 +1,32 @@
+apiVersion: operator.openshift.io/v1beta1
+kind: KubeDescheduler
+metadata:
+  name: cluster
+  namespace: openshift-kube-descheduler-operator
+spec:
+  deschedulingIntervalSeconds: 900
+  strategies:
+    - name: "LowNodeUtilization"
+      params:
+       - name: "CPUThreshold"
+         value: "50"
+       - name: "MemoryThreshold"
+         value: "50"
+       - name: "PodsThreshold"
+         value: "50"
+       - name: "MemoryTargetThreshold"
+         value: "50"
+       - name: "CPUTargetThreshold"
+         value: "50"
+       - name: "PodsTargetThreshold"
+         value: "50"
+    - name: "RemoveDuplicates"
+    - name: "RemovePodsViolatingInterPodAntiAffinity"
+    - name: "RemovePodsViolatingNodeAffinity"
+    - name: "RemovePodsViolatingNodeTaints"
+    - name: "RemovePodsHavingTooManyRestarts"
+      params:
+       - name: "PodRestartThreshold"
+         value: "10"
+       - name: "IncludingInitContainers"
+         value: "false"
