@@ -81,14 +81,15 @@
                 memory: 1Gi
                 ephemeral-storage: 1Gi
 
+- name: Get Infrastructure Name
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: Infrastructure
+    name: cluster
+  register: infra_info
+
 - name: Enable Autoscaler
   block:
-    - name: Get Infrastructure Name
-      k8s_info:
-        api_version: config.openshift.io/v1
-        kind: Infrastructure
-        name: cluster
-      register: infra_info
     - name: Create ClusterAutoscaler
       k8s:
         state: present
@@ -143,6 +144,58 @@
               kind: MachineSet
               name: "{{ infra_info.resources[0].status.infrastructureName }}-worker-us-east-2{{ item }}"
       loop: ['a', 'b', 'c']
+
+- name: Get ClusterVersion
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+  register: clusterversion
+      
+- name: Install Descheduler
+  block:
+    - name: Create openshift-kube-descheduler-operator namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-kube-descheduler-operator
+            annotations:
+              openshift.io/node-selector: ""
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+    - name: Create openshift-kube-descheduler-operator OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-kube-descheduler-operator
+            namespace: openshift-kube-descheduler-operator
+          spec:
+            targetNamespaces:
+              - openshift-kube-descheduler-operator
+    - name: Create cluster-kube-descheduler-operator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: cluster-kube-descheduler-operator
+            namespace: openshift-kube-descheduler-operator
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            installPlanApproval: Automatic
+            name: cluster-kube-descheduler-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+    - name: Create KubeDescheduler
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
 
 - name: Move routers to infra nodes and scale up to 3
   k8s:
@@ -214,12 +267,6 @@
               openshift.io/node-selector: ""
             labels:
               openshift.io/cluster-monitoring: "true"
-    - name: Get ClusterVersion
-      k8s_info:
-        api_version: config.openshift.io/v1
-        kind: ClusterVersion
-        name: version
-      register: clusterversion
     - name: Create openshift-operators-redhat OperatorGroup
       k8s:
         state: present
