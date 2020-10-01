@@ -9,11 +9,15 @@
     line: 'alias vi=vim'
     insertafter: '^alias mv'
 
-- name: set rmf alias
+- name: set jq/yq/rmf alias
   lineinfile:
     path: ~/.bashrc
-    line: 'alias rmf="yq d - metadata.managedFields"'
+    line: "{{ item }}"
     insertafter: '^alias vi'
+  loop:
+    - 'alias jq="jq -C"'
+    - 'alias yq="yq -C"'
+    - 'alias rmf="yq d - metadata.managedFields"'
 
 - name: set env vars
   lineinfile:
