@@ -53,7 +53,7 @@
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
-        name: "{{ item }}"
+        name: infra
       spec:
         machineConfigSelector:
           matchExpressions:
@@ -61,6 +61,22 @@
         nodeSelector:
           matchLabels:
             node-role.kubernetes.io/infra: ""
+
+- name: Create MachineConfigPool infra
+  k8s:
+    state: present
+    definition:
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: MachineConfigPool
+      metadata:
+        name: infraocs
+      spec:
+        machineConfigSelector:
+          matchExpressions:
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infraocs]}
+        nodeSelector:
+          matchLabels:
+            node-role.kubernetes.io/infraocs: ""
 
 - name: Config allocated resources for nodes
   block:
