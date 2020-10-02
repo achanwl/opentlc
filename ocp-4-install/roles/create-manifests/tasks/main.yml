@@ -75,6 +75,17 @@
               value: reserved
   with_sequence: start=0 end=2
 
+- name: Insert ocs node taints
+  blockinfile:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
+    insertbefore: '^      providerSpec:$'
+    block: |2
+            taints:
+            - effect: NoSchedule
+              key: node.ocs.openshift.io/storage
+              value: "true"
+  with_sequence: start=0 end=2
+
 - name: Remove infra and ocs managed block lines
   lineinfile:
     path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
