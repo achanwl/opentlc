@@ -57,7 +57,7 @@
       spec:
         machineConfigSelector:
           matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,{{ item }}]}
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,"{{ item }}"]}
         nodeSelector:
           matchLabels:
             node-role.kubernetes.io/{{ item }}: ""
@@ -158,7 +158,7 @@
           apiVersion: autoscaling.openshift.io/v1beta1
           kind: MachineAutoscaler
           metadata:
-            name: worker-us-east-2{{ item }}
+            name: "worker-us-east-2{{ item }}"
             namespace: openshift-machine-api
           spec:
             minReplicas: 1
