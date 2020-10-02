@@ -15,7 +15,7 @@
     kind: Node
     label_selectors:
       - node-role.kubernetes.io/infra
-  register: infranode_list
+  register: infra_list
 
 - name: Remove worker label from infra nodes
   k8s:
@@ -26,7 +26,25 @@
       metadata:
         labels:
           node-role.kubernetes.io/worker: null
-  with_items: "{{ infranode_list | json_query('resources[].metadata.name') }}"
+  with_items: "{{ infra_list | json_query('resources[].metadata.name') }}"
+
+- name: Get a list of infraocs nodes
+  k8s_info:
+    kind: Node
+    label_selectors:
+      - node-role.kubernetes.io/infraocs
+  register: infraocs_list
+
+- name: Remove worker label from infraocs nodes
+  k8s:
+    api_version: v1
+    kind: Node
+    name: "{{ item }}"
+    definition:
+      metadata:
+        labels:
+          node-role.kubernetes.io/worker: null
+  with_items: "{{ infraocs_list | json_query('resources[].metadata.name') }}"
 
 - name: Create MachineConfigPool infra
   k8s:
@@ -35,14 +53,17 @@
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
-        name: infra
+        name: {{ item }}
       spec:
         machineConfigSelector:
           matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,{{ item }}]}
         nodeSelector:
           matchLabels:
-            node-role.kubernetes.io/infra: ""
+            node-role.kubernetes.io/{{ item }}: ""
+  loop:
+    - infra
+    - infraocs
 
 - name: Config allocated resources for nodes
   block:
@@ -58,6 +79,7 @@
       loop:
         - master
         - infra
+        - infraocs
         - worker
     - name: Create KubeletConfig
       k8s:
@@ -101,13 +123,13 @@
           spec:
             podPriorityThreshold: -10
             resourceLimits:
-              maxNodesTotal: 18
+              maxNodesTotal: 21
               cores:
                 min: 2
-                max: 4
+                max: 8
               memory:
                 min: 8
-                max: 16
+                max: 32
             scaleDown:
               enabled: true
     - name: Create Infra MachineAutoscaler
@@ -117,16 +139,18 @@
           apiVersion: autoscaling.openshift.io/v1beta1
           kind: MachineAutoscaler
           metadata:
-            name: infra-us-east-2{{ item }}
+            name: {{ item.0 }}-us-east-2{{ item.1 }}
             namespace: openshift-machine-api
           spec:
             minReplicas: 1
-            maxReplicas: 3
+            maxReplicas: 2
             scaleTargetRef:
               apiVersion: machine.openshift.io/v1beta1
               kind: MachineSet
-              name: "{{ infra_info.resources[0].status.infrastructureName }}-infra-us-east-2{{ item }}"
-      loop: ['a', 'b', 'c']
+              name: "{{ infra_info.resources[0].status.infrastructureName }}-{{ item.0 }}-us-east-2{{ item.1 }}"
+      with_nested:
+        - ['infra', 'infraocs']
+        - ['a', 'b', 'c']
     - name: Create Worker MachineAutoscaler
       k8s:
         state: present
