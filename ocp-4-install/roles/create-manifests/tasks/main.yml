@@ -7,64 +7,84 @@
     dest: ~/cluster-{{ guid.stdout }}/manifests
     mode: 0640
 
-- name: Create infra machinesets
+- name: Create infra and infraocs machinesets
   copy:
-    src: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item }}.yaml
-    dest: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    src: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item.0 }}.yaml
+    dest: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     mode: 0640
-  with_sequence: start=0 end=2
+  with_nested:
+    - ['0', '1', '2']
+    - ['infra', 'infraocs']
 
 - name: Switch to m4.xlarge
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     regexp: 'm4\.large'
     replace: 'm4.xlarge'
-  with_sequence: start=0 end=2
+  with_nested:
+    - ['0', '1', '2']
+    - ['infra', 'infraocs']
 
-- name: Update infra machinesets part1
+- name: Update infra and infraocs machinesets part1
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     regexp: '-worker-us'
-    replace: '-infra-us'
-  with_sequence: start=0 end=2
+    replace: '-{{ item.1 }}-us'
+  with_nested:
+    - ['0', '1', '2']
+    - ['infra', 'infraocs']
 
-- name: Update infra machinesets part2
+- name: Update infra and infraocs machinesets part2
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     regexp: 'worker$'
-    replace: 'infra'
-  with_sequence: start=0 end=2
+    replace: '{{ item.1 }}'
+  with_nested:
+    - ['0', '1', '2']
+    - ['infra', 'infraocs']
 
 - name: Insert infra node labels
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item[0] }}.yaml
-    line: "{{ item[1] }}"
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item.0 }}.yaml
+    line: "{{ item.1 }}"
     insertbefore: '^      providerSpec:$'
   with_nested:
     - ['0', '1', '2']
     - ['        labels:', '          node-role.kubernetes.io/infra: ""']
 
-- name: Insert infra node taints
+- name: Insert infraocs node labels
+  lineinfile:
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infraocs-machineset-{{ item.0 }}.yaml
+    line: "{{ item.1 }}"
+    insertbefore: '^      providerSpec:$'
+  with_nested:
+    - ['0', '1', '2']
+    - ['        labels:', '          node-role.kubernetes.io/infraocs: ""', '          cluster.ocs.openshift.io/openshift-storage: ""']
+
+- name: Insert infra and infraocs node taints
   blockinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     insertbefore: '^      providerSpec:$'
     block: |2
             taints:
             - effect: NoSchedule
-              key: infra
+              key: {{ item.1 }}
               value: reserved
             - effect: NoExecute
-              key: infra
+              key: {{ item.1 }}
               value: reserved
-  with_sequence: start=0 end=2
+  with_nested:
+    - ['0', '1', '2']
+    - ['infra', 'infraocs']
 
-- name: Remove infra managed block lines
+- name: Remove infra and infraocs managed block lines
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item.0 }}.yaml
-    line: "{{ item.1 }}"
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
+    line: "{{ item.2 }}"
     state: absent
   with_nested:
     - ['0', '1', '2']
+    - ['infra', 'infraocs']
     - ['# BEGIN ANSIBLE MANAGED BLOCK', '# END ANSIBLE MANAGED BLOCK']
 
 - name: Set nodeplacement for ingress
