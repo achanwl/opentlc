@@ -60,7 +60,7 @@
             - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,"{{ item }}"]}
         nodeSelector:
           matchLabels:
-            node-role.kubernetes.io/{{ item }}: ""
+            "node-role.kubernetes.io/{{ item }}": ""
   loop:
     - infra
     - infraocs
