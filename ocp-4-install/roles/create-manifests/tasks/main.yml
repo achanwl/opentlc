@@ -16,14 +16,12 @@
     - ['0', '1', '2']
     - ['infra', 'ocs']
 
-- name: Switch to m4.xlarge
+- name: Switch ocs to m4.4xlarge
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
-    regexp: 'm4\.large'
-    replace: 'm4.xlarge'
-  with_nested:
-    - ['0', '1', '2']
-    - ['infra', 'ocs']
+    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
+    regexp: 'm4\.xlarge'
+    replace: 'm4.4xlarge'
+  with_sequence: start=0 end=2
 
 - name: Update infra and ocs machinesets part1
   replace:
