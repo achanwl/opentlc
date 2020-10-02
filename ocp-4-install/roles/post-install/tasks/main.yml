@@ -28,14 +28,14 @@
           node-role.kubernetes.io/worker: null
   with_items: "{{ infra_list | json_query('resources[].metadata.name') }}"
 
-- name: Get a list of infraocs nodes
+- name: Get a list of ocs nodes
   k8s_info:
     kind: Node
     label_selectors:
-      - node-role.kubernetes.io/infraocs
-  register: infraocs_list
+      - node-role.kubernetes.io/ocs
+  register: ocs_list
 
-- name: Remove worker label from infraocs nodes
+- name: Remove worker label from ocs nodes
   k8s:
     api_version: v1
     kind: Node
@@ -44,7 +44,7 @@
       metadata:
         labels:
           node-role.kubernetes.io/worker: null
-  with_items: "{{ infraocs_list | json_query('resources[].metadata.name') }}"
+  with_items: "{{ ocs_list | json_query('resources[].metadata.name') }}"
 
 - name: Create MachineConfigPool infra
   k8s:
@@ -62,21 +62,21 @@
           matchLabels:
             node-role.kubernetes.io/infra: ""
 
-- name: Create MachineConfigPool infraocs
+- name: Create MachineConfigPool ocs
   k8s:
     state: present
     definition:
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
-        name: infraocs
+        name: ocs
       spec:
         machineConfigSelector:
           matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infraocs]}
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,ocs]}
         nodeSelector:
           matchLabels:
-            node-role.kubernetes.io/infraocs: ""
+            node-role.kubernetes.io/ocs: ""
 
 - name: Config allocated resources for nodes
   block:
@@ -92,7 +92,7 @@
       loop:
         - master
         - infra
-        - infraocs
+        - ocs
         - worker
     - name: Create KubeletConfig
       k8s:
@@ -145,7 +145,7 @@
                 max: 32
             scaleDown:
               enabled: true
-    - name: Create Infra MachineAutoscaler
+    - name: Create MachineAutoscaler
       k8s:
         state: present
         definition:
@@ -162,25 +162,8 @@
               kind: MachineSet
               name: "{{ infra_info.resources[0].status.infrastructureName }}-{{ item.0 }}-us-east-2{{ item.1 }}"
       with_nested:
-        - ['infra', 'infraocs']
+        - ['infra', 'ocs', 'worker']
         - ['a', 'b', 'c']
-    - name: Create Worker MachineAutoscaler
-      k8s:
-        state: present
-        definition:
-          apiVersion: autoscaling.openshift.io/v1beta1
-          kind: MachineAutoscaler
-          metadata:
-            name: "worker-us-east-2{{ item }}"
-            namespace: openshift-machine-api
-          spec:
-            minReplicas: 1
-            maxReplicas: 2
-            scaleTargetRef:
-              apiVersion: machine.openshift.io/v1beta1
-              kind: MachineSet
-              name: "{{ infra_info.resources[0].status.infrastructureName }}-worker-us-east-2{{ item }}"
-      loop: ['a', 'b', 'c']
 
 - name: Get ClusterVersion
   k8s_info:
