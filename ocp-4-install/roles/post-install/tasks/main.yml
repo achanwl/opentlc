@@ -62,7 +62,7 @@
           matchLabels:
             node-role.kubernetes.io/infra: ""
 
-- name: Create MachineConfigPool infra
+- name: Create MachineConfigPool infraocs
   k8s:
     state: present
     definition:
