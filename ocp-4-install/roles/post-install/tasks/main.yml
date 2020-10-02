@@ -53,7 +53,7 @@
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
-        name: {{ item }}
+        name: "{{ item }}"
       spec:
         machineConfigSelector:
           matchExpressions:
@@ -139,7 +139,7 @@
           apiVersion: autoscaling.openshift.io/v1beta1
           kind: MachineAutoscaler
           metadata:
-            name: {{ item.0 }}-us-east-2{{ item.1 }}
+            name: "{{ item.0 }}-us-east-2{{ item.1 }}"
             namespace: openshift-machine-api
           spec:
             minReplicas: 1
