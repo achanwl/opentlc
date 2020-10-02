@@ -57,13 +57,10 @@
       spec:
         machineConfigSelector:
           matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,"{{ item }}"]}
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
         nodeSelector:
           matchLabels:
-            "node-role.kubernetes.io/{{ item }}": ""
-  loop:
-    - infra
-    - infraocs
+            node-role.kubernetes.io/infra: ""
 
 - name: Config allocated resources for nodes
   block:
