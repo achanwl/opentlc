@@ -139,10 +139,10 @@
               maxNodesTotal: 21
               cores:
                 min: 2
-                max: 8
+                max: 16
               memory:
                 min: 8
-                max: 32
+                max: 64
             scaleDown:
               enabled: true
     - name: Create MachineAutoscaler
