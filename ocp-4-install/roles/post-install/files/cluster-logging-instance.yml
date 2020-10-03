@@ -11,12 +11,12 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
       tolerations:
-      - key: infra
-        value: reserved
-        effect: NoSchedule
-      - key: infra
-        value: reserved
-        effect: NoExecute
+        - key: infra
+          value: reserved
+          effect: NoSchedule
+        - key: infra
+          value: reserved
+          effect: NoExecute
       nodeCount: 3
       redundancyPolicy: SingleRedundancy
       resources:
@@ -41,24 +41,27 @@ spec:
       type: fluentd
       fluentd:
         tolerations:
-        - key: infra
-          value: reserved
-          effect: NoSchedule
-        - key: infra
-          value: reserved
-          effect: NoExecute
+          - key: infra
+            value: reserved
+            effect: NoSchedule
+          - key: infra
+            value: reserved
+            effect: NoExecute
+          - key: node.ocs.openshift.io/storage
+            value: "true"
+            effect: NoSchedule
   visualization:
     type: kibana
     kibana:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
       tolerations:
-      - key: infra
-        value: reserved
-        effect: NoSchedule
-      - key: infra
-        value: reserved
-        effect: NoExecute
+        - key: infra
+          value: reserved
+          effect: NoSchedule
+        - key: infra
+          value: reserved
+          effect: NoExecute
       replicas: 2
   curation:
     type: curator
@@ -66,10 +69,10 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
       tolerations:
-      - key: infra
-        value: reserved
-        effect: NoSchedule
-      - key: infra
-        value: reserved
-        effect: NoExecute
+        - key: infra
+          value: reserved
+          effect: NoSchedule
+        - key: infra
+          value: reserved
+          effect: NoExecute
       schedule: 0 0 * * *
