@@ -10,7 +10,9 @@ controlPlane:
   architecture: amd64
   hyperthreading: Enabled
   name: master
-  platform: {}
+  platform:
+    aws:
+      type: m5a.xlarge
   replicas: 3
 compute:
 - architecture: amd64
@@ -18,7 +20,7 @@ compute:
   name: worker
   platform:
     aws:
-      type: m4.xlarge
+      type: m5a.xlarge
   replicas: 3
 networking:
   networkType: OpenShiftSDN
