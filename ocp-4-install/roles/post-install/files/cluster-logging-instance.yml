@@ -19,13 +19,6 @@ spec:
           effect: NoExecute
       nodeCount: 3
       redundancyPolicy: SingleRedundancy
-      resources:
-        requests:
-          cpu: 1
-          memory: 4Gi
-        limits:
-          cpu: 2
-          memory: 8Gi
       storage:
         storageClassName: gp2
         size: 100Gi
