@@ -46,6 +46,63 @@
           node-role.kubernetes.io/worker: null
   with_items: "{{ ocs_list | json_query('resources[].metadata.name') }}"
 
+- name: Get ClusterVersion
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+  register: clusterversion
+
+- name: Install Descheduler
+  block:
+    - name: Create openshift-kube-descheduler-operator namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-kube-descheduler-operator
+            annotations:
+              openshift.io/node-selector: ""
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+    - name: Create openshift-kube-descheduler-operator OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-kube-descheduler-operator
+            namespace: openshift-kube-descheduler-operator
+          spec:
+            targetNamespaces:
+              - openshift-kube-descheduler-operator
+    - name: Create cluster-kube-descheduler-operator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: cluster-kube-descheduler-operator
+            namespace: openshift-kube-descheduler-operator
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            installPlanApproval: Automatic
+            name: cluster-kube-descheduler-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Create KubeDescheduler
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
+
 - name: Create MachineConfigPool infra
   k8s:
     state: present
@@ -164,63 +221,6 @@
       with_nested:
         - ['infra', 'ocs', 'worker']
         - ['a', 'b', 'c']
-
-- name: Get ClusterVersion
-  k8s_info:
-    api_version: config.openshift.io/v1
-    kind: ClusterVersion
-    name: version
-  register: clusterversion
-
-- name: Install Descheduler
-  block:
-    - name: Create openshift-kube-descheduler-operator namespace
-      k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: openshift-kube-descheduler-operator
-            annotations:
-              openshift.io/node-selector: ""
-              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
-    - name: Create openshift-kube-descheduler-operator OperatorGroup
-      k8s:
-        state: present
-        definition:
-          apiVersion: operators.coreos.com/v1
-          kind: OperatorGroup
-          metadata:
-            name: openshift-kube-descheduler-operator
-            namespace: openshift-kube-descheduler-operator
-          spec:
-            targetNamespaces:
-              - openshift-kube-descheduler-operator
-    - name: Create cluster-kube-descheduler-operator Subscription
-      k8s:
-        state: present
-        definition:
-          apiVersion: operators.coreos.com/v1alpha1
-          kind: Subscription
-          metadata:
-            name: cluster-kube-descheduler-operator
-            namespace: openshift-kube-descheduler-operator
-          spec:
-            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
-            installPlanApproval: Automatic
-            name: cluster-kube-descheduler-operator
-            source: redhat-operators
-            sourceNamespace: openshift-marketplace
-        wait: yes
-        wait_condition:
-          reason: AllCatalogSourcesHealthy
-          type: CatalogSourcesUnhealthy
-          status: "False"
-    - name: Create KubeDescheduler
-      k8s:
-        state: present
-        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
 
 - name: Move routers to infra nodes and scale up to 3
   k8s:
