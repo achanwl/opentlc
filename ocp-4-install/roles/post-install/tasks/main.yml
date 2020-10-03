@@ -103,76 +103,6 @@
         state: present
         definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
 
-- name: Create MachineConfigPool infra
-  k8s:
-    state: present
-    definition:
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      metadata:
-        name: infra
-      spec:
-        machineConfigSelector:
-          matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
-        nodeSelector:
-          matchLabels:
-            node-role.kubernetes.io/infra: ""
-
-- name: Create MachineConfigPool ocs
-  k8s:
-    state: present
-    definition:
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      metadata:
-        name: ocs
-      spec:
-        machineConfigSelector:
-          matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,ocs]}
-        nodeSelector:
-          matchLabels:
-            node-role.kubernetes.io/ocs: ""
-
-- name: Config allocated resources for nodes
-  block:
-    - name: Label MCPs
-      k8s:
-        api_version: machineconfiguration.openshift.io/v1
-        kind: MachineConfigPool
-        name: "{{ item }}"
-        definition:
-          metadata:
-            labels:
-              custom-kubelet: allocatable
-      loop:
-        - master
-        - infra
-        - ocs
-        - worker
-    - name: Create KubeletConfig
-      k8s:
-        state: present
-        definition:
-          apiVersion: machineconfiguration.openshift.io/v1
-          kind: KubeletConfig
-          metadata:
-            name: allocatable
-          spec:
-            machineConfigPoolSelector:
-              matchLabels:
-                custom-kubelet: allocatable
-            kubeletConfig:
-              kubeReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
-              systemReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
-
 - name: Get Infrastructure Name
   k8s_info:
     api_version: config.openshift.io/v1
@@ -358,4 +288,74 @@
       k8s:
         state: present
         definition: "{{ lookup('file', 'cluster-logging-instance.yml') }}"
+
+- name: Create MachineConfigPool infra
+  k8s:
+    state: present
+    definition:
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: MachineConfigPool
+      metadata:
+        name: infra
+      spec:
+        machineConfigSelector:
+          matchExpressions:
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
+        nodeSelector:
+          matchLabels:
+            node-role.kubernetes.io/infra: ""
+
+- name: Create MachineConfigPool ocs
+  k8s:
+    state: present
+    definition:
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: MachineConfigPool
+      metadata:
+        name: ocs
+      spec:
+        machineConfigSelector:
+          matchExpressions:
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,ocs]}
+        nodeSelector:
+          matchLabels:
+            node-role.kubernetes.io/ocs: ""
+
+- name: Config allocated resources for nodes
+  block:
+    - name: Label MCPs
+      k8s:
+        api_version: machineconfiguration.openshift.io/v1
+        kind: MachineConfigPool
+        name: "{{ item }}"
+        definition:
+          metadata:
+            labels:
+              custom-kubelet: allocatable
+      loop:
+        - master
+        - infra
+        - ocs
+        - worker
+    - name: Create KubeletConfig
+      k8s:
+        state: present
+        definition:
+          apiVersion: machineconfiguration.openshift.io/v1
+          kind: KubeletConfig
+          metadata:
+            name: allocatable
+          spec:
+            machineConfigPoolSelector:
+              matchLabels:
+                custom-kubelet: allocatable
+            kubeletConfig:
+              kubeReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
+              systemReserved:
+                cpu: 500m
+                memory: 1Gi
+                ephemeral-storage: 1Gi
 
