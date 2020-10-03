@@ -10,6 +10,7 @@ create-cluster:
 
 destroy-cluster:
 	openshift-install destroy cluster --dir $$HOME/cluster-$${GUID} --log-level debug
+	rm -fr $$HOME/cluster-$${GUID}
 
 post-install:
 	ansible-playbook post-install.yml
