@@ -6,7 +6,7 @@
       prompt: "sandbox id"
       private: no
     - name: multitenant
-      prompt: "Multitenant plug-in (y/n)?"
+      prompt: "Multitenant plug-in (y/n)"
       private: no
       default: "n"
 
