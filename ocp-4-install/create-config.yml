@@ -6,9 +6,9 @@
       prompt: "sandbox id"
       private: no
     - name: multitenant
-      prompt: "Multitenant plug-in (y/n)"
+      prompt: "Use Multitenant plug-in (yes/no)"
       private: no
-      default: "n"
+      default: no
 
   pre_tasks:
     - name: Get GUID
