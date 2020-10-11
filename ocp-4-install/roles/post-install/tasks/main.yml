@@ -178,8 +178,8 @@
               openshift.io/node-selector: ""
             labels:
               openshift.io/cluster-monitoring: "true"
-    - name: Disable network isolation for logging projects
-      command: oc adm pod-network make-projects-global openshift-operators-redhat openshift-logging
+    - name: Join the netnamespaces of logging projects
+      command: oc adm pod-network join-projects --to=openshift-operators-redhat openshift-logging
       when: multitenant | bool
     - name: Create openshift-operators-redhat OperatorGroup
       k8s:
