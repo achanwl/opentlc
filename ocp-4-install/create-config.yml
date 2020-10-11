@@ -5,6 +5,10 @@
     - name: sbid
       prompt: "sandbox id"
       private: no
+    - name: multitenant
+      prompt: "Multitenant plug-in (y/n)?"
+      private: no
+      default: "n"
 
   pre_tasks:
     - name: Get GUID
