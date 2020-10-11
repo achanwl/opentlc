@@ -8,11 +8,11 @@ setup-bastion:
 create-cluster:
 	ansible-playbook --ask-vault-pass create-config.yml && openshift-install create cluster --dir $$HOME/cluster-$${GUID} --log-level debug
 
-destroy-cluster:
-	openshift-install destroy cluster --dir $$HOME/cluster-$${GUID} --log-level debug
-	rm -fr $$HOME/cluster-$${GUID}
-
 post-install:
 	ansible-playbook post-install.yml
 	curl https://raw.githubusercontent.com/eparis/ssh-bastion/master/deploy/deploy.sh | bash
+
+destroy-cluster:
+	openshift-install destroy cluster --dir $$HOME/cluster-$${GUID} --log-level debug
+	rm -fr $$HOME/cluster-$${GUID}
 
