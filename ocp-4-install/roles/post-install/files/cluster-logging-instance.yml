@@ -34,15 +34,7 @@ spec:
       type: fluentd
       fluentd:
         tolerations:
-          - key: infra
-            value: reserved
-            effect: NoSchedule
-          - key: infra
-            value: reserved
-            effect: NoExecute
-          - key: node.ocs.openshift.io/storage
-            value: "true"
-            effect: NoSchedule
+          - operator: Exists
   visualization:
     type: kibana
     kibana:
