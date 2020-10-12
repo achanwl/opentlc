@@ -189,9 +189,9 @@
       command:
         cmd: oc adm pod-network join-projects
         argv:
-          - --to openshift-operators-redhat
+          - --to=openshift-operators-redhat
           - openshift-logging
-      when: "{{ clusternetwork.resources[0].pluginName }}" == "redhat/openshift-ovs-multitenant"
+      when: clusternetwork.resources[0].pluginName == "redhat/openshift-ovs-multitenant"
     - name: Create openshift-operators-redhat OperatorGroup
       k8s:
         state: present
