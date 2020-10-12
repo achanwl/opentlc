@@ -10,13 +10,6 @@
           openshift.io/node-selector: ""
           scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
 
-- name: Get a list of infra nodes
-  k8s_info:
-    kind: Node
-    label_selectors:
-      - node-role.kubernetes.io/infra
-  register: infra_list
-
 - name: Remove worker label from infra nodes
   k8s:
     api_version: v1
@@ -28,13 +21,6 @@
           node-role.kubernetes.io/worker: null
   with_items: "{{ infra_list | json_query('resources[].metadata.name') }}"
 
-- name: Get a list of ocs nodes
-  k8s_info:
-    kind: Node
-    label_selectors:
-      - node-role.kubernetes.io/ocs
-  register: ocs_list
-
 - name: Remove worker label from ocs nodes
   k8s:
     api_version: v1
@@ -45,13 +31,6 @@
         labels:
           node-role.kubernetes.io/worker: null
   with_items: "{{ ocs_list | json_query('resources[].metadata.name') }}"
-
-- name: Get ClusterVersion
-  k8s_info:
-    api_version: config.openshift.io/v1
-    kind: ClusterVersion
-    name: version
-  register: clusterversion
 
 - name: Install Descheduler
   block:
@@ -103,13 +82,6 @@
 #        state: present
 #        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
 
-- name: Get Infrastructure Name
-  k8s_info:
-    api_version: config.openshift.io/v1
-    kind: Infrastructure
-    name: cluster
-  register: infra_info
-
 - name: Enable Autoscaler
   block:
     - name: Create ClusterAutoscaler
@@ -151,13 +123,6 @@
       with_nested:
         - ['infra', 'ocs', 'worker']
         - ['a', 'b', 'c']
-
-- name: Get ClusterNetwork
-  k8s_info:
-    api_version: network.openshift.io/v1
-    kind: ClusterNetwork
-    name: default
-  register: clusternetwork
 
 - name: Install Cluster Logging
   block:
