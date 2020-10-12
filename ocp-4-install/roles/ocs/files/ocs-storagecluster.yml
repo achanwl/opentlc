@@ -1,0 +1,20 @@
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  storageDeviceSets:
+    - name: ocs-deviceset
+      count: 1
+      dataPVCTemplate:
+        spec:
+          storageClassName: gp2
+          volumeMode: Block
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 512Gi
+      portable: true
+      replica: 3

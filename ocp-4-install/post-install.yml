@@ -39,3 +39,4 @@
 
   roles:
     - role: post-install
+    - role: ocs

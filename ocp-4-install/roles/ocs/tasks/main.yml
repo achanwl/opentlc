@@ -1,0 +1,50 @@
+- name: Install OCS
+  block:
+    - name: Create openshift-storage namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-storage
+            annotations:
+              openshift.io/node-selector: ""
+            labels:
+              openshift.io/cluster-monitoring: "true"
+    - name: Create openshift-storage OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-storage
+            namespace: openshift-storage
+          spec:
+            targetNamespaces:
+              - openshift-storage
+    - name: Create ocs-operator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: ocs-operator
+            namespace: openshift-storage
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel }}"
+            installPlanApproval: Automatic
+            name: ocs-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Create StorageCluster
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'ocs-storagecluster.yml') }}"
