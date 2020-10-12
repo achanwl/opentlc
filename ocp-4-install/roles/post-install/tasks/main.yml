@@ -186,7 +186,11 @@
             labels:
               openshift.io/cluster-monitoring: "true"
     - name: Join the netnamespaces of logging projects
-      command: "oc adm pod-network join-projects --to=openshift-operators-redhat openshift-logging"
+      command:
+        cmd: oc adm pod-network join-projects
+        argv:
+          - --to=openshift-operators-redhat
+          - openshift-logging
       when: "{{ clusternetwork.resources[0].pluginName }}" == "redhat/openshift-ovs-multitenant"
     - name: Create openshift-operators-redhat OperatorGroup
       k8s:
