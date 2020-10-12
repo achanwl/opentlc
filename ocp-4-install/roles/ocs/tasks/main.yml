@@ -48,3 +48,18 @@
       k8s:
         state: present
         definition: "{{ lookup('file', 'ocs-storagecluster.yml') }}"
+    - name: Fix DaemonSets
+      k8s:
+        api_version: apps/v1
+        kind: DaemonSet
+        name: "{{ item }}"
+        namespace: openshift-storage
+        definition:
+          spec:
+            template:
+              spec:
+                tolerations:
+                  - operator: Exists
+      with_items:
+        - csi-cephfsplugin
+        - csi-rbdplugin
