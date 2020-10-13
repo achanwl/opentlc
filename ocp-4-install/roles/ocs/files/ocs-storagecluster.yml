@@ -15,6 +15,6 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 512Gi
+              storage: 100Gi
       portable: true
       replica: 3
