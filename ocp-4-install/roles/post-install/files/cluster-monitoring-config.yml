@@ -44,7 +44,7 @@ data:
        spec:
          resources:
            requests:
-             storage: 5Gi
+             storage: 10Gi
     kubeStateMetrics:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
