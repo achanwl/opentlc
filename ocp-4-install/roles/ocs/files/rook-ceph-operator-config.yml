@@ -1,4 +1,10 @@
 data:
+  CSI_PROVISIONER_TOLERATIONS: |2-
+
+    - key: node.ocs.openshift.io/storage
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
   CSI_PLUGIN_TOLERATIONS: |2-
 
     - key: node.ocs.openshift.io/storage
