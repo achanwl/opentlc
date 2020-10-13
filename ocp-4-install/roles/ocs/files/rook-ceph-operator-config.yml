@@ -1,0 +1,15 @@
+data:
+  CSI_PLUGIN_TOLERATIONS: |2-
+
+    - key: node.ocs.openshift.io/storage
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
+    - key: infra
+      value: reserved
+      effect: NoSchedule
+    - key: infra
+      value: reserved
+      effect: NoExecute
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule

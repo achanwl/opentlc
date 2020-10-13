@@ -48,18 +48,10 @@
       k8s:
         state: present
         definition: "{{ lookup('file', 'ocs-storagecluster.yml') }}"
-    - name: Fix DaemonSets
+    - name: Fix DaemonSets tolerations
       k8s:
-        api_version: apps/v1
-        kind: DaemonSet
-        name: "{{ item }}"
+        api_version: v1
+        kind: ConfigMap
+        name: rook-ceph-operator-config
         namespace: openshift-storage
-        definition:
-          spec:
-            template:
-              spec:
-                tolerations:
-                  - operator: Exists
-      with_items:
-        - csi-cephfsplugin
-        - csi-rbdplugin
+        definition: "{{ lookup('file', 'rook-ceph-operator-config.yml') }}"
