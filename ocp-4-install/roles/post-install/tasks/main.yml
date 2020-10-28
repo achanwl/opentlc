@@ -77,10 +77,10 @@
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
           status: "False"
-#    - name: Create KubeDescheduler
-#      k8s:
-#        state: present
-#        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
+    - name: Create KubeDescheduler
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'kube-descheduler.yml') }}"
 
 - name: Enable Autoscaler
   block:
