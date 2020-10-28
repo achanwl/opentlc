@@ -84,6 +84,9 @@
         name: cluster-kube-descheduler-operator
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_sub_info
+    - name: Debug kubedesch_sub_info
+      debug:
+        var: kubedesch_sub_info
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -215,6 +218,9 @@
         name: elasticsearch-operator
         namespace: openshift-operators-redhat
       register: es_sub_info
+    - name: Debug es_sub_info
+      debug:
+        var: es_sub_info
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -264,6 +270,9 @@
         name: cluster-logging
         namespace: openshift-logging
       register: logging_sub_info
+    - name: Debug logging_sub_info
+      debug:
+        var: logging_sub_info
     - name: Wait for successful cluster-logging CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
