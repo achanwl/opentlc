@@ -44,6 +44,23 @@
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
           status: "False"
+    - name: Get ocs-operator Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: ocs-operator
+        namespace: openshift-storage
+      register: ocs_sub_info
+    - name: Wait for successful ocs-operator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ ocs_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-storage
+      register: ocs_csv_info
+      until: ocs_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 10
+      delay: 3
     - name: Create StorageCluster
       k8s:
         state: present
