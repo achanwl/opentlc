@@ -43,7 +43,7 @@
           metadata:
             name: openshift-kube-descheduler-operator
             annotations:
-              openshift.io/node-selector: ""
+              openshift.io/node-selector: 'node-role.kubernetes.io/infra=""'
               scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
     - name: Create openshift-kube-descheduler-operator OperatorGroup
       k8s:
@@ -135,7 +135,8 @@
           metadata:
             name: openshift-operators-redhat
             annotations:
-              openshift.io/node-selector: ""
+              openshift.io/node-selector: 'node-role.kubernetes.io/infra=""'
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
             labels:
               openshift.io/cluster-monitoring: "true"
     - name: Create openshift-logging namespace
