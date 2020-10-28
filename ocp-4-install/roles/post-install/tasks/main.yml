@@ -77,6 +77,23 @@
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
           status: "False"
+    - name: Get cluster-kube-descheduler-operator Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: cluster-kube-descheduler-operator
+        namespace: openshift-kube-descheduler-operator
+      register: kubedesch_sub_info
+    - name: Wait for successful clusterkubedescheduleroperator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ kubedesch_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-kube-descheduler-operator
+      register: kubedesch_csv_info
+      until: kubedesch_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 10
+      delay: 3
     - name: Create KubeDescheduler
       k8s:
         state: present
