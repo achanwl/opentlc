@@ -34,7 +34,7 @@
             name: ocs-operator
             namespace: openshift-storage
           spec:
-            channel: "{{ clusterversion.resources[0].spec.channel }}"
+            channel: "{{ ocschannel }}"
             installPlanApproval: Automatic
             name: ocs-operator
             source: redhat-operators
