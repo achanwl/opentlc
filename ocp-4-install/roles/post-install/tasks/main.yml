@@ -208,6 +208,23 @@
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
           status: "False"
+    - name: Get elasticsearch-operator Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: elasticsearch-operator
+        namespace: openshift-operators-redhat
+      register: es_sub_info
+    - name: Wait for successful elasticsearch-operator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ es_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-operators-redhat
+      register: es_csv_info
+      until: es_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 10
+      delay: 3
     - name: Create openshift-logging OperatorGroup
       k8s:
         state: present
@@ -240,6 +257,23 @@
           reason: AllCatalogSourcesHealthy
           type: CatalogSourcesUnhealthy
           status: "False"
+    - name: Get cluster-logging Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: cluster-logging
+        namespace: openshift-logging
+      register: logging_sub_info
+    - name: Wait for successful cluster-logging CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ logging_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-logging
+      register: logging_csv_info
+      until: logging_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 10
+      delay: 3
     - name: Create Cluster Logging instance
       k8s:
         state: present
