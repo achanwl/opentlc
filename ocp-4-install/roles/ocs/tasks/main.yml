@@ -51,6 +51,9 @@
         name: ocs-operator
         namespace: openshift-storage
       register: ocs_sub_info
+    - name: Debug ocs_sub_info
+      debug:
+        var: ocs_sub_info
     - name: Wait for successful ocs-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
