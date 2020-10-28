@@ -20,7 +20,7 @@ spec:
        - name: "MemoryTargetThreshold"
          value: "75"
        - name: "PodsTargetThreshold"
-         value: "10"
+         value: "20"
     - name: "RemoveDuplicates"
     - name: "RemovePodsViolatingInterPodAntiAffinity"
     - name: "RemovePodsViolatingNodeAffinity"
