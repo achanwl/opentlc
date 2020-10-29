@@ -69,7 +69,7 @@
       register: kubedesch_sub_info
     - name: Wait for CSV creation
       pause:
-        seconds: 3
+        seconds: 5
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -204,7 +204,7 @@
       register: es_sub_info
     - name: Wait for CSV creation
       pause:
-        seconds: 3
+        seconds: 5
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -257,7 +257,7 @@
       register: logging_sub_info
     - name: Wait for CSV creation
       pause:
-        seconds: 3
+        seconds: 5
     - name: Wait for successful cluster-logging CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
