@@ -84,9 +84,6 @@
         name: cluster-kube-descheduler-operator
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_sub_info
-    - name: Debug kubedesch_sub_info
-      debug:
-        var: kubedesch_sub_info
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -97,6 +94,9 @@
       until: kubedesch_csv_info.resources[0].status.phase == "Succeeded"
       retries: 10
       delay: 3
+    - name: Debug kubedesch_csv_info
+      debug:
+        var: kubedesch_csv_info
     - name: Create KubeDescheduler
       k8s:
         state: present
@@ -218,9 +218,6 @@
         name: elasticsearch-operator
         namespace: openshift-operators-redhat
       register: es_sub_info
-    - name: Debug es_sub_info
-      debug:
-        var: es_sub_info
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -231,6 +228,9 @@
       until: es_csv_info.resources[0].status.phase == "Succeeded"
       retries: 10
       delay: 3
+    - name: Debug es_csv_info
+      debug:
+        var: es_csv_info
     - name: Create openshift-logging OperatorGroup
       k8s:
         state: present
@@ -270,9 +270,6 @@
         name: cluster-logging
         namespace: openshift-logging
       register: logging_sub_info
-    - name: Debug logging_sub_info
-      debug:
-        var: logging_sub_info
     - name: Wait for successful cluster-logging CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -283,6 +280,9 @@
       until: logging_csv_info.resources[0].status.phase == "Succeeded"
       retries: 10
       delay: 3
+    - name: Debug logging_csv_info
+      debug:
+        var: logging_csv_info
     - name: Create Cluster Logging instance
       k8s:
         state: present
