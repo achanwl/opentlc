@@ -4,14 +4,14 @@
 - name: Create cluster-network-03-config
   copy:
     src: cluster-network-03-config.yml
-    dest: ~/cluster-{{ guid.stdout }}/manifests
+    dest: ~/cluster-{{ guid }}/manifests
     mode: 0640
   when: multitenant | bool
 
 - name: Create infra and ocs machinesets
   copy:
-    src: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item.0 }}.yaml
-    dest: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
+    src: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item.0 }}.yaml
+    dest: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     mode: 0640
   with_nested:
     - ['0', '1', '2']
@@ -19,21 +19,21 @@
 
 - name: Switch infra to m5a.2xlarge
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     regexp: 'm5a\.xlarge'
     replace: 'm5a.2xlarge'
   with_sequence: start=0 end=2
 
 - name: Switch ocs to m5a.4xlarge
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
     regexp: 'm5a\.xlarge'
     replace: 'm5a.4xlarge'
   with_sequence: start=0 end=2
 
 - name: Update infra and ocs machinesets part1
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     regexp: '-worker-us'
     replace: '-{{ item.1 }}-us'
   with_nested:
@@ -42,7 +42,7 @@
 
 - name: Update infra and ocs machinesets part2
   replace:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     regexp: 'worker$'
     replace: '{{ item.1 }}'
   with_nested:
@@ -51,7 +51,7 @@
 
 - name: Insert infra node labels
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item.0 }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item.0 }}.yaml
     line: "{{ item.1 }}"
     insertbefore: '^      providerSpec:$'
   with_nested:
@@ -60,7 +60,7 @@
 
 - name: Insert ocs node labels
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item.0 }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item.0 }}.yaml
     line: "{{ item.1 }}"
     insertbefore: '^      providerSpec:$'
   with_nested:
@@ -69,7 +69,7 @@
 
 - name: Insert infra node taints
   blockinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
     insertbefore: '^      providerSpec:$'
     block: |2
             taints:
@@ -83,7 +83,7 @@
 
 - name: Insert ocs node taints
   blockinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
     insertbefore: '^      providerSpec:$'
     block: |2
             taints:
@@ -94,7 +94,7 @@
 
 - name: Remove infra and ocs managed block lines
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_{{ item.1 }}-machineset-{{ item.0 }}.yaml
     line: "{{ item.2 }}"
     state: absent
   with_nested:
@@ -104,7 +104,7 @@
 
 - name: Set nodeplacement for ingress
   blockinfile:
-    path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
+    path: ~/cluster-{{ guid }}/manifests/cluster-ingress-02-config.yml
     insertafter: '^spec:$'
     block: |2
         nodePlacement:
@@ -121,7 +121,7 @@
 
 - name: Remove ingress managed block lines
   lineinfile:
-    path: ~/cluster-{{ guid.stdout }}/manifests/cluster-ingress-02-config.yml
+    path: ~/cluster-{{ guid }}/manifests/cluster-ingress-02-config.yml
     line: "{{ item }}"
     state: absent
   loop:

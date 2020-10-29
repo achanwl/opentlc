@@ -18,8 +18,8 @@
 
   tasks:
     - name: Get GUID
-      shell: hostname | cut -d"." -f2
-      register: guid
+      set_fact:
+        guid: "{{ ansible_nodename.split('.')[1] }}"
     - name: Setup aws and ocp tools
       block:
         - name: Unzip awscli
@@ -57,4 +57,4 @@
       become: true
     - name: Setup ssh keypair
       openssh_keypair:
-        path: ~/.ssh/cluster-{{ guid.stdout }}-key
+        path: ~/.ssh/cluster-{{ guid }}-key

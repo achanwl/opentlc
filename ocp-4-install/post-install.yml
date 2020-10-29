@@ -8,8 +8,8 @@
 
   pre_tasks:
     - name: Get GUID
-      shell: hostname | cut -d"." -f2
-      register: guid
+      set_fact:
+        guid: "{{ ansible_nodename.split('.')[1] }}"
     - name: Get a list of infra nodes
       k8s_info:
         kind: Node

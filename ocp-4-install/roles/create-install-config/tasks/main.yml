@@ -1,14 +1,14 @@
 - name: Remove cluster-$GUID dir
   file:
-    path: ~/cluster-{{ guid.stdout }}
+    path: ~/cluster-{{ guid }}
     state: absent
 
 - name: Create cluster-$GUID dir
   file:
-    path: ~/cluster-{{ guid.stdout }}
+    path: ~/cluster-{{ guid }}
     state: directory
 
 - name: Create install-config.yaml
   template:
     src: install-config.j2
-    dest: ~/cluster-{{ guid.stdout }}/install-config.yaml
+    dest: ~/cluster-{{ guid }}/install-config.yaml

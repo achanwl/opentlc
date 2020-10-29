@@ -12,8 +12,8 @@
 
   pre_tasks:
     - name: Get GUID
-      shell: hostname | cut -d"." -f2
-      register: guid
+      set_fact:
+        guid: "{{ ansible_nodename.split('.')[1] }}"
 
   roles:
     - role: create-install-config
