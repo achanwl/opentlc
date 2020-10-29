@@ -62,7 +62,7 @@
         namespace: openshift-storage
       register: ocs_csv_info
       until: ocs_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 30
+      retries: 60
       delay: 1
     - name: Create StorageCluster
       k8s:
