@@ -1,3 +1,12 @@
+- name: Set default cluster-wide node selectors
+  k8s:
+    api_version: config.openshift.io/v1
+    kind: Scheduler
+    name: cluster
+    definition:
+      spec:
+        defaultNodeSelector: node-role.kubernetes.io/worker=
+
 - name: Create debug project with tolerations for infra node debug pods
   k8s:
     state: present
@@ -138,7 +147,7 @@
           metadata:
             name: openshift-operators-redhat
             annotations:
-              openshift.io/node-selector: ""
+              openshift.io/node-selector: node-role.kubernetes.io/infra=
               scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
             labels:
               openshift.io/cluster-monitoring: "true"
