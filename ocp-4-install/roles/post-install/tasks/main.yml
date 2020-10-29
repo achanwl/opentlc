@@ -80,9 +80,6 @@
       until: kubedesch_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
-    - name: Debug kubedesch_csv_info
-      debug:
-        var: kubedesch_csv_info
     - name: Create KubeDescheduler
       k8s:
         state: present
@@ -217,9 +214,6 @@
       until: es_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
-    - name: Debug es_csv_info
-      debug:
-        var: es_csv_info
     - name: Create openshift-logging OperatorGroup
       k8s:
         state: present
@@ -272,9 +266,6 @@
       until: logging_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
-    - name: Debug logging_csv_info
-      debug:
-        var: logging_csv_info
     - name: Create Cluster Logging instance
       k8s:
         state: present

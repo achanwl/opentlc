@@ -64,9 +64,6 @@
       until: ocs_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
-    - name: Debug ocs_csv_info
-      debug:
-        var: ocs_csv_info
     - name: Create StorageCluster
       k8s:
         state: present
@@ -78,3 +75,4 @@
         name: rook-ceph-operator-config
         namespace: openshift-storage
         definition: "{{ lookup('file', 'rook-ceph-operator-config.yml') }}"
+
