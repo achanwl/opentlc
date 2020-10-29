@@ -10,27 +10,10 @@
           openshift.io/node-selector: ""
           scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
 
-- name: Remove worker label from infra nodes
+- name: Move cluster-monitoring stack to infra nodes and add persistent storage
   k8s:
-    api_version: v1
-    kind: Node
-    name: "{{ item }}"
-    definition:
-      metadata:
-        labels:
-          node-role.kubernetes.io/worker: null
-  with_items: "{{ infra_list | json_query('resources[].metadata.name') }}"
-
-- name: Remove worker label from ocs nodes
-  k8s:
-    api_version: v1
-    kind: Node
-    name: "{{ item }}"
-    definition:
-      metadata:
-        labels:
-          node-role.kubernetes.io/worker: null
-  with_items: "{{ ocs_list | json_query('resources[].metadata.name') }}"
+    state: present
+    definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
 
 - name: Install Descheduler
   block:
@@ -290,116 +273,4 @@
       k8s:
         state: present
         definition: "{{ lookup('file', 'cluster-logging-instance.yml') }}"
-
-- name: Move routers to infra nodes and scale up to 3
-  k8s:
-    api_version: operator.openshift.io/v1
-    kind: IngressController
-    namespace: openshift-ingress-operator
-    name: default
-    definition:
-      spec:
-        nodePlacement:
-          nodeSelector:
-            matchLabels:
-              node-role.kubernetes.io/infra: ""
-          tolerations:
-          - effect: NoSchedule
-            key: infra
-            value: reserved
-          - effect: NoExecute
-            key: infra
-            value: reserved
-        replicas: 3
-
-- name: Move registry to infra nodes and scale up to 3
-  k8s:
-    api_version: imageregistry.operator.openshift.io/v1
-    kind: Config
-    name: cluster
-    definition:
-      spec:
-        replicas: 3
-        nodeSelector:
-          node-role.kubernetes.io/infra: ""
-        tolerations:
-        - effect: NoSchedule
-          key: infra
-          value: reserved
-        - effect: NoExecute
-          key: infra
-          value: reserved
-
-- name: Move cluster-monitoring stack to infra nodes and add persistent storage
-  k8s:
-    state: present
-    definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
-
-- name: Create MachineConfigPool infra
-  k8s:
-    state: present
-    definition:
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      metadata:
-        name: infra
-      spec:
-        machineConfigSelector:
-          matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,infra]}
-        nodeSelector:
-          matchLabels:
-            node-role.kubernetes.io/infra: ""
-
-- name: Create MachineConfigPool ocs
-  k8s:
-    state: present
-    definition:
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      metadata:
-        name: ocs
-      spec:
-        machineConfigSelector:
-          matchExpressions:
-            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,ocs]}
-        nodeSelector:
-          matchLabels:
-            node-role.kubernetes.io/ocs: ""
-
-- name: Config allocated resources for nodes
-  block:
-    - name: Label MCPs
-      k8s:
-        api_version: machineconfiguration.openshift.io/v1
-        kind: MachineConfigPool
-        name: "{{ item }}"
-        definition:
-          metadata:
-            labels:
-              custom-kubelet: allocatable
-      loop:
-        - master
-        - worker
-    - name: Create KubeletConfig
-      k8s:
-        state: present
-        definition:
-          apiVersion: machineconfiguration.openshift.io/v1
-          kind: KubeletConfig
-          metadata:
-            name: allocatable
-          spec:
-            machineConfigPoolSelector:
-              matchLabels:
-                custom-kubelet: allocatable
-            kubeletConfig:
-              kubeReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
-              systemReserved:
-                cpu: 500m
-                memory: 1Gi
-                ephemeral-storage: 1Gi
 

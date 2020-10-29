@@ -44,3 +44,4 @@
   roles:
     - role: post-install
     - role: ocs
+    - role: post-install-disruptive
