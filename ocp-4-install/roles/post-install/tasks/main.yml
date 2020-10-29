@@ -78,7 +78,7 @@
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_csv_info
       until: kubedesch_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 10
+      retries: 30
       delay: 1
     - name: Debug kubedesch_csv_info
       debug:
@@ -215,7 +215,7 @@
         namespace: openshift-operators-redhat
       register: es_csv_info
       until: es_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 10
+      retries: 30
       delay: 1
     - name: Debug es_csv_info
       debug:
@@ -270,7 +270,7 @@
         namespace: openshift-logging
       register: logging_csv_info
       until: logging_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 10
+      retries: 30
       delay: 1
     - name: Debug logging_csv_info
       debug:

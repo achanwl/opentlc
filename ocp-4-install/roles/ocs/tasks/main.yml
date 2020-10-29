@@ -62,7 +62,7 @@
         namespace: openshift-storage
       register: ocs_csv_info
       until: ocs_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 10
+      retries: 30
       delay: 1
     - name: Debug ocs_csv_info
       debug:
