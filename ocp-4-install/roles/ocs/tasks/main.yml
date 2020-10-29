@@ -53,7 +53,7 @@
       register: ocs_sub_info
     - name: Wait for CSV creation
       pause:
-        seconds: 5
+        seconds: 10
     - name: Wait for successful ocs-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -63,7 +63,7 @@
       register: ocs_csv_info
       until: ocs_csv_info.resources[0].status.phase == "Succeeded"
       retries: 10
-      delay: 3
+      delay: 1
     - name: Debug ocs_csv_info
       debug:
         var: ocs_csv_info
