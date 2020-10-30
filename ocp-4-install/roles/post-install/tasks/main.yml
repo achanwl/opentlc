@@ -89,7 +89,9 @@
         name: "{{ kubedesch_sub_info.resources[0].status.currentCSV }}"
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_csv_info
-      until: kubedesch_csv_info.resources[0].status.phase == "Succeeded"
+      until:
+        - kubedesch_csv_info.resources[0].status.phase is defined
+        - kubedesch_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
     - name: Create KubeDescheduler
@@ -226,7 +228,9 @@
         name: "{{ es_sub_info.resources[0].status.currentCSV }}"
         namespace: openshift-operators-redhat
       register: es_csv_info
-      until: es_csv_info.resources[0].status.phase == "Succeeded"
+      until:
+        - es_csv_info.resources[0].status.phase is defined
+        - es_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
     - name: Create openshift-logging OperatorGroup
@@ -281,7 +285,9 @@
         name: "{{ logging_sub_info.resources[0].status.currentCSV }}"
         namespace: openshift-logging
       register: logging_csv_info
-      until: logging_csv_info.resources[0].status.phase == "Succeeded"
+      until:
+        - logging_csv_info.resources[0].status.phase is defined
+        - logging_csv_info.resources[0].status.phase == "Succeeded"
       retries: 30
       delay: 1
     - name: Create Cluster Logging instance

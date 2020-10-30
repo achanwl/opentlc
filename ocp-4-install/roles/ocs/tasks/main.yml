@@ -64,7 +64,9 @@
         name: "{{ ocs_sub_info.resources[0].status.currentCSV }}"
         namespace: openshift-storage
       register: ocs_csv_info
-      until: ocs_csv_info.resources[0].status.phase == "Succeeded"
+      until:
+        - ocs_csv_info.resources[0].status.phase is defined
+        - ocs_csv_info.resources[0].status.phase == "Succeeded"
       retries: 60
       delay: 1
     - name: Create StorageCluster
