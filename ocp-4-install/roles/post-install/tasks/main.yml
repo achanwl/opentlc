@@ -77,8 +77,11 @@
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_sub_info
     - name: Wait for CSV creation
-      pause:
-        seconds: 10
+      debug:
+        msg: "Waiting for CSV creation..."
+      until: kubedesch_sub_info.resources[0].status.currentCSV is defined
+      retries: 30
+      delay: 1
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -211,8 +214,11 @@
         namespace: openshift-operators-redhat
       register: es_sub_info
     - name: Wait for CSV creation
-      pause:
-        seconds: 10
+      debug:
+        msg: "Waiting for CSV creation..."
+      until: es_sub_info.resources[0].status.currentCSV is defined
+      retries: 30
+      delay: 1
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -263,8 +269,11 @@
         namespace: openshift-logging
       register: logging_sub_info
     - name: Wait for CSV creation
-      pause:
-        seconds: 10
+      debug:
+        msg: "Waiting for CSV creation..."
+      until: logging_sub_info.resources[0].status.currentCSV is defined
+      retries: 30
+      delay: 1
     - name: Wait for successful cluster-logging CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
