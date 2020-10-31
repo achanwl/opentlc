@@ -80,7 +80,7 @@
       debug:
         msg: "Waiting for CSV creation..."
       until: kubedesch_sub_info.resources[0].status.currentCSV is defined
-      retries: 30
+      retries: 60
       delay: 1
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
@@ -92,7 +92,7 @@
       until:
         - kubedesch_csv_info.resources[0].status.phase is defined
         - kubedesch_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 30
+      retries: 60
       delay: 1
     - name: Create KubeDescheduler
       k8s:
@@ -219,7 +219,7 @@
       debug:
         msg: "Waiting for CSV creation..."
       until: es_sub_info.resources[0].status.currentCSV is defined
-      retries: 30
+      retries: 60
       delay: 1
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
@@ -276,7 +276,7 @@
       debug:
         msg: "Waiting for CSV creation..."
       until: logging_sub_info.resources[0].status.currentCSV is defined
-      retries: 30
+      retries: 60
       delay: 1
     - name: Wait for successful cluster-logging CSV
       k8s_info:
@@ -288,7 +288,7 @@
       until:
         - logging_csv_info.resources[0].status.phase is defined
         - logging_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 30
+      retries: 60
       delay: 1
     - name: Create Cluster Logging instance
       k8s:
