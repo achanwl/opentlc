@@ -55,7 +55,7 @@
       debug:
         msg: "Waiting for CSV creation..."
       until: ocs_sub_info.resources[0].status.currentCSV is defined
-      retries: 30
+      retries: 60
       delay: 1
     - name: Wait for successful ocs-operator CSV
       k8s_info:
