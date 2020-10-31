@@ -231,7 +231,7 @@
       until:
         - es_csv_info.resources[0].status.phase is defined
         - es_csv_info.resources[0].status.phase == "Succeeded"
-      retries: 30
+      retries: 60
       delay: 1
     - name: Create openshift-logging OperatorGroup
       k8s:
