@@ -37,7 +37,7 @@
           - rhel-7-server-extras-rpms
           - rhel-7-server-optional-rpms
           - rhel-7-server-ansible-2.9-rpms
-          - rhel-7-server-ose-4.6-rpms
+          - rhel-7-server-ose-4.5-rpms
         state: enabled
     - name: yum clean all
       command: yum clean all
