@@ -7,6 +7,16 @@
       spec:
         defaultNodeSelector: node-role.kubernetes.io/worker=
 
+- name: Bug workaround
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: openshift-cluster-csi-drivers
+    definition:
+      metadata:
+        annotations:
+          openshift.io/node-selector: ""
+
 - name: Create debug project with tolerations for infra node debug pods
   k8s:
     state: present
