@@ -21,6 +21,7 @@
     line: "{{ item }}"
     insertafter: '^alias ge'
   loop:
+    - alias kadm='egrep "web-console|Login"  ~/cluster-${GUID}/.openshift_install.log'
     - 'alias rmf="yq d - metadata.managedFields"'
     - 'alias yq="yq -C"'
     - 'alias jq="jq -C"'
