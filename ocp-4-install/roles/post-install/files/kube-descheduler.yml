@@ -23,7 +23,7 @@ spec:
          value: "75"
     - name: "RemoveDuplicates"
     - name: "RemovePodsViolatingInterPodAntiAffinity"
-    - name: "RemovePodsViolatingNodeAffinity"
+    #- name: "RemovePodsViolatingNodeAffinity"
     - name: "RemovePodsViolatingNodeTaints"
     - name: "RemovePodsHavingTooManyRestarts"
       params:
