@@ -19,6 +19,9 @@ spec:
         deploymentconfig: grafana
     spec:
       containers:
+      - env:
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-clock-panel,grafana-simple-json-datasource
       - image: docker.io/grafana/grafana:latest
         imagePullPolicy: IfNotPresent
         name: grafana
