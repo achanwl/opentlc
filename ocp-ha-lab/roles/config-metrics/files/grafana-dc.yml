@@ -19,12 +19,12 @@ spec:
         deploymentconfig: grafana
     spec:
       containers:
-      - env:
+      - name: grafana
+        image: docker.io/grafana/grafana:latest
+        imagePullPolicy: IfNotPresent
+        env:
         - name: GF_INSTALL_PLUGINS
           value: grafana-clock-panel,grafana-simple-json-datasource
-      - image: docker.io/grafana/grafana:latest
-        imagePullPolicy: IfNotPresent
-        name: grafana
         ports:
         - containerPort: 3000
           protocol: TCP
