@@ -88,7 +88,7 @@
       register: kubedesch_sub_info
     - name: Wait for CSV creation
       debug:
-        msg: Current CSV: {{ kubedesch_sub_info.resources[0].status.currentCSV }}
+        msg: "Current CSV: {{ kubedesch_sub_info.resources[0].status.currentCSV }}"
       until: kubedesch_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
@@ -227,7 +227,7 @@
       register: es_sub_info
     - name: Wait for CSV creation
       debug:
-        msg: Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}
+        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
       until: es_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
@@ -284,7 +284,7 @@
       register: logging_sub_info
     - name: Wait for CSV creation
       debug:
-        msg: Current CSV: {{ logging_sub_info.resources[0].status.currentCSV }}
+        msg: "Current CSV: {{ logging_sub_info.resources[0].status.currentCSV }}"
       until: logging_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
