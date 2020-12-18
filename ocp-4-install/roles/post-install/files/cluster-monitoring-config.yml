@@ -29,7 +29,7 @@ data:
        spec:
          resources:
            requests:
-             storage: 10Gi
+             storage: 50Gi
     alertmanagerMain:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
