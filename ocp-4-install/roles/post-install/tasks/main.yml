@@ -16,7 +16,7 @@
       metadata:
         annotations:
           openshift.io/node-selector: ""
-  when: clusterversion.resources[0].spec.channel.split('-')[1]|float < 4.6
+#  when: clusterversion.resources[0].spec.channel.split('-')[1]|float < 4.6
 
 - name: Create debug project with tolerations for infra node debug pods
   k8s:
