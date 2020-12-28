@@ -125,11 +125,11 @@
             resourceLimits:
               maxNodesTotal: 21
               cores:
-                min: 2
-                max: 16
+                min: 96
+                max: 192
               memory:
-                min: 8
-                max: 64
+                min: 384
+                max: 768
             scaleDown:
               enabled: true
     - name: Create MachineAutoscaler
