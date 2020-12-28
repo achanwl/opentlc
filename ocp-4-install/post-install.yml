@@ -46,4 +46,7 @@
     - role: ocs
       tags:
         - ocs
+    - role: ossm
+      tags:
+        - ossm
     - role: post-install-disruptive
