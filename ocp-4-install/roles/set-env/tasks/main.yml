@@ -13,7 +13,7 @@
   lineinfile:
     path: ~/.bashrc
     regexp: '^alias ge'
-    line: 'alias ge="oc get events --sort-by=.metadata.creationTimestamp"'
+    line: 'alias ge="oc get events --sort-by=.lastTimestamp"'
 
 - name: set jq/yq/rmf alias
   lineinfile:
