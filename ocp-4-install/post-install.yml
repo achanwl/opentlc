@@ -44,4 +44,6 @@
   roles:
     - role: post-install
     - role: ocs
+      tags:
+        - ocs
     - role: post-install-disruptive
