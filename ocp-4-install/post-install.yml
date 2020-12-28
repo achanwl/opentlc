@@ -7,43 +7,44 @@
       private: no
 
   pre_tasks:
-    block:
-      - name: Get GUID
-        set_fact:
-          guid: "{{ ansible_nodename.split('.')[1] }}"
-      - name: Get a list of infra nodes
-        k8s_info:
-          kind: Node
-          label_selectors:
-            - node-role.kubernetes.io/infra
-        register: infra_list
-      - name: Get a list of ocs nodes
-        k8s_info:
-          kind: Node
-          label_selectors:
-            - node-role.kubernetes.io/ocs
-        register: ocs_list
-      - name: Get ClusterVersion
-        k8s_info:
-          api_version: config.openshift.io/v1
-          kind: ClusterVersion
-          name: version
-        register: clusterversion
-      - name: Get Infrastructure Name
-        k8s_info:
-          api_version: config.openshift.io/v1
-          kind: Infrastructure
-          name: cluster
-        register: infra_info
-      - name: Get ClusterNetwork
-        k8s_info:
-          api_version: network.openshift.io/v1
-          kind: ClusterNetwork
-          name: default
-        register: clusternetwork
-    tags:
-      - ocs
-      - ossm
+    - name: Prep all variables
+      block: 
+        - name: Get GUID
+          set_fact:
+            guid: "{{ ansible_nodename.split('.')[1] }}"
+        - name: Get a list of infra nodes
+          k8s_info:
+            kind: Node
+            label_selectors:
+              - node-role.kubernetes.io/infra
+          register: infra_list
+        - name: Get a list of ocs nodes
+          k8s_info:
+            kind: Node
+            label_selectors:
+              - node-role.kubernetes.io/ocs
+          register: ocs_list
+        - name: Get ClusterVersion
+          k8s_info:
+            api_version: config.openshift.io/v1
+            kind: ClusterVersion
+            name: version
+          register: clusterversion
+        - name: Get Infrastructure Name
+          k8s_info:
+            api_version: config.openshift.io/v1
+            kind: Infrastructure
+            name: cluster
+          register: infra_info
+        - name: Get ClusterNetwork
+          k8s_info:
+            api_version: network.openshift.io/v1
+            kind: ClusterNetwork
+            name: default
+          register: clusternetwork
+      tags:
+        - ocs
+        - ossm
 
   roles:
     - role: post-install
