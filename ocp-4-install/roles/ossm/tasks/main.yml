@@ -1,0 +1,173 @@
+- name: Check for elasticsearch operator
+  k8s_info:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: elasticsearch-operator
+    namespace: openshift-operators-redhat
+  register: es_sub_info
+
+- name: Install elasticsearch-operator if needed
+  block:
+    - name: Create openshift-operators-redhat namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: openshift-operators-redhat
+            annotations:
+              openshift.io/node-selector: node-role.kubernetes.io/infra=
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+            labels:
+              openshift.io/cluster-monitoring: "true"
+    - name: Create openshift-operators-redhat OperatorGroup
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1
+          kind: OperatorGroup
+          metadata:
+            name: openshift-operators-redhat
+            namespace: openshift-operators-redhat
+          spec: {}
+    - name: Create elasticsearch-operator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: elasticsearch-operator
+            namespace: openshift-operators-redhat
+          spec:
+            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            installPlanApproval: Automatic
+            name: elasticsearch-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Get elasticsearch-operator Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: elasticsearch-operator
+        namespace: openshift-operators-redhat
+      register: es_sub_info
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
+      until: es_sub_info.resources[0].status.currentCSV is defined
+      retries: 60
+      delay: 1
+    - name: Wait for successful elasticsearch-operator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ es_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-operators-redhat
+      register: es_csv_info
+      until:
+        - es_csv_info.resources[0].status.phase is defined
+        - es_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 60
+      delay: 1
+  when: es_sub_info.resources[0].status.currentCSV is defined
+
+- name: Install OSSM
+  block:
+    - name: Create jaeger-product Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: jaeger-product
+            namespace: openshift-operators
+          spec:
+            channel: stable
+            installPlanApproval: Automatic
+            name: jaeger-product
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Get jaeger-product Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: jaeger-product
+        namespace: openshift-operators
+      register: jaeger_sub_info
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ jaeger_sub_info.resources[0].status.currentCSV }}"
+      until: jaeger_sub_info.resources[0].status.currentCSV is defined
+      retries: 60
+      delay: 1
+    - name: Wait for successful jaeger-operator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ jaeger_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-operators
+      register: jaeger_csv_info
+      until:
+        - jaeger_csv_info.resources[0].status.phase is defined
+        - jaeger_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 60
+      delay: 1
+    - name: Create kiali-ossm Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: kiali-ossm
+            namespace: openshift-operators
+          spec:
+            channel: stable
+            installPlanApproval: Automatic
+            name: kiali-ossm
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Get kiali-ossm Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: kiali-ossm
+        namespace: openshift-operators
+      register: kiali_sub_info
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ kiali_sub_info.resources[0].status.currentCSV }}"
+      until: kiali_sub_info.resources[0].status.currentCSV is defined
+      retries: 60
+      delay: 1
+    - name: Wait for successful kiali-operator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ kiali_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-operators
+      register: kiali_csv_info
+      until:
+        - kiali_csv_info.resources[0].status.phase is defined
+        - kiali_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 60
+      delay: 1
+
