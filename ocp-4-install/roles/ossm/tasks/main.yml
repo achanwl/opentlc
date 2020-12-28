@@ -170,4 +170,48 @@
         - kiali_csv_info.resources[0].status.phase == "Succeeded"
       retries: 60
       delay: 1
-
+    - name: Create servicemeshoperator Subscription
+      k8s:
+        state: present
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: servicemeshoperator
+            namespace: openshift-operators
+          spec:
+            channel: stable
+            installPlanApproval: Automatic
+            name: servicemeshoperator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        wait: yes
+        wait_condition:
+          reason: AllCatalogSourcesHealthy
+          type: CatalogSourcesUnhealthy
+          status: "False"
+    - name: Get servicemeshoperator Subscription info
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        name: servicemeshoperator
+        namespace: openshift-operators
+      register: smo_sub_info
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ smo_sub_info.resources[0].status.currentCSV }}"
+      until: smo_sub_info.resources[0].status.currentCSV is defined
+      retries: 60
+      delay: 1
+    - name: Wait for successful servicemeshoperator CSV
+      k8s_info:
+        api_version: operators.coreos.com/v1alpha1
+        kind: ClusterServiceVersion
+        name: "{{ smo_sub_info.resources[0].status.currentCSV }}"
+        namespace: openshift-operators
+      register: smo_csv_info
+      until:
+        - smo_csv_info.resources[0].status.phase is defined
+        - smo_csv_info.resources[0].status.phase == "Succeeded"
+      retries: 60
+      delay: 1
