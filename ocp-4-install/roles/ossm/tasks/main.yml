@@ -4,7 +4,7 @@
     kind: Subscription
     name: elasticsearch-operator
     namespace: openshift-operators-redhat
-  register: es_sub_info
+  register: es_chk_info
 
 - name: Install elasticsearch-operator if needed
   block:
@@ -76,7 +76,7 @@
         - es_csv_info.resources[0].status.phase == "Succeeded"
       retries: 60
       delay: 1
-  when: es_sub_info.resources[0].status.currentCSV is not defined
+  when: es_chk_info.resources[0].status.currentCSV is not defined
 
 - name: Install OSSM
   block:
