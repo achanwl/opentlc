@@ -215,3 +215,28 @@
         - smo_csv_info.resources[0].status.phase == "Succeeded"
       retries: 60
       delay: 1
+
+- name: Deploy OSSM Control Plane
+  block:
+    - name: Create istio-system namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: istio-system
+            annotations:
+              openshift.io/node-selector: node-role.kubernetes.io/infra=
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+    - name: Create ServiceMeshControlPlane
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'smcp-basic.yml') }}"
+    - name: Create ServiceMeshMemberRoll
+      k8s:
+        state: present
+        definition: "{{ lookup('file', 'smmr-default.yml') }}"
+
+
+
