@@ -238,5 +238,3 @@
         state: present
         definition: "{{ lookup('file', 'smmr-default.yml') }}"
 
-
-
