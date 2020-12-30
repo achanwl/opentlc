@@ -233,8 +233,40 @@
       k8s:
         state: present
         definition: "{{ lookup('file', 'smcp-basic.yml') }}"
-    - name: Create ServiceMeshMemberRoll
+    - name: Create ServiceMeshMemberRoll with bookinfo
       k8s:
         state: present
         definition: "{{ lookup('file', 'smmr-default.yml') }}"
+
+- name: Deploy bookinfo app on OSSM
+  block:
+    - name: Create bookinfo namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: bookinfo
+    - name: Deploy bookinfo.yaml
+      k8s:
+        state: present
+        namespace: bookinfo
+        definition: "{{ item }}"
+      with_items: '{{ lookup("url", "https://raw.githubusercontent.com/Maistra/istio/maistra-2.0/samples/bookinfo/platform/kube/bookinfo.yaml", split_lines=False) | from_yaml_all | list }}'
+      when: item is not none
+    - name: Deploy ingress gateway
+      k8s:
+        state: present
+        namespace: bookinfo
+        definition: "{{ item }}"
+      with_items: '{{ lookup("url", "https://raw.githubusercontent.com/Maistra/istio/maistra-2.0/samples/bookinfo/networking/bookinfo-gateway.yaml", split_lines=False) | from_yaml_all | list }}'
+      when: item is not none
+    - name: Deploy default destination rules with mTLS
+      k8s:
+        state: present
+        namespace: bookinfo
+        definition: "{{ item }}"
+      with_items: '{{ lookup("url", "https://raw.githubusercontent.com/Maistra/istio/maistra-2.0/samples/bookinfo/networking/destination-rule-all-mtls.yaml", split_lines=False) | from_yaml_all | list }}'
+      when: item is not none
 
