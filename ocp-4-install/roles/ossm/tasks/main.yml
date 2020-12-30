@@ -248,6 +248,7 @@
           kind: Namespace
           metadata:
             name: bookinfo
+        wait: yes
     - name: Deploy bookinfo.yaml
       k8s:
         state: present
