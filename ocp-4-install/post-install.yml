@@ -8,7 +8,7 @@
 
   pre_tasks:
     - name: Prep all variables
-      block: 
+      block:
         - name: Get GUID
           set_fact:
             guid: "{{ ansible_nodename.split('.')[1] }}"
