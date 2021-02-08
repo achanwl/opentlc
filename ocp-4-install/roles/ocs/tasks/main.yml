@@ -51,12 +51,12 @@
         name: ocs-operator
         namespace: openshift-storage
       register: ocs_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ ocs_sub_info.resources[0].status.currentCSV }}"
       until: ocs_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ ocs_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful ocs-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
