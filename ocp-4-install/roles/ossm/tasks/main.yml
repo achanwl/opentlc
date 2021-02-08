@@ -197,6 +197,9 @@
         name: servicemeshoperator
         namespace: openshift-operators
       register: smo_sub_info
+      until: smo_sub_info.resources[0].status.currentCSV is defined
+      retries: 60
+      delay: 1
     - name: Wait for CSV creation
       debug:
         msg: "Current CSV: {{ smo_sub_info.resources[0].status.currentCSV }}"
