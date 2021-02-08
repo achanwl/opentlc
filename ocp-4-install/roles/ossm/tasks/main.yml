@@ -58,12 +58,12 @@
         name: elasticsearch-operator
         namespace: openshift-operators-redhat
       register: es_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
       until: es_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -107,12 +107,12 @@
         name: jaeger-product
         namespace: openshift-operators
       register: jaeger_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ jaeger_sub_info.resources[0].status.currentCSV }}"
       until: jaeger_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ jaeger_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful jaeger-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -152,12 +152,12 @@
         name: kiali-ossm
         namespace: openshift-operators
       register: kiali_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ kiali_sub_info.resources[0].status.currentCSV }}"
       until: kiali_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ kiali_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful kiali-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -203,9 +203,6 @@
     - name: Wait for CSV creation
       debug:
         msg: "Current CSV: {{ smo_sub_info.resources[0].status.currentCSV }}"
-      until: smo_sub_info.resources[0].status.currentCSV is defined
-      retries: 60
-      delay: 1
     - name: Wait for successful servicemeshoperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
