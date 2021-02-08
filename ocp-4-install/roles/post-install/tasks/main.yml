@@ -87,12 +87,12 @@
         name: cluster-kube-descheduler-operator
         namespace: openshift-kube-descheduler-operator
       register: kubedesch_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ kubedesch_sub_info.resources[0].status.currentCSV }}"
       until: kubedesch_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ kubedesch_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful clusterkubedescheduleroperator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -226,12 +226,12 @@
         name: elasticsearch-operator
         namespace: openshift-operators-redhat
       register: es_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
       until: es_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ es_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful elasticsearch-operator CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
@@ -283,12 +283,12 @@
         name: cluster-logging
         namespace: openshift-logging
       register: logging_sub_info
-    - name: Wait for CSV creation
-      debug:
-        msg: "Current CSV: {{ logging_sub_info.resources[0].status.currentCSV }}"
       until: logging_sub_info.resources[0].status.currentCSV is defined
       retries: 60
       delay: 1
+    - name: Wait for CSV creation
+      debug:
+        msg: "Current CSV: {{ logging_sub_info.resources[0].status.currentCSV }}"
     - name: Wait for successful cluster-logging CSV
       k8s_info:
         api_version: operators.coreos.com/v1alpha1
