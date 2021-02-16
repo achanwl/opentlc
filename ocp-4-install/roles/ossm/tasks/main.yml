@@ -255,6 +255,10 @@
         state: present
         definition: "{{ lookup('file', 'smmr-default.yml') }}"
         wait: yes
+        wait_condition:
+          reason: Configured
+          type: Ready
+          status: "True"
     - name: Deploy bookinfo.yaml
       k8s:
         state: present
