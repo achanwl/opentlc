@@ -8,6 +8,15 @@
     mode: 0640
   when: multitenant | bool
 
+- name: Set machinesets deletePolicy
+  lineinfile:
+    path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item.0 }}.yaml
+    line: "{{ item.1 }}"
+    insertafter: '^spec:$'
+  with_nested:
+    - ['0', '1', '2']
+    - ['  deletePolicy: Newest']
+
 - name: Create infra and ocs machinesets
   copy:
     src: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_worker-machineset-{{ item.0 }}.yaml
