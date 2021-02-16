@@ -234,6 +234,10 @@
         state: present
         definition: "{{ lookup('file', 'smcp-basic.yml') }}"
         wait: yes
+        wait_condition:
+          reason: ComponentsReady
+          type: Ready
+          status: "True"
 
 - name: Deploy bookinfo app on OSSM
   block:
