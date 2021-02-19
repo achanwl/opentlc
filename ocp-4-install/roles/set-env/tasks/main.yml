@@ -22,7 +22,7 @@
     insertafter: '^alias ge'
   loop:
     - alias kadm='egrep "web-console|Login"  ~/cluster-${GUID}/.openshift_install.log'
-    - alias rmf="yq e 'del(.metadata.managedFields)' -"
+    - alias rmf="yq e 'del(.metadata.managedFields)' - | less -R"
     - alias yq="yq -C"
     - alias jq="jq -C"
 
@@ -57,7 +57,7 @@
 
 - name: get yq
   get_url:
-    url: https://github.com/mikefarah/yq/releases/download/v4.4.1/yq_linux_amd64
+    url: https://github.com/mikefarah/yq/releases/download/v4.6.0/yq_linux_amd64
     dest: ~/bin/yq
     mode: '0755'
 
