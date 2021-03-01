@@ -25,6 +25,7 @@
     - alias rmf="yq e 'del(.metadata.managedFields)' - | less -R"
     - alias yq="yq -C"
     - alias jq="jq -C"
+    - alias less="less -X"
 
 - name: set aws completion
   lineinfile:
@@ -57,7 +58,7 @@
 
 - name: get yq
   get_url:
-    url: https://github.com/mikefarah/yq/releases/download/v4.6.0/yq_linux_amd64
+    url: https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64
     dest: ~/bin/yq
     mode: '0755'
 
