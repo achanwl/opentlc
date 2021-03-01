@@ -238,6 +238,7 @@
           reason: ComponentsReady
           type: Ready
           status: "True"
+        wait_timeout: 300
 
 - name: Deploy bookinfo app on OSSM
   block:
