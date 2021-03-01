@@ -47,6 +47,7 @@
         name:
           - python3-pyyaml
           - python3-openshift
+          - python3-requests-oauthlib
           - tree
           - traceroute
           - lsof
