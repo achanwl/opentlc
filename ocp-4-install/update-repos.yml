@@ -11,7 +11,7 @@
     - role: reg-host
 
   tasks:
-    - name: yum update all
-      yum:
+    - name: dnf update all
+      dnf:
         name: '*'
         state: latest

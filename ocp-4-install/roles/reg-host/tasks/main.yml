@@ -1,23 +1,30 @@
 - name: Register system and enable required repos
-
   block:
-    - name: yum update subscription-manager first
-      yum:
-        name: subscription-manager
-        state: latest
-    - name: Check for open_ocp4-ha-lab.repo
+    - name: dnf clean all
+      command: dnf clean all
+    - name: sub-mgr remove all
+      command: subscription-manager remove --all
+    - name: sub-mgr unregister
+      command: subscription-manager unregister
+    - name: sub-mgr clean
+      command: subscription-manager clean
+    - name: Remove katello-ca-consumer-labsat.opentlc.com
+      dnf:
+        name: katello-ca-consumer-labsat.opentlc.com
+        state: absent
+    - name: Check for ansible-tower-cli-el7.repo
       stat:
-        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        path: /etc/yum.repos.d/ansible-tower-cli-el7.repo
       register: repo_file
-    - name: Copy open_ocp4-ha-lab.repo
+    - name: Copy ansible-tower-cli-el7.repo
       copy:
-        src: /etc/yum.repos.d/open_ocp4-ha-lab.repo
-        dest: /etc/yum.repos.d/open_ocp4-ha-lab.repo.old
+        src: /etc/yum.repos.d/ansible-tower-cli-el7.repo
+        dest: /etc/yum.repos.d/ansible-tower-cli-el7.repo.disabled
         remote_src: yes
       when: repo_file.stat.exists
-    - name: Remove open_ocp4-ha-lab.repo
+    - name: Remove ansible-tower-cli-el7.repo
       file:
-        path: /etc/yum.repos.d/open_ocp4-ha-lab.repo
+        path: /etc/yum.repos.d/ansible-tower-cli-el7.repo
         state: absent
     - name: sub-mgr register
       redhat_subscription:
@@ -26,31 +33,24 @@
         password: "{{ rhnpasswd }}"
         force_register: yes
         pool_ids: 8a85f99c6c8b9588016c8be0f38a0ee9
-    - name: Disable all repos
-      rhsm_repository:
-        name: '*'
-        state: disabled
     - name: Enable needed repos
       rhsm_repository:
         name:
-          - rhel-7-server-rpms
-          - rhel-7-server-extras-rpms
-          - rhel-7-server-optional-rpms
-          - rhel-7-server-ansible-2.9-rpms
-          - rhel-7-server-ose-4.5-rpms
+          - ansible-2-for-rhel-8-x86_64-rpms
+          - rhel-8-for-x86_64-supplementary-rpms
+          - rhocp-4.6-for-rhel-8-x86_64-rpms
         state: enabled
-    - name: yum clean all
-      command: yum clean all
-    - name: yum install packages
-      yum:
+    - name: dnf clean all
+      command: dnf clean all
+    - name: dnf install packages
+      dnf:
         name:
-          - python2-openshift
-          - PyYAML
+          - python3-pyyaml
+          - python3-openshift
           - tree
           - traceroute
           - lsof
           - jq
         state: latest
-
   tags:
     - reg-host
