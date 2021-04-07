@@ -15,9 +15,10 @@
     line: "{{ item }}"
     insertafter: '^alias vi'
   loop:
-    - 'alias jq="jq -C"'
-    - 'alias yq="yq -C"'
-    - 'alias rmf="yq d - metadata.managedFields"'
+    - alias rmf="yq e 'del(..|select(has(\"managedFields\")).managedFields)' - | less -R"
+    - alias yq="yq -C"
+    - alias jq="jq -C"
+    - alias less="less -X"
 
 - name: set env vars
   lineinfile:
@@ -42,7 +43,7 @@
 
 - name: get yq
   get_url:
-    url: https://github.com/mikefarah/yq/releases/download/3.4.0/yq_linux_amd64
+    url: https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_amd64
     dest: ~/bin/yq
     mode: '0755'
 
