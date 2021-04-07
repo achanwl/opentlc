@@ -22,7 +22,7 @@
     insertafter: '^alias ge'
   loop:
     - alias kadm='egrep "web-console|Login"  ~/cluster-${GUID}/.openshift_install.log'
-    - alias rmf="yq e 'del(..|select(has("managedFields")).managedFields)' - | less -R"
+    - alias rmf="yq e 'del(..|select(has(\"managedFields\")).managedFields)' - | less -R"
     - alias yq="yq -C"
     - alias jq="jq -C"
     - alias less="less -X"
