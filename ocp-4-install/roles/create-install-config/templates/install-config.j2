@@ -4,6 +4,7 @@ metadata:
 platform:
   aws:
     region: us-east-2
+    test: customer env testing
 baseDomain: sandbox{{ sbid }}.opentlc.com
 publish: External
 controlPlane:
@@ -23,6 +24,6 @@ compute:
       type: m5a.xlarge
   replicas: 3
 networking:
-  networkType: OpenShiftSDN
+  networkType: OVNKubernetes
 sshKey: '{{ sshkey }}'
 pullSecret: '{{ pullsecret }}'
