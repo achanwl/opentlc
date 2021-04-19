@@ -6,6 +6,9 @@
     - name: rhnpasswd
       prompt: "RHN Password"
       private: yes
+    - name: ocpver
+      prompt: "OCP 4 Version x.y"
+      private: no
 
   roles:
     - role: reg-host
