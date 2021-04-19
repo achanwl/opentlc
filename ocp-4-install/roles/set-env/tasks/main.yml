@@ -58,7 +58,7 @@
 
 - name: get yq
   get_url:
-    url: https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_amd64
+    url: https://github.com/mikefarah/yq/releases/download/v4.7.0/yq_linux_amd64
     dest: ~/bin/yq
     mode: '0755'
 
