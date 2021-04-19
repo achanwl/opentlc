@@ -61,9 +61,11 @@
     url: https://github.com/mikefarah/yq/releases/download/v4.7.0/yq_linux_amd64
     dest: ~/bin/yq
     mode: '0755'
+    force: yes
 
 - name: get ssh-bastion ssh.sh
   get_url:
     url: https://raw.githubusercontent.com/eparis/ssh-bastion/master/ssh.sh
     dest: ~/bin/ssh-bastion.sh
     mode: '0755'
+    force: yes
