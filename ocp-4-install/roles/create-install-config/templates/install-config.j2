@@ -16,6 +16,9 @@ controlPlane:
   platform:
     aws:
       type: m5a.xlarge
+      rootVolume:
+        type: io1
+        iops: 3000
   replicas: 3
 compute:
 - architecture: amd64
