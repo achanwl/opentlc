@@ -6,7 +6,7 @@ platform:
     region: us-east-2
     userTags:
       user: alchan
-      test: "customer env testing"
+      test: customer_environment_testing
 baseDomain: sandbox{{ sbid }}.opentlc.com
 publish: External
 controlPlane:
@@ -15,6 +15,7 @@ controlPlane:
   name: master
   platform:
     aws:
+      type: m5a.xlarge
       rootVolume:
         type: io1
         iops: 3000
@@ -25,7 +26,7 @@ compute:
   name: worker
   platform:
     aws:
-      type: m5.xlarge
+      type: m5a.xlarge
   replicas: 3
 networking:
   networkType: OVNKubernetes
