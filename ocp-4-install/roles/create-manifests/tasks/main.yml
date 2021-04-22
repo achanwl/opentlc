@@ -26,18 +26,18 @@
     - ['0', '1', '2']
     - ['infra', 'ocs']
 
-- name: Switch infra to m5a.2xlarge
+- name: Switch infra to m5.2xlarge
   replace:
     path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_infra-machineset-{{ item }}.yaml
-    regexp: 'm5a\.xlarge'
-    replace: 'm5a.2xlarge'
+    regexp: 'm5\.xlarge'
+    replace: 'm5.2xlarge'
   with_sequence: start=0 end=2
 
-- name: Switch ocs to m5a.4xlarge
+- name: Switch ocs to m5.4xlarge
   replace:
     path: ~/cluster-{{ guid }}/openshift/99_openshift-cluster-api_ocs-machineset-{{ item }}.yaml
-    regexp: 'm5a\.xlarge'
-    replace: 'm5a.4xlarge'
+    regexp: 'm5\.xlarge'
+    replace: 'm5.4xlarge'
   with_sequence: start=0 end=2
 
 - name: Update infra and ocs machinesets part1
