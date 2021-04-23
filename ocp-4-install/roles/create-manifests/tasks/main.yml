@@ -66,6 +66,7 @@
   with_nested:
     - ['0', '1', '2']
     - ['infra', 'ocs']
+  when: ocp_install_ver.stdout_lines[0].split(' ')[1] is version('4.7.0', '>=')
 
 - name: Insert infra node labels
   lineinfile:
