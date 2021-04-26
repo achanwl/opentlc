@@ -41,7 +41,7 @@
             name: elasticsearch-operator
             namespace: openshift-operators-redhat
           spec:
-            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            channel: "{{ cver_xy is version('4.7', '>=') | ternary('stable', '{{ cvery_xy }}') }}"
             installPlanApproval: Automatic
             name: elasticsearch-operator
             source: redhat-operators
