@@ -188,7 +188,9 @@
           - join-projects
           - --to=openshift-operators-redhat
           - openshift-logging
-      when: clusternetwork.resources[0].pluginName == "redhat/openshift-ovs-multitenant"
+      when:
+        - network_op.resources[0].spec.defaultNetwork.type == "OpenShiftSDN"
+        - network_op.resources[0].spec.defaultNetwork.openshiftSDNConfig.mode == "Multitenant"
     - name: Create openshift-operators-redhat OperatorGroup
       k8s:
         state: present
