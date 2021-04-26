@@ -16,7 +16,7 @@
       metadata:
         annotations:
           openshift.io/node-selector: ""
-  when: clusterversion.resources[0].spec.channel.split('-')[1] is version('4.6', '<')
+  when: cver_xy is version('4.6', '<')
 
 - name: Create debug project with tolerations for infra node debug pods
   k8s:
@@ -70,7 +70,7 @@
             name: cluster-kube-descheduler-operator
             namespace: openshift-kube-descheduler-operator
           spec:
-            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            channel: "{{ cver_xy }}"
             installPlanApproval: Automatic
             name: cluster-kube-descheduler-operator
             source: redhat-operators
@@ -211,7 +211,7 @@
             name: elasticsearch-operator
             namespace: openshift-operators-redhat
           spec:
-            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            channel: "{{ cver_xy is version('4.7', '>=') | ternary('stable', '{{ cvery_xy }}') }}"
             installPlanApproval: Automatic
             name: elasticsearch-operator
             source: redhat-operators
@@ -268,7 +268,7 @@
             name: cluster-logging
             namespace: openshift-logging
           spec:
-            channel: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+            channel: "{{ cver_xy is version('4.7', '>=') | ternary('stable', '{{ cvery_xy }}') }}"
             installPlanApproval: Automatic
             name: cluster-logging
             source: redhat-operators
