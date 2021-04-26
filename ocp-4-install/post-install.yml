@@ -30,18 +30,18 @@
             kind: ClusterVersion
             name: version
           register: clusterversion
-        - name: Get Infrastructure Name
+        - name: Get Infrastructure
           k8s_info:
             api_version: config.openshift.io/v1
             kind: Infrastructure
             name: cluster
           register: infra_info
-        - name: Get ClusterNetwork
+        - name: Get Network Operator
           k8s_info:
-            api_version: network.openshift.io/v1
-            kind: ClusterNetwork
-            name: default
-          register: clusternetwork
+            api_version: operator.openshift.io/v1
+            kind: Network
+            name: cluster
+          register: network_op
       tags:
         - ocs
         - ossm
