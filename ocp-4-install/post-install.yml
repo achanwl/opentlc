@@ -30,6 +30,9 @@
             kind: ClusterVersion
             name: version
           register: clusterversion
+        - name: Set ClusterVersion x.y
+          set_fact:
+            cver_xy: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
         - name: Get Infrastructure
           k8s_info:
             api_version: config.openshift.io/v1
