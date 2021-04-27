@@ -30,5 +30,5 @@ compute:
   replicas: 3
 networking:
   networkType: OVNKubernetes
-sshKey: '{{ installer_ssh_key }}'
-pullSecret: '{{ pull_secret }}'
+sshKey: '{{ config.installer_ssh_key }}'
+pullSecret: '{{ config.pull_secret }}'

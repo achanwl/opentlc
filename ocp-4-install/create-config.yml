@@ -11,14 +11,14 @@
       default: no
 
   pre_tasks:
-    - name: Check if cluster-<guid>-key.pub exists
+    - name: Check if cluster-guid-key.pub exists
       fail:
         msg: "Error: Please provide cluster-{{ guid }}-key.pub!"
-      when: installer_ssh_key is none or installer_ssh_key == ""
+      when: config.installer_ssh_key is none or config.installer_ssh_key == ""
     - name: Check if pull-secret.json exists
       fail:
         msg: "Error: Please provide pull-secret.json!"
-      when: pull_secret is none or pull_secret == ""
+      when: config.pull_secret is none or config.pull_secret == ""
     - name: Get installer version
       command: openshift-install version
       register: ocp_install_ver
