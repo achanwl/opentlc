@@ -11,6 +11,10 @@
       default: no
 
   pre_tasks:
+    - name: Check if cluster-<guid>-key.pub exists
+      fail:
+        msg: "Error: Please provide cluster-{{ guid }}-key.pub!"
+      when: installer_ssh_key is none or installer_ssh_key == ""
     - name: Check if pull-secret.json exists
       fail:
         msg: "Error: Please provide pull-secret.json!"
