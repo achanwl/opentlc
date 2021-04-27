@@ -6,7 +6,8 @@ setup-bastion:
 	ansible-playbook setup-bastion.yml
 
 create-cluster:
-	ansible-playbook create-config.yml && openshift-install create cluster --dir $$HOME/cluster-$${GUID} --log-level debug
+	ansible-playbook create-config.yml
+	openshift-install create cluster --dir $$HOME/cluster-$${GUID} --log-level debug
 
 post-install:
 	ansible-playbook post-install.yml
