@@ -1,4 +1,5 @@
 guid: "{{ ansible_nodename.split('.')[1] }}"
 config:
+  multitenant: false
   installer_ssh_key: "{{ lookup('file', '~/.ssh/cluster-{{ guid }}-key.pub') }}"
   pull_secret: "{{ lookup('file', '~/pull-secret') }}"

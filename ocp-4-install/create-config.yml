@@ -5,10 +5,6 @@
     - name: sbid
       prompt: "sandbox id"
       private: no
-    - name: multitenant
-      prompt: "Use Multitenant plug-in (yes/no)"
-      private: no
-      default: no
 
   pre_tasks:
     - name: Check if cluster-guid-key.pub exists

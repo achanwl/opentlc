@@ -6,7 +6,7 @@
     src: cluster-network-03-config.yml
     dest: ~/cluster-{{ guid }}/manifests
     mode: 0640
-  when: multitenant | bool
+  when: config.multitenant | bool
 
 - name: Set machinesets deletePolicy
   lineinfile:
