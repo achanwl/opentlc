@@ -17,9 +17,6 @@
     - role: set-env
 
   tasks:
-    - name: Get GUID
-      set_fact:
-        guid: "{{ ansible_nodename.split('.')[1] }}"
     - name: Setup aws and ocp tools
       block:
         - name: Unzip awscli

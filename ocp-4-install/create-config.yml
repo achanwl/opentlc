@@ -11,9 +11,10 @@
       default: no
 
   pre_tasks:
-    - name: Get GUID
-      set_fact:
-        guid: "{{ ansible_nodename.split('.')[1] }}"
+    - name: Check if pull-secret.json exists
+      fail:
+        msg: "Error: Please provide pull-secret.json!"
+      when: pull_secret is none or pull_secret == ""
     - name: Get installer version
       command: openshift-install version
       register: ocp_install_ver

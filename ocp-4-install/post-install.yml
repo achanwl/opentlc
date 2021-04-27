@@ -9,9 +9,6 @@
   pre_tasks:
     - name: Prep all variables
       block:
-        - name: Get GUID
-          set_fact:
-            guid: "{{ ansible_nodename.split('.')[1] }}"
         - name: Get a list of infra nodes
           k8s_info:
             kind: Node
