@@ -31,4 +31,4 @@ compute:
 networking:
   networkType: OVNKubernetes
 sshKey: '{{ config.installer_ssh_key }}'
-pullSecret: '{{ config.pull_secret }}'
+pullSecret: '{{ config.pull_secret | to_json }}'
