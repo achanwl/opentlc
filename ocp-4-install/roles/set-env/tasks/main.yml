@@ -51,6 +51,11 @@
     - 'KUBECONFIG=~/cluster-${GUID}/auth/kubeconfig'
     - 'export EDITOR VISUAL SSH_KEY_PATH KUBECONFIG'
 
+- name: rm pull-secret
+  lineinfile:
+    path: ~/.bash_logout
+    line: 'rm -f ~/pull-secret'
+
 - name: create ~/bin
   file:
     path: ~/bin
