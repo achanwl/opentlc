@@ -7,10 +7,14 @@
       route53_info:
         query: hosted_zone
       register: hosted_zones
+    - name: Get base domain
+      set_fact:
+        # Needs to and from due to https://github.com/ansible/ansible/issues/27299
+        base_domain: "{{ (hosted_zones | to_json | from_json | json_query('HostedZones[].Name | [?starts_with(@, `sandbox`)] | [0]'))[:-1] }}"
     - name: Get sandbox id
       set_fact:
         # Needs to and from due to https://github.com/ansible/ansible/issues/27299
-        sbid: "{{ (hosted_zones | to_json | from_json |json_query('HostedZones[].Name | [?starts_with(@, `sandbox`)] | [0]')).split('.')[0].split('x')[1] }}"
+        sbid: "{{ (hosted_zones | to_json | from_json | json_query('HostedZones[].Name | [?starts_with(@, `sandbox`)] | [0]')).split('.')[0].split('x')[1] }}"
     - name: Check if cluster-guid-key.pub exists
       fail:
         msg: "Error: Please provide cluster-{{ guid }}-key.pub!"
