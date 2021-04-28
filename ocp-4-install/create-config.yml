@@ -1,12 +1,15 @@
 - name: Create OCP4 Cluster
   hosts: localhost
   order: inventory
-  vars_prompt:
-    - name: sbid
-      prompt: "sandbox id"
-      private: no
 
   pre_tasks:
+    - name: Get hosted zones
+      route53_info:
+        query: hosted_zone
+      register: hosted_zones
+    - name: Get sandbox id
+      set_fact:
+        sbid: "{{ (hosted_zones | json_query('HostedZones[].Name | [?starts_with(@, `sandbox`)] | [0]')).split('.')[0].split('x')[1] }}"
     - name: Check if cluster-guid-key.pub exists
       fail:
         msg: "Error: Please provide cluster-{{ guid }}-key.pub!"
