@@ -44,6 +44,8 @@
     - name: yum install packages
       yum:
         name:
+          - python2-boto3
+          - python2-boto
           - python2-openshift
           - PyYAML
           - tree
