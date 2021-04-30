@@ -1,10 +1,6 @@
 - name: Post-installation Configuration
   hosts: localhost
   order: inventory
-  vars_prompt:
-    - name: ocschannel
-      prompt: "OCS Channel x.y"
-      private: no
 
   pre_tasks:
     - name: Prep all variables
