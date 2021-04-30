@@ -38,7 +38,7 @@
         name:
           - ansible-2-for-rhel-8-x86_64-rpms
           - rhel-8-for-x86_64-supplementary-rpms
-          - rhocp-{{ ocpver }}-for-rhel-8-x86_64-rpms
+          - rhocp-{{ ocpver | splitext | first }}-for-rhel-8-x86_64-rpms
         state: enabled
     - name: dnf clean all
       command: dnf clean all
