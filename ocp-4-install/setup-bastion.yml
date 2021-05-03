@@ -2,9 +2,6 @@
   hosts: localhost
   order: inventory
   vars_prompt:
-    - name: ocpver
-      prompt: "OCP 4 Version x.y.z"
-      private: no
     - name: awsaccesskey
       prompt: "aws_access_key_id"
       private: no
