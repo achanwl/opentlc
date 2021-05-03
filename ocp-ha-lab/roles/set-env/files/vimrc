@@ -10,6 +10,10 @@ endif
 "
 call plug#begin('~/.vim/bundle')
 
+" vim-colors-solarized  theme
+"
+Plug 'altercation/vim-colors-solarized'
+
 " palenight theme
 "
 Plug 'drewtempelmeyer/palenight.vim'
@@ -31,11 +35,19 @@ Plug 'pearofducks/ansible-vim'
 
 " vim-puppet
 "
-Plug 'rodjek/vim-puppet'
+"Plug 'rodjek/vim-puppet'
+
+" vim-go
+"
+Plug 'fatih/vim-go'
 
 " syntastic
 "
 Plug 'vim-syntastic/syntastic'
+
+" indentLine
+"
+Plug 'Yggdroot/indentLine'
 
 " airline statusline
 "
@@ -49,11 +61,12 @@ call plug#end()
 " turn off auto adding comments on next line
 " so you can cut and paste reliably
 " http://vimdoc.sourceforge.net/htmldoc/change.html#fo-table
-" set fo=tcq
-set nocompatible
-set modeline
+"set fo=tcq
+"set nocompatible
+"set modeline
 set background=dark
-colorscheme palenight
+colorscheme solarized
+"colorscheme palenight
 
 syntax on
 set hlsearch
@@ -64,9 +77,10 @@ set number
 " highlight comment ctermfg=cyan
 
 set tabstop=2
-set expandtab
-set softtabstop=2
 set shiftwidth=2
+set softtabstop=2
+set expandtab
+set smarttab
 
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /
@@ -90,9 +104,12 @@ filetype plugin indent on
 
 " syntastic settings
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" indentLine settings
+let g:indentLine_enabled = 0
 
 " airline settings
 let g:airline_theme='dark'
@@ -104,6 +121,10 @@ let g:netrw_liststyle = 3
 let g:netrw_browse_split = 3
 let g:netrw_winsize = 25
 "let g:netrw_altv = 1
+
+" terminal settings
+set splitbelow
+set termwinsize=10x0
 
 " Toggle Vexplore with Ctrl-E
 " Modified to use non-split explorer than open with tabs

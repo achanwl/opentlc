@@ -35,7 +35,7 @@ Plug 'pearofducks/ansible-vim'
 
 " vim-puppet
 "
-Plug 'rodjek/vim-puppet'
+"Plug 'rodjek/vim-puppet'
 
 " vim-go
 "
@@ -77,9 +77,10 @@ set number
 " highlight comment ctermfg=cyan
 
 set tabstop=2
-set expandtab
-set softtabstop=2
 set shiftwidth=2
+set softtabstop=2
+set expandtab
+set smarttab
 
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /
@@ -120,6 +121,10 @@ let g:netrw_liststyle = 3
 let g:netrw_browse_split = 3
 let g:netrw_winsize = 25
 "let g:netrw_altv = 1
+
+" terminal settings
+set splitbelow
+set termwinsize=10x0
 
 " Toggle Vexplore with Ctrl-E
 " Modified to use non-split explorer than open with tabs
