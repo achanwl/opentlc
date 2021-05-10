@@ -35,6 +35,11 @@
     state: present
     definition: "{{ lookup('file', 'cluster-monitoring-config.yml') }}"
 
+- name: Move user-workload-monitoring stack to infra nodes and add persistent storage
+  k8s:
+    state: present
+    definition: "{{ lookup('file', 'user-workload-monitoring-config.yml') }}"
+
 - name: Install Descheduler
   block:
     - name: Create openshift-kube-descheduler-operator namespace
