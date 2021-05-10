@@ -4,30 +4,9 @@ metadata:
   name: cluster
   namespace: openshift-kube-descheduler-operator
 spec:
-  image: registry.redhat.io/openshift4/ose-descheduler
+  managementState: Managed
   deschedulingIntervalSeconds: 900
-  strategies:
-    - name: "LowNodeUtilization"
-      params:
-       - name: "CPUThreshold"
-         value: "20"
-       - name: "MemoryThreshold"
-         value: "20"
-       - name: "PodsThreshold"
-         value: "20"
-       - name: "CPUTargetThreshold"
-         value: "80"
-       - name: "MemoryTargetThreshold"
-         value: "80"
-       - name: "PodsTargetThreshold"
-         value: "80"
-    - name: "RemoveDuplicates"
-    - name: "RemovePodsViolatingInterPodAntiAffinity"
-    #- name: "RemovePodsViolatingNodeAffinity"
-    - name: "RemovePodsViolatingNodeTaints"
-    - name: "RemovePodsHavingTooManyRestarts"
-      params:
-       - name: "PodRestartThreshold"
-         value: "10"
-       - name: "IncludingInitContainers"
-         value: "false"
+  profiles:
+    - AffinityAndTaints
+    - TopologyAndDuplicates
+    - LifecycleAndUtilization
