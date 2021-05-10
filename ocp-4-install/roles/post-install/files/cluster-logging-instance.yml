@@ -35,6 +35,10 @@ spec:
       fluentd:
         tolerations:
           - operator: Exists
+  forwarder:
+    fluentd:
+      buffer:
+        flushThreadCount: 4
   visualization:
     type: kibana
     kibana:
