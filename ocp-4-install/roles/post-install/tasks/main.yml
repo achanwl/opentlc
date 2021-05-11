@@ -113,7 +113,7 @@
     - name: Create KubeDescheduler
       k8s:
         state: present
-        definition: "{{ lookup('file', '{{ cver_xy is version('4.7', '>=') | ternary('kube-descheduler.yml', 'kube-descheduler-old.yml') }}') }}"
+        definition: "{{ lookup('file', '{{ kdesch_yml }}') }}"
 
 - name: Enable Autoscaler
   block:

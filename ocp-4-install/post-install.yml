@@ -26,6 +26,9 @@
         - name: Set ClusterVersion x.y
           set_fact:
             cver_xy: "{{ clusterversion.resources[0].spec.channel.split('-')[1] }}"
+        - name: Set kdesch_yml
+          set_fact:
+            kdesch_yml: "{{ cver_xy is version('4.7', '>=') | ternary('kube-descheduler.yml', 'kube-descheduler-old.yml') }}"
         - name: Get Infrastructure
           k8s_info:
             api_version: config.openshift.io/v1
