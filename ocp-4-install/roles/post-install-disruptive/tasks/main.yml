@@ -126,4 +126,8 @@
           - effect: NoExecute
             key: infra
             value: reserved
+        logging:
+          access:
+            destination:
+              type: Container
 
