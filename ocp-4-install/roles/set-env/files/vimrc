@@ -35,7 +35,7 @@ Plug 'pearofducks/ansible-vim'
 
 " vim-puppet
 "
-"Plug 'rodjek/vim-puppet'
+Plug 'rodjek/vim-puppet'
 
 " vim-go
 "
@@ -58,16 +58,21 @@ Plug 'vim-airline/vim-airline-themes'
 "
 call plug#end()
 
-" turn off auto adding comments on next line
-" so you can cut and paste reliably
-" http://vimdoc.sourceforge.net/htmldoc/change.html#fo-table
-"set fo=tcq
-"set nocompatible
-"set modeline
+" Set color scheme
 set background=dark
 colorscheme solarized
 "colorscheme palenight
 
+" turn off auto adding comments on next line
+" so you can cut and paste reliably
+" http://vimdoc.sourceforge.net/htmldoc/change.html#fo-table
+set fo=cql
+
+" Set mode related settings
+"set nocompatible
+"set modeline
+
+" Set syntax related settings
 syntax on
 set hlsearch
 set number
@@ -76,12 +81,17 @@ set number
 " which is not very legible on a black background
 " highlight comment ctermfg=cyan
 
+" Set tabs
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
 set smarttab
 
+" Set backspace option
+set backspace=2
+
+" Highlight empty spaces
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
@@ -91,10 +101,8 @@ match ExtraWhitespace /\s\+$/
 set ruler
 
 " Set up puppet manifest and spec options
-au BufRead,BufNewFile *.pp
-  \ set filetype=puppet
-au BufRead,BufNewFile *_spec.rb
-  \ nmap <F8> :!rspec --color %<CR>
+au BufRead,BufNewFile *.pp set filetype=puppet
+au BufRead,BufNewFile *_spec.rb nmap <F8> :!rspec --color %<CR>
 
 " Enable Ansible files
 au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
@@ -109,12 +117,13 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " indentLine settings
-let g:indentLine_enabled = 0
+let g:indentLine_enabled = 1
 
 " airline settings
-let g:airline_theme='dark'
+let g:airline_theme = 'dark'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#formatter = 'default'
 
 " netrw settings
 let g:netrw_liststyle = 3
