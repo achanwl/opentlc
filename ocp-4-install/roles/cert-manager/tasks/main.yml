@@ -1,0 +1,99 @@
+- name: Setup IAM for DNS Challenge
+  block:
+    - name: Create IAM cert-manager user
+      iam:
+        state: present
+        name: cert-manager
+        iam_type: user
+        access_key_state: create
+      register: certmanager_info
+    - name: Create IAM policy for cert-manager
+      iam_policy:
+        state: present
+        policy_name: ACMERoute53
+        policy_document: ACMERoute53.json
+        iam_type: user
+        iam_name: cert-manager
+
+- name: Install cert-manager
+  block:
+    - name: Create cert-manager namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: cert-manager
+            annotations:
+              openshift.io/node-selector: node-role.kubernetes.io/infra=
+              scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+    - name: Deploy cert-manager app
+      k8s:
+        state: present
+        namespace: cert-manager
+        definition: "{{ item }}"
+        wait: yes
+      with_items: '{{ lookup("url", "https://github.com/jetstack/cert-manager/releases/download/v1.3.1/cert-manager.yaml", split_lines=False) | from_yaml_all | list }}'
+      when: item is not none
+    - name: Update deployment to use 8.8.8.8 dns
+      k8s:
+        api_version: apps/v1
+        kind: Deployment
+        name: cert-manager
+        namespace: cert-manager
+        merge_type: json
+        definition:
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53
+        wait: yes
+    - name: Create cert-manager-secretaccesskey
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: cert-manager-secretaccesskey
+            namespace: cert-manager
+          type: Opaque
+          data:
+            secret-access-key: "{{ certmanager_info.user_meta.access_keys[0].secret_access_key | b64encode }}"
+    - name: Create letsencrypt-prod ClusterIssuer
+      k8s:
+        state: present
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: ClusterIssuer
+          metadata:
+            name: letsencrypt-prod
+          spec:
+            acme:
+              email: alchan@redhat.com
+              server: https://acme-v02.api.letsencrypt.org/directory
+              privateKeySecretRef:
+                name: cluster-issuer-key
+              solvers:
+                - dns01:
+                    route53:
+                      region: us-east-2
+                      hostedZoneID: "{{ xxx }}"
+                      accessKeyID: "{{ certmanager_info.user_meta.access_keys[0].access_key_id }}"
+                      secretAccessKeySecretRef:
+                        name: cert-manager-secretaccesskey
+                        key: secret-access-key
+
+- name: Use letsencrypt cert for the router
+  block:
+    - name: Get dnsname
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: Subscription
+        name: jaeger-product
+        namespace: openshift-operators
+      register: jaeger_sub_info
+
+
+    - name: Get a letsencrypt cert
+
