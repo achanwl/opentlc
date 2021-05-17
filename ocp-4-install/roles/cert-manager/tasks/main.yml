@@ -28,13 +28,14 @@
             annotations:
               openshift.io/node-selector: node-role.kubernetes.io/infra=
               scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
+        wait: yes
     - name: Deploy cert-manager app
       k8s:
         state: present
         namespace: cert-manager
         definition: "{{ item }}"
         wait: yes
-      with_items: '{{ lookup("url", "https://github.com/jetstack/cert-manager/releases/download/v1.3.1/cert-manager.yaml", split_lines=False) | from_yaml_all | list }}'
+      with_items: '{{ lookup("url", "https://github.com/jetstack/cert-manager/releases/download/v{{ certmgrver }}/cert-manager.yaml", split_lines=False) | from_yaml_all | list }}'
       when: item is not none
     - name: Update deployment to use 8.8.8.8 dns
       k8s:
@@ -89,11 +90,23 @@
     - name: Get dnsname
       k8s_info:
         api_version: config.openshift.io/v1
-        kind: Subscription
-        name: jaeger-product
-        namespace: openshift-operators
-      register: jaeger_sub_info
-
-
+        kind: Ingress
+        name: cluster
+      register: ingress_info
     - name: Get a letsencrypt cert
+      k8s:
+        state: present
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Certificate
+          metadata:
+            name: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}"
+            namespace: openshift-ingress
+          spec:
+            secretName: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}-cert"
+            dnsNames:
+              - "*.{{ ingress_info.resources[0].spec.domain }}"
+            issuerRef:
+              kind: ClusterIssuer
+              name: letsencrypt-prod
 
