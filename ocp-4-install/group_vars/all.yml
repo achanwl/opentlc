@@ -2,6 +2,7 @@ ocpver: 4.7.9
 ocschannel: 4.6
 maistraver: 2.1
 certmgrver: 1.3.1
+yqver: 4.9.1
 guid: "{{ ansible_nodename.split('.')[1] }}"
 config:
   multitenant: false

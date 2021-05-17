@@ -11,7 +11,8 @@
       iam_policy:
         state: present
         policy_name: ACMERoute53
-        policy_document: ACMERoute53.json
+        # https://github.com/ansible/ansible/issues/19249
+        policy_document: files/ACMERoute53.json
         iam_type: user
         iam_name: cert-manager
 
