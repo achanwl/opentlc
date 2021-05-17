@@ -55,18 +55,20 @@
     - name: Update deployment to use google dns
       command:
         cmd: oc -n cert-manager patch deployment cert-manager --type='json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"}]'
-    - name: Create cert-manager-secretaccesskey
+    - name: Create cert-manager-sak
       k8s:
         state: present
+        name: cert-manager-sak
+        append_hash: yes
         definition:
           apiVersion: v1
           kind: Secret
           metadata:
-            name: cert-manager-secretaccesskey
             namespace: cert-manager
           type: Opaque
           data:
             secret-access-key: "{{ certmanager_info.user_meta.access_keys[0].secret_access_key | b64encode }}"
+      register: certmanager_sak
     - name: Get dns base domain
       k8s_info:
         api_version: config.openshift.io/v1
@@ -101,7 +103,7 @@
                       hostedZoneID: "{{ hosted_zones.HostedZones[0].Id.split('/')[2] }}"
                       accessKeyID: "{{ certmanager_info.user_meta.access_keys[0].access_key_id }}"
                       secretAccessKeySecretRef:
-                        name: cert-manager-secretaccesskey
+                        name: "{{ certmanager_sak.result.metadata.name }}"
                         key: secret-access-key
 
 - name: Use letsencrypt cert for the router
@@ -119,10 +121,12 @@
           apiVersion: cert-manager.io/v1
           kind: Certificate
           metadata:
-            name: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}"
+            #name: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}"
+            name: router-certs-letsencrypt
             namespace: openshift-ingress
           spec:
-            secretName: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}-cert"
+            #secretName: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}-certs"
+            secretName: router-certs-letsencrypt
             dnsNames:
               - "*.{{ ingress_info.resources[0].spec.domain }}"
             issuerRef:
