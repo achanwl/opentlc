@@ -12,7 +12,7 @@
         state: present
         policy_name: ACMERoute53
         # https://github.com/ansible/ansible/issues/19249
-        policy_document: "{{ role_path }}files/ACMERoute53.json"
+        policy_document: "{{ role_path }}/files/ACMERoute53.json"
         iam_type: user
         iam_name: cert-manager
 
