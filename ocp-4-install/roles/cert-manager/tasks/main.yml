@@ -54,7 +54,8 @@
     #    wait: yes
     - name: Update deployment to use google dns
       command:
-        cmd: oc -n cert-manager patch deployment cert-manager --type='json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"}]'
+        cmd: >
+          oc -n cert-manager patch deployment cert-manager --type='json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"}]'
     - name: Create cert-manager-sak
       k8s:
         state: present
@@ -109,6 +110,11 @@
                       secretAccessKeySecretRef:
                         name: "{{ certmanager_sak.result.metadata.name }}"
                         key: secret-access-key
+        wait: yes
+        wait_condition:
+          reason: ACMEAccountRegistered
+          type: Ready
+          staus: "True"
 
 - name: Use letsencrypt cert for the router
   block:
@@ -138,4 +144,9 @@
             issuerRef:
               kind: ClusterIssuer
               name: letsencrypt-prod
+        wait: yes
+        wait_condition:
+          reason: Ready
+          type: Ready
+          status: "True"
 
