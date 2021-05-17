@@ -114,7 +114,7 @@
         wait_condition:
           reason: ACMEAccountRegistered
           type: Ready
-          staus: "True"
+          status: "True"
 
 - name: Use letsencrypt cert for the router
   block:
