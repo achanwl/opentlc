@@ -38,18 +38,23 @@
         wait: yes
       with_items: '{{ lookup("url", "https://github.com/jetstack/cert-manager/releases/download/v{{ certmgrver }}/cert-manager.yaml", split_lines=False) | from_yaml_all | list }}'
       when: item is not none
-    - name: Update deployment to use 8.8.8.8 dns
-      k8s:
-        api_version: apps/v1
-        kind: Deployment
-        name: cert-manager
-        namespace: cert-manager
-        merge_type: json
-        definition:
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
-            value: --dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53
-        wait: yes
+    # k8s json merge type is broken
+    # https://github.com/ansible/ansible/issues/65897
+    #- name: Update deployment to use 8.8.8.8 dns
+    #  k8s:
+    #    api_version: apps/v1
+    #    kind: Deployment
+    #    name: cert-manager
+    #    namespace: cert-manager
+    #    merge_type: json
+    #    definition:
+    #      - op: add
+    #        path: /spec/template/spec/containers/0/args/-
+    #        value: --dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53
+    #    wait: yes
+    - name: Update deployment to use google dns
+      command:
+        cmd: oc -n cert-manager patch deployment cert-manager --type='json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--dns01-recursive-nameservers=8.8.8.8:53,8.8.4.4:53"}]'
     - name: Create cert-manager-secretaccesskey
       k8s:
         state: present
