@@ -106,7 +106,7 @@
           key: infra
           value: reserved
 
-- name: Move routers to infra nodes and scale up to 3
+- name: Move routers to infra nodes, scale up to 3 and with letsencrypt
   k8s:
     api_version: operator.openshift.io/v1
     kind: IngressController
@@ -114,6 +114,8 @@
     name: default
     definition:
       spec:
+        defaultCertificate:
+          name: router-certs-letsencrypt
         replicas: 3
         nodePlacement:
           nodeSelector:
