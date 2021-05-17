@@ -53,4 +53,7 @@
     - role: ossm
       tags:
         - ossm
+    - role: cert-manager
+      tags:
+        - certmgr
     - role: post-install-disruptive

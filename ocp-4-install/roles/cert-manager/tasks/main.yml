@@ -61,6 +61,12 @@
           type: Opaque
           data:
             secret-access-key: "{{ certmanager_info.user_meta.access_keys[0].secret_access_key | b64encode }}"
+    - name: Get hosted zone
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: DNS
+        name: cluster
+      register: dns_info
     - name: Create letsencrypt-prod ClusterIssuer
       k8s:
         state: present
@@ -79,7 +85,7 @@
                 - dns01:
                     route53:
                       region: us-east-2
-                      hostedZoneID: "{{ xxx }}"
+                      hostedZoneID: "{{ dns_info.resources[0].spec.baseDomain.split('.')[1:] | join('.')  }}"
                       accessKeyID: "{{ certmanager_info.user_meta.access_keys[0].access_key_id }}"
                       secretAccessKeySecretRef:
                         name: cert-manager-secretaccesskey
