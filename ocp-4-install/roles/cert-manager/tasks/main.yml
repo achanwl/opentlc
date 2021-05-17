@@ -145,6 +145,8 @@
             issuerRef:
               kind: ClusterIssuer
               name: letsencrypt-prod
+            isCA: false
+            revisionHistoryLimit: 1
         wait: yes
         wait_condition:
           reason: Ready
