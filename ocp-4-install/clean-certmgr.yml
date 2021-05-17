@@ -1,0 +1,63 @@
+- name: Clean up cert-manager
+  hosts: localhost
+
+  tasks:
+    - name: Delete IAM Policy
+      iam_policy:
+        state: absent
+        policy_name: ACMERoute53
+        iam_type: user
+        iam_name: cert-manager
+    - name: Delete IAM User
+      iam:
+        state: absent
+        iam_type: user
+        name: cert-manager
+        access_key_state: remove
+      register: certmanager_info
+    - name: Patch
+      k8s:
+        api_version: operator.openshift.io/v1
+        kind: IngressController
+        name: default
+        namespace: openshift-ingress-operator
+        definition:
+          spec:
+            defaultCertificate: null
+    - name: Delete certificate
+      k8s:
+        state: absent
+        api_version: cert-manager.io/v1
+        kind: Certificate
+        name: router-certs-letsencrypt
+        namespace: openshift-ingress
+    - name: Delete cert secret
+      k8s:
+        state: absent
+        api_version: v1
+        kind: Secret
+        name: router-certs-letsencrypt
+        namespace: openshift-ingress
+    - name: Delete clusterissuer
+      k8s:
+        state: absent
+        api_version: cert-manager.io/v1
+        kind: ClusterIssuer
+        name: letsencrypt-prod
+    - name: Get list of secrets
+      k8s_info:
+        api_version: v1
+        kind: Secret
+        namespace: cert-manager
+        label_selectors:
+          - app = cert-manager
+      register: secret_list
+    - name: Delete sak secret
+      k8s:
+        state: absent
+        api_version: v1
+        kind: Secret
+        name: "{{ item }}"
+        namespace: cert-manager
+      loop: "{{ secret_list | json_query('resources[].metadata.name') }}"
+

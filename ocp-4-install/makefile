@@ -17,3 +17,5 @@ destroy-cluster:
 	openshift-install destroy cluster --dir $$HOME/cluster-$${GUID} --log-level debug
 	rm -fr $$HOME/cluster-$${GUID}
 
+clean-certmgr:
+	ansible-playbook clean-certmgr.yml

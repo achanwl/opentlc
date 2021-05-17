@@ -7,6 +7,7 @@
         iam_type: user
         access_key_state: create
       register: certmanager_info
+    # This is inline policy, not customer managed policy.
     - name: Create IAM policy for cert-manager
       iam_policy:
         state: present
