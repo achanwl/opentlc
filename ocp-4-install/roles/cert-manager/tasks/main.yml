@@ -64,6 +64,8 @@
           apiVersion: v1
           kind: Secret
           metadata:
+            labels:
+              app: cert-manager
             namespace: cert-manager
           type: Opaque
           data:
@@ -89,6 +91,8 @@
           apiVersion: cert-manager.io/v1
           kind: ClusterIssuer
           metadata:
+            labels:
+              app: cert-manager
             name: letsencrypt-prod
           spec:
             acme:
@@ -121,6 +125,8 @@
           apiVersion: cert-manager.io/v1
           kind: Certificate
           metadata:
+            labels:
+              app: cert-manager
             #name: "{{ ingress_info.resources[0].spec.domain | replace('.', '-') }}"
             name: router-certs-letsencrypt
             namespace: openshift-ingress
