@@ -79,8 +79,8 @@
               matchLabels:
                 custom-kubelet: allocatable
             kubeletConfig:
-              kubeAPIBurst: 1000
-              kubeAPIQPS: 500
+              kubeAPIBurst: 500
+              kubeAPIQPS: 250
               kubeReserved:
                 cpu: 500m
                 memory: 1Gi
