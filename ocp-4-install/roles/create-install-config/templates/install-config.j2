@@ -15,7 +15,7 @@ controlPlane:
   name: master
   platform:
     aws:
-      type: m5a.xlarge
+      type: {{ config.instance_type }}.xlarge
       rootVolume:
         type: io1
         iops: 5000
@@ -26,7 +26,7 @@ compute:
   name: worker
   platform:
     aws:
-      type: m5a.xlarge
+      type: {{ config.instance_type }}.xlarge
   replicas: 3
 networking:
   networkType: OVNKubernetes
