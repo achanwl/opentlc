@@ -106,15 +106,17 @@ au BufRead,BufNewFile *_spec.rb nmap <F8> :!rspec --color %<CR>
 
 " Enable Ansible files
 au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
+au BufRead,BufNewFile */opentlc/ocp-4-install/*.yml set filetype=yaml.ansible
+au BufRead,BufNewFile */opentlc/ocp-ha-lab/*.yml set filetype=yaml.ansible
 
 " Enable indentation matching for =>'s
 filetype plugin indent on
 
 " syntastic settings
 let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 " indentLine settings
 let g:indentLine_enabled = 1
