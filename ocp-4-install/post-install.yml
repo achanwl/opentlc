@@ -41,9 +41,6 @@
             kind: Network
             name: cluster
           register: network_op
-      tags:
-        - ocs
-        - ossm
 
   roles:
     - role: post-install
