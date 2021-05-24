@@ -1,4 +1,5 @@
 update-repos:
+	dnf update -y ansible
 	ansible-playbook update-repos.yml
 	sleep 10; sudo reboot
 
