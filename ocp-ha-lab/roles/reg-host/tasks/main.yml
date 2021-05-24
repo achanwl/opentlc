@@ -39,11 +39,16 @@
           - rhel-7-server-ansible-2.9-rpms
           - rh-gluster-3-client-for-rhel-7-server-rpms
         state: enabled
+    - name: Enable nodejs repo
+      shell: curl -fsSL https://rpm.nodesource.com/setup_current.x | bash -
     - name: yum clean all
       command: yum clean all
     - name: yum install packages
       yum:
         name:
+          - golang
+          - golang-docs
+          - nodejs
           - python2-boto3
           - python2-boto
           - python2-openshift
