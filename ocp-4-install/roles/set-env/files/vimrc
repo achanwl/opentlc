@@ -27,7 +27,7 @@ Plug 'tpope/vim-fugitive'
 "
 Plug 'airblade/vim-gitgutter'
 Plug 'mhinz/vim-signify'
-Plug 'neoclide/coc-git'
+"Plug 'neoclide/coc-git'
 
 " ansible-vim
 "
@@ -39,7 +39,7 @@ Plug 'rodjek/vim-puppet'
 
 " vim-go
 "
-Plug 'fatih/vim-go'
+"Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries'}
 
 " syntastic
 "
@@ -53,6 +53,9 @@ Plug 'Yggdroot/indentLine'
 "
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+" coc-nvim
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " End initialization
 "
@@ -127,15 +130,18 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 "let g:airline#extensions#tabline#formatter = 'default'
 
+" coc-nvim
+let g:coc_global_extensions = ['coc-git', 'coc-go', 'coc-json', 'coc-pyright', 'coc-sh', 'coc-yaml']
+
+" terminal settings
+set splitbelow
+set termwinsize=10x0
+
 " netrw settings
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 3
 let g:netrw_winsize = 25
 "let g:netrw_altv = 1
-
-" terminal settings
-set splitbelow
-set termwinsize=10x0
 
 " Toggle Vexplore with Ctrl-E
 " Modified to use non-split explorer than open with tabs
@@ -158,3 +164,4 @@ function! ToggleVExplorer()
   endif
 endfunction
 map <silent> <C-E> :call ToggleVExplorer()<CR>
+
