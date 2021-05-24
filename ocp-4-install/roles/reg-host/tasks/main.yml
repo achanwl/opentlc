@@ -9,7 +9,8 @@
     - name: sub-mgr remove all
       command: subscription-manager remove --all
     - name: sub-mgr unregister
-      command: subscription-manager unregister
+      redhat_subscription:
+        state: absent
     - name: sub-mgr clean
       command: subscription-manager clean
     - name: Remove katello-ca-consumer-labsat.opentlc.com
