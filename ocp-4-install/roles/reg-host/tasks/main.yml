@@ -1,5 +1,9 @@
 - name: Register system and enable required repos
   block:
+    - name: yum update subscription-manager first
+      dnf:
+        name: subscription-manager
+        state: latest
     - name: dnf clean all
       command: dnf clean all
     - name: sub-mgr remove all
