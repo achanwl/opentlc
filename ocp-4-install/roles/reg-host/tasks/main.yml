@@ -1,6 +1,6 @@
 - name: Register system and enable required repos
   block:
-    - name: yum update subscription-manager first
+    - name: Update subscription-manager first
       dnf:
         name: subscription-manager
         state: latest
