@@ -152,4 +152,5 @@
           reason: Ready
           type: Ready
           status: "True"
+        wait_timeout: 300
 
