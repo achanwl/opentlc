@@ -17,8 +17,7 @@ controlPlane:
     aws:
       type: {{ config.instance_type }}.xlarge
       rootVolume:
-        type: io1
-        iops: 5000
+        type: gp3
   replicas: 3
 compute:
 - architecture: amd64
@@ -27,6 +26,8 @@ compute:
   platform:
     aws:
       type: {{ config.instance_type }}.xlarge
+      rootVolume:
+        type: gp3
   replicas: 3
 networking:
   networkType: OVNKubernetes
