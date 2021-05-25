@@ -9,7 +9,7 @@ spec:
       count: 1
       dataPVCTemplate:
         spec:
-          storageClassName: gp2
+          #storageClassName: gp3-csi
           volumeMode: Block
           accessModes:
             - ReadWriteOnce
