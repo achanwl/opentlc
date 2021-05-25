@@ -20,7 +20,7 @@ spec:
       nodeCount: 3
       redundancyPolicy: SingleRedundancy
       storage:
-        storageClassName: gp2
+        #storageClassName: gp3-csi
         size: 100Gi
     retentionPolicy:
       infra:

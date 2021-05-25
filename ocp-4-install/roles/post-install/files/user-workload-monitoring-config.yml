@@ -40,3 +40,8 @@ data:
       - key: infra
         value: reserved
         effect: NoExecute
+      volumeClaimTemplate:
+       spec:
+         resources:
+           requests:
+             storage: 10Gi

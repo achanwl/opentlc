@@ -30,6 +30,36 @@
           openshift.io/node-selector: ""
           scheduler.alpha.kubernetes.io/defaultTolerations: '[{"operator": "Exists"}]'
 
+- name: Use gp3-csi as storage class
+  block:
+    - name: Create gp3-csi storage class
+      k8s:
+        state: present
+        definition:
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: gp3-csi
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"
+          provisioner: ebs.csi.aws.com
+          parameters:
+            encrypted: "true"
+            type: gp3
+          allowVolumeExpansion: true
+          reclaimPolicy: Delete
+          volumeBindingMode: WaitForFirstConsumer
+    - name: Remove gp2 as default storage class
+      k8s:
+        api_version: storage.k8s.io/v1
+        kind: StorageClass
+        name: gp2
+        definition:
+          metadata:
+            annotations:
+              storageclass.kubernetes.io/is-default-class: null
+  when: cver_xy is version('4.7', '>=')
+
 - name: Move cluster-monitoring stack to infra nodes and add persistent storage
   k8s:
     state: present
