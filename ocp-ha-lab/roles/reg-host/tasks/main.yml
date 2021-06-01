@@ -46,8 +46,6 @@
     - name: yum install packages
       yum:
         name:
-          - golang
-          - golang-docs
           - nodejs
           - python2-boto3
           - python2-boto
