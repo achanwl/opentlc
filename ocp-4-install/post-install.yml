@@ -54,3 +54,5 @@
       tags:
         - certmgr
     - role: post-install-disruptive
+      tags:
+        - disruptive
