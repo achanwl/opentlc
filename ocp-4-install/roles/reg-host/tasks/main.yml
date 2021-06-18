@@ -61,6 +61,7 @@
           - traceroute
           - lsof
           - jq
+          - wireshark-cli
         state: latest
   tags:
     - reg-host
