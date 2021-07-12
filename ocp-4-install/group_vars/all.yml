@@ -1,8 +1,8 @@
-ocpver: 4.7.18
+ocpver: 4.7.19
 ocschannel: 4.7
 maistraver: 2.0
 certmgrver: 1.4.0
-yqver: 4.9.6
+yqver: 4.9.8
 guid: "{{ ansible_nodename.split('.')[1] }}"
 config:
   instance_type: m5
